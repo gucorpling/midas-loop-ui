@@ -14,6 +14,10 @@ Midas Loop UI
 - `yarn start` - start development server
 - `yarn test` - run minimal tests (eg: lint javascript files)
 
+### Adding a new page
+1. Make a new directory under `src` prefixed with `page-`, e.g. `src/page-login`, with at least a `tmpl.html`
+2. In both `webpack.dev.js` and `webpack.prod.js`, extend `module.exports.entry` and `module.plugins` appropriately.
+
 ## Production
 
 - `yarn build` to prepare `html`, `css`, `js` files in `dist/` directory
