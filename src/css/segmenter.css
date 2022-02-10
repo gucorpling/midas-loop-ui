@@ -1,0 +1,80 @@
+.wrap {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.boarder{
+  display: flex;
+  white-space: normal;
+  justify-content: center;
+  padding: 50px;
+  margin: 20px;
+  background-color: lightgrey;
+  line-height: 1.5rem;
+}
+
+.clear{
+  color: lightgrey;
+}
+.clear:hover {
+  color: black;
+}
+
+.lightgrey {
+   color: lightgrey;
+}
+
+.red {
+  color: red;
+  filter: brightness(85%);
+}
+
+.green {
+  color: green;
+  filter: brightness(85%);
+}
+
+.blue {
+  color: blue;
+}
+
+.gray{color:gray}
+
+/* dialog box */
+
+textarea {
+  width: 100%;
+  height: 90%;
+}
+
+/* Button */
+/*
+button,
+.button {
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+  background-color: lightgrey;
+  border-radius: 4px;
+  border: 0;
+  box-shadow: inset 0 0 0 1px #ffffff;
+  color: black !important;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 0.8rem;
+  font-weight: 300;
+  height: 2.75rem;
+  letter-spacing: 0.2rem;
+  line-height: 2.75rem;
+  outline: 0;
+  padding: 0 1.25rem 0 1.35rem;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+  white-space: nowrap;
+  margin: 10px;
+}
+
+button:hover,
+.button:hover {
+  background-color: darkgrey;
+}
+  */

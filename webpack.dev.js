@@ -1,4 +1,15 @@
+
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+//var webpack = require('webpack');
+
+//var $ = require('jquery');
+//require('jquery-ui')($);
+//require('jqgrid')($);
+
+/*new webpack.ProvidePlugin({
+  $: 'jquery',
+  jQuery: 'jquery',
+});*/
 
 module.exports = {
 
@@ -12,6 +23,7 @@ module.exports = {
   // https://webpack.js.org/concepts/entry-points/#multi-page-application
   entry: {
     index: './src/page-index/main.js',
+    open: './src/page-open/main.js',
     //about: './src/page-index/main.js',
     //contacts: './src/page-contacts/main.js'
   },
@@ -68,18 +80,18 @@ module.exports = {
       inject: true,
       chunks: ['index'],
       filename: 'index.html'
-    })
+    }),
     //new HtmlWebpackPlugin({
     //  template: './src/page-index/tmpl.html',
     //  inject: true,
     //  chunks: ['about'],
     //  filename: 'about.html'
     //}),
-    //new HtmlWebpackPlugin({
-    //  template: './src/page-contacts/tmpl.html',
-    //  inject: true,
-    //  chunks: ['contacts'],
-    //  filename: 'contacts.html'
-    //})
+    new HtmlWebpackPlugin({
+      template: './src/page-open/tmpl.html',
+      inject: true,
+      chunks: ['open'],
+      filename: 'open.html'
+    })
   ]
 }
