@@ -23,7 +23,8 @@
         <button class="nav-link" onclick="window.open_segment();" id="pills-segmentation-tab" data-bs-toggle="pill" data-bs-target="#pills-segmentation" type="button" role="tab" aria-controls="pills-segmentation" aria-selected="false">Segmentation</button>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Syntax</a>
+        <button class="nav-link" onclick="window.open_syntax();" id="pills-syntax-tab" data-bs-toggle="pill" data-bs-target="#pills-syntax" type="button" role="tab" aria-controls="pills-syntax" aria-selected="false">Syntax</button>
+        <!-- <a class="nav-link" href="#">Syntax</a> -->
       </li>
       <li class="nav-item">
         <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Entities</a>
@@ -50,7 +51,13 @@
        </div>
     </div>
   </div>
-  <div class="tab-pane" id="syntax" role="tabpanel" aria-labelledby="messages-tab">...</div>
+  <div class="tab-pane fade" id="pills-syntax" role="tabpanel" aria-labelledby="pills-syntax-tab">
+    
+    <div id="syntax_main" class = "boarder">
+       <div id = "syntax_canvas">
+       </div>
+    </div>
+  </div> <!-- TO DO -->
   <div class="tab-pane" id="settings" role="tabpanel" aria-labelledby="settings-tab">...</div>
 </div>
 

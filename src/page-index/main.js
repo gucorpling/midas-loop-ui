@@ -7,6 +7,7 @@ import '../css/main.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import '../js/common.js'
 import {segmenter_read_conllu, select} from '../js/segmenter.js'
+import {syntax_read_conllu} from '../js/syntax.js'
 import '@fortawesome/fontawesome-free/js/fontawesome'
 import '@fortawesome/fontawesome-free/js/solid'
 import '@fortawesome/fontawesome-free/js/regular'
@@ -80,6 +81,13 @@ function open_segment(){
   }
 }
 
+function open_syntax(){
+  window.selected_tab = "syntax";
+  if (window.docs.length > 0){
+    get_conllu(window.docs[doc_index],syntax_read_conllu);
+  }
+}
+
 function cycle_docs(offset){
   if (docs.length>1){
       if (offset<0){ // prev doc
@@ -102,9 +110,13 @@ function cycle_docs(offset){
       if (window.selected_tab=="segment"){
         window.open_segment();
       }
+      if (window.selected_tab=="syntax"){
+        window.open_syntax();
+      }
     }
 }
 
 window.open_segment = open_segment;
+window.open_syntax = open_syntax;
 window.select = select;
 window.cycle_docs = cycle_docs;
