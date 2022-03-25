@@ -20,8 +20,7 @@ module.exports = {
   entry: {
     index: './src/page-index/main.js',
     login: './src/page-login/main.js',
-    //about: './src/page-index/main.js',
-    //contacts: './src/page-contacts/main.js'
+    open: './src/page-open/main.js',
   },
 
   // how to write the compiled files to disk
@@ -89,18 +88,12 @@ module.exports = {
       chunks: ['login'],
       filename: 'login.html'
     }),
-    //new HtmlWebpackPlugin({
-    //  template: './src/page-index/tmpl.html',
-    //  inject: true,
-    //  chunks: ['about'],
-    //  filename: 'about.html'
-    //}),
-    //new HtmlWebpackPlugin({
-    //  template: './src/page-contacts/tmpl.html',
-    //  inject: true,
-    //  chunks: ['contacts'],
-    //  filename: 'contacts.html'
-    //}),
+    new HtmlWebpackPlugin({
+      template: './src/page-open/tmpl.html',
+      inject: true,
+      chunks: ['open'],
+      filename: 'open.html'
+    }),
     new MiniCssExtractPlugin({
       filename: '[name].[contenthash].css',
       chunkFilename: '[id].[contenthash].css'

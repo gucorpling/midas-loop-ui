@@ -1,15 +1,5 @@
 
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-//var webpack = require('webpack');
-
-//var $ = require('jquery');
-//require('jquery-ui')($);
-//require('jqgrid')($);
-
-/*new webpack.ProvidePlugin({
-  $: 'jquery',
-  jQuery: 'jquery',
-});*/
 
 module.exports = {
 
@@ -89,12 +79,6 @@ module.exports = {
       chunks: ['login'],
       filename: 'login.html'
     }),
-    //new HtmlWebpackPlugin({
-    //  template: './src/page-index/tmpl.html',
-    //  inject: true,
-    //  chunks: ['about'],
-    //  filename: 'about.html'
-    //}),
     new HtmlWebpackPlugin({
       template: './src/page-open/tmpl.html',
       inject: true,
