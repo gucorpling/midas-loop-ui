@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html style="height:100%">
+
 <head>
   <title>Midas Loop</title>
   <%= require('../partials/head.html?raw') %>
 </head>
+
 <body class="d-flex flex-column h-100">
   <%= require('../partials/nav.html?raw') %>
   <div id="doc-ribbon" class="ribbon">
@@ -17,10 +19,14 @@
   <main class="flex-grow-1">
     <ul class="nav nav-pills">
       <li class="nav-item">
-        <button class="nav-link active" onclick="window.selected_tab='home';" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Home</button>
+        <button class="nav-link active" onclick="window.selected_tab='home';" id="pills-home-tab" data-bs-toggle="pill"
+          data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home"
+          aria-selected="true">Home</button>
       </li>
       <li class="nav-item">
-        <button class="nav-link" onclick="window.open_segment();" id="pills-segmentation-tab" data-bs-toggle="pill" data-bs-target="#pills-segmentation" type="button" role="tab" aria-controls="pills-segmentation" aria-selected="false">Segmentation</button>
+        <button class="nav-link" onclick="window.open_segment();" id="pills-segmentation-tab" data-bs-toggle="pill"
+          data-bs-target="#pills-segmentation" type="button" role="tab" aria-controls="pills-segmentation"
+          aria-selected="false">Segmentation</button>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="#">Syntax</a>
@@ -34,25 +40,25 @@
     </ul>
 
     <!-- Tab panes -->
-<div class="tab-content" id="tab-content">
-  <div class="tab-pane active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
-      <h1 class="page-title">
-      <i class="fas fa-user-secret"></i>
-      Welcome to Midas Loop
-    </h1>
-  </div>
-  <div class="tab-pane fade" id="pills-segmentation" role="tabpanel" aria-labelledby="pills-segmentation-tab">
-    <div id ="outputDialog"></div>
+    <div class="tab-content" id="tab-content">
+      <div class="tab-pane active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+        <h1 class="page-title">
+          <i class="fas fa-user-secret"></i>
+          Welcome to Midas Loop
+        </h1>
+      </div>
+      <div class="tab-pane fade" id="pills-segmentation" role="tabpanel" aria-labelledby="pills-segmentation-tab">
+        <div id="outputDialog"></div>
         <div id="inputDialog"></div>
-    
-    <div id="main" class = "boarder">
-       <div id = "canvas">
-       </div>
+
+        <div id="main" class="boarder">
+          <div id="canvas">
+          </div>
+        </div>
+      </div>
+      <div class="tab-pane" id="syntax" role="tabpanel" aria-labelledby="messages-tab">...</div>
+      <div class="tab-pane" id="settings" role="tabpanel" aria-labelledby="settings-tab">...</div>
     </div>
-  </div>
-  <div class="tab-pane" id="syntax" role="tabpanel" aria-labelledby="messages-tab">...</div>
-  <div class="tab-pane" id="settings" role="tabpanel" aria-labelledby="settings-tab">...</div>
-</div>
 
 
     <div style="text-align: center">
@@ -65,4 +71,5 @@
 
   <%= require('../partials/footer.html?raw') %>
 </body>
+
 </html>
