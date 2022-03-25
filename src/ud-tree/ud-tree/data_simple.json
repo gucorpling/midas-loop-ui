@@ -1,0 +1,1280 @@
+{
+    "id": "5e293af4-1459-40d2-8742-8bad915fe34d",
+    "name": "AMALGUM_whow_toilet",
+    "sentences": [
+        {
+            "id": "221d1c94-2b62-4057-953e-8f0aed8bc459",
+            "conlluMetadata": [
+                {
+                    "id": "af243ac6-1f3e-418f-9cfc-a4d7e9129aab",
+                    "key": "s_type",
+                    "value": "imp"
+                },
+                {
+                    "id": "4f3e313d-c811-40f4-9790-f37930d51444",
+                    "key": "newdoc id",
+                    "value": "AMALGUM_whow_toilet"
+                },
+                {
+                    "id": "18848c5e-6f17-4a35-b762-a192874217ab",
+                    "key": "sent_id",
+                    "value": "AMALGUM_whow_toilet-1"
+                },
+                {
+                    "id": "dba6dc01-46f4-4f0a-aa87-53c43a4eaba2",
+                    "key": "text",
+                    "value": "Unclog a Toilet with Dish Soap"
+                }
+            ],
+            "tokens": [
+                {
+                    "lemma": "unclog",
+                    "head": "root",
+                    "upos": "VERB",
+                    "feats": [
+                        {
+                            "id": "7d534006-b3fd-4415-a127-45eaac4fc87f",
+                            "key": "Mood",
+                            "value": "Imp"
+                        },
+                        {
+                            "id": "222540ab-b639-489a-ba1d-8d947672652a",
+                            "key": "Person",
+                            "value": "2"
+                        },
+                        {
+                            "id": "19d5f2eb-fc01-46a7-98bf-209ccb51ca17",
+                            "key": "VerbForm",
+                            "value": "Fin"
+                        }
+                    ],
+                    "id": "c233fae8-03b4-4096-84e9-873d5f6a0467",
+                    "tokenType": "token",
+                    "misc": [
+                        {
+                            "id": "840d447d-4c84-4dae-83c9-6997212404d8",
+                            "key": "Discourse",
+                            "value": "preparation:1->7"
+                        }
+                    ],
+                    "deprel": "root",
+                    "form": "Unclog",
+                    "xpos": "VB",
+                    "deps": [
+                        {
+                            "id": "434f5238-22f7-41b6-8fad-ecfc95a3ae97",
+                            "key": "root",
+                            "value": "root"
+                        }
+                    ]
+                },
+                {
+                    "lemma": "a",
+                    "head": "ad4b2b59-16e0-4290-9cdb-1a69851f72c3",
+                    "upos": "DET",
+                    "feats": [
+                        {
+                            "id": "6fd1d61c-658d-471d-b24e-0ef569b0bf32",
+                            "key": "Definite",
+                            "value": "Ind"
+                        },
+                        {
+                            "id": "e7e9ea9a-1ba7-4654-9d5d-567d1f35d21c",
+                            "key": "PronType",
+                            "value": "Art"
+                        }
+                    ],
+                    "id": "44a08269-fbcf-446f-a433-820cabd14bdf",
+                    "tokenType": "token",
+                    "misc": [
+                        {
+                            "id": "8bdc7dee-44e5-4840-af65-7e85b64c5546",
+                            "key": "Entity",
+                            "value": "(abstract-1"
+                        }
+                    ],
+                    "deprel": "det",
+                    "form": "a",
+                    "xpos": "DT",
+                    "deps": [
+                        {
+                            "id": "7283118e-38b9-4d68-a86d-dac3099af52a",
+                            "key": "ad4b2b59-16e0-4290-9cdb-1a69851f72c3",
+                            "value": "det"
+                        }
+                    ]
+                },
+                {
+                    "lemma": "Toilet",
+                    "head": "c233fae8-03b4-4096-84e9-873d5f6a0467",
+                    "upos": "NOUN",
+                    "feats": [
+                        {
+                            "id": "947ebe4f-99dc-4bdc-b85b-6f09e95483c3",
+                            "key": "Number",
+                            "value": "Sing"
+                        }
+                    ],
+                    "id": "ad4b2b59-16e0-4290-9cdb-1a69851f72c3",
+                    "tokenType": "token",
+                    "misc": [
+                        {
+                            "id": "3abd4ccc-2fbd-4ee9-9f7d-e8f9cc72d7b9",
+                            "key": "Entity",
+                            "value": "abstract-1)"
+                        }
+                    ],
+                    "deprel": "obj",
+                    "form": "Toilet",
+                    "xpos": "NN",
+                    "deps": [
+                        {
+                            "id": "67a6ada7-d930-4e7e-a58a-fd6c58bf6297",
+                            "key": "c233fae8-03b4-4096-84e9-873d5f6a0467",
+                            "value": "obj"
+                        }
+                    ]
+                },
+                {
+                    "lemma": "with",
+                    "head": "754a73bf-a588-442b-9c55-50115c7de845",
+                    "upos": "ADP",
+                    "feats": [],
+                    "id": "a276bc67-01f0-4760-bf93-7faefb43f70e",
+                    "tokenType": "token",
+                    "misc": [],
+                    "deprel": "case",
+                    "form": "with",
+                    "xpos": "IN",
+                    "deps": [
+                        {
+                            "id": "88dee00d-00ef-4669-90a2-d0bd8e2f7289",
+                            "key": "754a73bf-a588-442b-9c55-50115c7de845",
+                            "value": "case"
+                        }
+                    ]
+                },
+                {
+                    "lemma": "dish",
+                    "head": "754a73bf-a588-442b-9c55-50115c7de845",
+                    "upos": "NOUN",
+                    "feats": [
+                        {
+                            "id": "1555f3b9-5cd4-4f50-be9d-409cbab8016c",
+                            "key": "Number",
+                            "value": "Sing"
+                        }
+                    ],
+                    "id": "9546f9ba-fc67-42ed-9741-8c5f1f4dfa98",
+                    "tokenType": "token",
+                    "misc": [
+                        {
+                            "id": "b2fe264f-87f8-4ff6-99eb-df65d9589b29",
+                            "key": "Entity",
+                            "value": "(substance-2(object-3)"
+                        }
+                    ],
+                    "deprel": "compound",
+                    "form": "Dish",
+                    "xpos": "NN",
+                    "deps": [
+                        {
+                            "id": "781ae747-bca7-4f54-9e11-7c47374bb11a",
+                            "key": "754a73bf-a588-442b-9c55-50115c7de845",
+                            "value": "compound"
+                        }
+                    ]
+                },
+                {
+                    "lemma": "soap",
+                    "head": "c233fae8-03b4-4096-84e9-873d5f6a0467",
+                    "upos": "NOUN",
+                    "feats": [
+                        {
+                            "id": "17142b86-21da-429b-a5fe-a91491805f99",
+                            "key": "Number",
+                            "value": "Sing"
+                        }
+                    ],
+                    "id": "754a73bf-a588-442b-9c55-50115c7de845",
+                    "tokenType": "token",
+                    "misc": [
+                        {
+                            "id": "4ba03457-5add-4306-b6ed-08c52beec93d",
+                            "key": "Entity",
+                            "value": "substance-2)"
+                        }
+                    ],
+                    "deprel": "obl",
+                    "form": "Soap",
+                    "xpos": "NN",
+                    "deps": [
+                        {
+                            "id": "aa2f817d-da11-4cb9-899f-6f61619ceffd",
+                            "key": "c233fae8-03b4-4096-84e9-873d5f6a0467",
+                            "value": "obl:with"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "fe59ec01-fd95-43ae-8c39-9f71584b575a",
+            "conlluMetadata": [
+                {
+                    "id": "9e86775a-68ca-4ccb-982d-73352c44f298",
+                    "key": "s_type",
+                    "value": "decl"
+                },
+                {
+                    "id": "2a3b4fb3-23bf-45e1-9bcc-0524ca509d50",
+                    "key": "sent_id",
+                    "value": "AMALGUM_whow_toilet-2"
+                },
+                {
+                    "id": "1b8cf5d1-4b47-43b0-9377-f7ed4a48d031",
+                    "key": "text",
+                    "value": "A clogged toilet is something we 've all experienced : the rising of water to the brim , the sense of panic as it does n't stop , the scurrying for the plunger ."
+                }
+            ],
+            "tokens": [
+                {
+                    "lemma": "a",
+                    "head": "040d258e-7f11-4fbb-a4fa-30e4b5c77dbf",
+                    "upos": "DET",
+                    "feats": [
+                        {
+                            "id": "cf4456d1-c5e7-4b4b-be6e-35eae1e36ff7",
+                            "key": "Definite",
+                            "value": "Ind"
+                        },
+                        {
+                            "id": "43e8ae1b-c1ee-4c14-b96b-6d2a8da9a4c9",
+                            "key": "PronType",
+                            "value": "Art"
+                        }
+                    ],
+                    "id": "b3c8ef9b-0574-4332-90c5-8e101a0b4d45",
+                    "tokenType": "token",
+                    "misc": [
+                        {
+                            "id": "63ed028d-6fb7-4d68-90bd-3431b144bbdf",
+                            "key": "Discourse",
+                            "value": "concession:2->7"
+                        },
+                        {
+                            "id": "54854bb5-ca8e-421e-b348-754017c90e24",
+                            "key": "Entity",
+                            "value": "(abstract-1"
+                        }
+                    ],
+                    "deprel": "det",
+                    "form": "A",
+                    "xpos": "DT",
+                    "deps": [
+                        {
+                            "id": "194299d0-0250-4155-8bf6-c54ec786e5e8",
+                            "key": "040d258e-7f11-4fbb-a4fa-30e4b5c77dbf",
+                            "value": "det"
+                        }
+                    ]
+                },
+                {
+                    "lemma": "clogged",
+                    "head": "040d258e-7f11-4fbb-a4fa-30e4b5c77dbf",
+                    "upos": "ADJ",
+                    "feats": [
+                        {
+                            "id": "0549b957-2599-44d3-8f6a-683416054d6a",
+                            "key": "Degree",
+                            "value": "Pos"
+                        }
+                    ],
+                    "id": "8e38270d-f9b3-4896-b7cb-665b96b1806b",
+                    "tokenType": "token",
+                    "misc": [],
+                    "deprel": "amod",
+                    "form": "clogged",
+                    "xpos": "JJ",
+                    "deps": [
+                        {
+                            "id": "a5a0ce62-3d3f-4d78-bd0e-ed354470806d",
+                            "key": "040d258e-7f11-4fbb-a4fa-30e4b5c77dbf",
+                            "value": "amod"
+                        }
+                    ]
+                },
+                {
+                    "lemma": "toilet",
+                    "head": "25f99f1d-3b2a-4efd-962c-f79029064bee",
+                    "upos": "NOUN",
+                    "feats": [
+                        {
+                            "id": "e1b092ed-e34a-4e39-973a-b6413407b0b2",
+                            "key": "Number",
+                            "value": "Sing"
+                        }
+                    ],
+                    "id": "040d258e-7f11-4fbb-a4fa-30e4b5c77dbf",
+                    "tokenType": "token",
+                    "misc": [
+                        {
+                            "id": "29869018-7b68-459f-8d67-199eab63e852",
+                            "key": "Entity",
+                            "value": "abstract-1)"
+                        }
+                    ],
+                    "deprel": "nsubj",
+                    "form": "toilet",
+                    "xpos": "NN",
+                    "deps": [
+                        {
+                            "id": "26086ddb-7a7e-4873-9b1a-747992b7a3ed",
+                            "key": "25f99f1d-3b2a-4efd-962c-f79029064bee",
+                            "value": "nsubj"
+                        }
+                    ]
+                },
+                {
+                    "lemma": "be",
+                    "head": "25f99f1d-3b2a-4efd-962c-f79029064bee",
+                    "upos": "AUX",
+                    "feats": [
+                        {
+                            "id": "0f5bc3a0-f2b5-413f-adb7-ef0228033cbf",
+                            "key": "Mood",
+                            "value": "Ind"
+                        },
+                        {
+                            "id": "f29500c4-750f-44d0-940e-2e2187a39c74",
+                            "key": "Number",
+                            "value": "Sing"
+                        },
+                        {
+                            "id": "a9e99d78-9a80-4212-bc9b-fa861f8ae7e5",
+                            "key": "Person",
+                            "value": "3"
+                        },
+                        {
+                            "id": "36e572d5-b5c9-47d9-b10d-60af68c43bcc",
+                            "key": "Tense",
+                            "value": "Pres"
+                        },
+                        {
+                            "id": "4d9f1f5d-8d15-4212-9d3d-96da6a0026e7",
+                            "key": "VerbForm",
+                            "value": "Fin"
+                        }
+                    ],
+                    "id": "0d4be7c7-829f-49fc-8c94-e137cbe5df3c",
+                    "tokenType": "token",
+                    "misc": [],
+                    "deprel": "cop",
+                    "form": "is",
+                    "xpos": "VBZ",
+                    "deps": [
+                        {
+                            "id": "8f4c3e7f-08f6-44bd-8558-d97813e928eb",
+                            "key": "25f99f1d-3b2a-4efd-962c-f79029064bee",
+                            "value": "cop"
+                        }
+                    ]
+                },
+                {
+                    "lemma": "something",
+                    "head": "root",
+                    "upos": "NOUN",
+                    "feats": [
+                        {
+                            "id": "6b3dfcd4-399b-47b7-b9b6-33b00a6eca83",
+                            "key": "Number",
+                            "value": "Sing"
+                        }
+                    ],
+                    "id": "25f99f1d-3b2a-4efd-962c-f79029064bee",
+                    "tokenType": "token",
+                    "misc": [
+                        {
+                            "id": "4d9766e9-4ffa-4e0e-958c-b4ca78e3e04c",
+                            "key": "Entity",
+                            "value": "(abstract-1"
+                        }
+                    ],
+                    "deprel": "root",
+                    "form": "something",
+                    "xpos": "NN",
+                    "deps": [
+                        {
+                            "id": "ca0d2884-2917-4d52-8280-c6ea9d531aab",
+                            "key": "root",
+                            "value": "root"
+                        }
+                    ]
+                },
+                {
+                    "lemma": "we",
+                    "head": "fb662861-4637-49d3-95a3-56809a6779da",
+                    "upos": "PRON",
+                    "feats": [
+                        {
+                            "id": "85438dec-dac1-48df-9a52-05819ecd20c0",
+                            "key": "Case",
+                            "value": "Nom"
+                        },
+                        {
+                            "id": "93232d80-e8cf-4022-868c-eda7fb87854d",
+                            "key": "Number",
+                            "value": "Plur"
+                        },
+                        {
+                            "id": "c4d55bc0-7003-4872-8dfe-16ed265fe63a",
+                            "key": "Person",
+                            "value": "1"
+                        },
+                        {
+                            "id": "5285c71f-63a7-4adf-a0fe-f1aa3560f381",
+                            "key": "PronType",
+                            "value": "Prs"
+                        }
+                    ],
+                    "id": "92bec10f-f00a-4608-97d4-461e6b53d115",
+                    "tokenType": "token",
+                    "misc": [
+                        {
+                            "id": "ec90816e-8686-4831-8dca-3d8ec46fe09f",
+                            "key": "Discourse",
+                            "value": "preparation:3->4"
+                        },
+                        {
+                            "id": "eb16008f-b308-4785-8296-9a32f07aa7a2",
+                            "key": "Entity",
+                            "value": "(person-4)"
+                        }
+                    ],
+                    "deprel": "nsubj",
+                    "form": "we",
+                    "xpos": "PRP",
+                    "deps": [
+                        {
+                            "id": "2280c5a3-8207-44bd-9294-9cc35b874ea5",
+                            "key": "fb662861-4637-49d3-95a3-56809a6779da",
+                            "value": "nsubj"
+                        }
+                    ]
+                },
+                {
+                    "lemma": "have",
+                    "head": "fb662861-4637-49d3-95a3-56809a6779da",
+                    "upos": "AUX",
+                    "feats": [
+                        {
+                            "id": "3b7e9e29-5370-463d-a218-0189f9cbd353",
+                            "key": "Mood",
+                            "value": "Ind"
+                        },
+                        {
+                            "id": "78c72d3f-ab93-40fb-964a-00536768aea6",
+                            "key": "Number",
+                            "value": "Plur"
+                        },
+                        {
+                            "id": "57924073-0fb5-4c3f-9f84-d08b12b0907f",
+                            "key": "Person",
+                            "value": "1"
+                        },
+                        {
+                            "id": "26b57716-4555-42fa-99fc-2b7aaaa5e864",
+                            "key": "Tense",
+                            "value": "Pres"
+                        },
+                        {
+                            "id": "5387ac11-2536-47a9-b45b-0801b6fef94e",
+                            "key": "VerbForm",
+                            "value": "Fin"
+                        }
+                    ],
+                    "id": "f22ecde5-1842-41d4-9c34-0d9d9f0ed7b9",
+                    "tokenType": "token",
+                    "misc": [],
+                    "deprel": "aux",
+                    "form": "'ve",
+                    "xpos": "VBP",
+                    "deps": [
+                        {
+                            "id": "6c1b1503-ca5b-4a59-ab80-849f2e537ab5",
+                            "key": "fb662861-4637-49d3-95a3-56809a6779da",
+                            "value": "aux"
+                        }
+                    ]
+                },
+                {
+                    "lemma": "all",
+                    "head": "fb662861-4637-49d3-95a3-56809a6779da",
+                    "upos": "PRON",
+                    "feats": [],
+                    "id": "fe8318ae-2f70-47ed-8fa6-6c3d2d21e543",
+                    "tokenType": "token",
+                    "misc": [],
+                    "deprel": "advmod",
+                    "form": "all",
+                    "xpos": "DT",
+                    "deps": [
+                        {
+                            "id": "fec9ad02-a0eb-4e5f-901d-abeb25ff0c9c",
+                            "key": "fb662861-4637-49d3-95a3-56809a6779da",
+                            "value": "advmod"
+                        }
+                    ]
+                },
+                {
+                    "lemma": "experience",
+                    "head": "25f99f1d-3b2a-4efd-962c-f79029064bee",
+                    "upos": "VERB",
+                    "feats": [
+                        {
+                            "id": "a0743b96-b283-4582-94e3-40fedf4d3df8",
+                            "key": "Tense",
+                            "value": "Past"
+                        },
+                        {
+                            "id": "c01ba450-8e9b-4477-ad98-2f71c4c4dbb0",
+                            "key": "VerbForm",
+                            "value": "Part"
+                        }
+                    ],
+                    "id": "fb662861-4637-49d3-95a3-56809a6779da",
+                    "tokenType": "token",
+                    "misc": [
+                        {
+                            "id": "a11c8e74-e4e7-46d5-b546-d663d28462ed",
+                            "key": "Entity",
+                            "value": "abstract-1)"
+                        }
+                    ],
+                    "deprel": "acl:relcl",
+                    "form": "experienced",
+                    "xpos": "VBN",
+                    "deps": [
+                        {
+                            "id": "2999e4e2-d9ba-47ff-8dee-951452cac59f",
+                            "key": "25f99f1d-3b2a-4efd-962c-f79029064bee",
+                            "value": "acl:relcl"
+                        }
+                    ]
+                },
+                {
+                    "lemma": ":",
+                    "head": "1d8aeebd-0bc4-4b18-b489-8ab72e895b31",
+                    "upos": "PUNCT",
+                    "feats": [],
+                    "id": "290dfe74-6ff9-4249-b50b-7e6c1bba726f",
+                    "tokenType": "token",
+                    "misc": [],
+                    "deprel": "punct",
+                    "form": ":",
+                    "xpos": ":",
+                    "deps": [
+                        {
+                            "id": "8b6f3ba6-8ce9-40f9-8c57-7f062a637737",
+                            "key": "1d8aeebd-0bc4-4b18-b489-8ab72e895b31",
+                            "value": "punct"
+                        }
+                    ]
+                },
+                {
+                    "lemma": "the",
+                    "head": "1d8aeebd-0bc4-4b18-b489-8ab72e895b31",
+                    "upos": "DET",
+                    "feats": [
+                        {
+                            "id": "943f85aa-2fcd-4b89-b57b-692d57b40308",
+                            "key": "Definite",
+                            "value": "Def"
+                        },
+                        {
+                            "id": "b92d3220-04bb-4713-90cd-041eee4a1b69",
+                            "key": "PronType",
+                            "value": "Art"
+                        }
+                    ],
+                    "id": "fc94b03f-a7fc-41cc-a9ad-58f54bf5cd6d",
+                    "tokenType": "token",
+                    "misc": [
+                        {
+                            "id": "0b58d6c7-3a1e-466d-afba-fbd8557eb03f",
+                            "key": "Discourse",
+                            "value": "elaboration:4->2"
+                        },
+                        {
+                            "id": "fff6f1c4-d007-498d-b896-55469b2c147b",
+                            "key": "Entity",
+                            "value": "(event-5"
+                        }
+                    ],
+                    "deprel": "det",
+                    "form": "the",
+                    "xpos": "DT",
+                    "deps": [
+                        {
+                            "id": "57a12e03-c001-48f0-99a8-b5a2fe3565fc",
+                            "key": "1d8aeebd-0bc4-4b18-b489-8ab72e895b31",
+                            "value": "det"
+                        }
+                    ]
+                },
+                {
+                    "lemma": "rising",
+                    "head": "25f99f1d-3b2a-4efd-962c-f79029064bee",
+                    "upos": "NOUN",
+                    "feats": [
+                        {
+                            "id": "bf83592a-d7aa-4966-9202-3373006c45a9",
+                            "key": "Number",
+                            "value": "Sing"
+                        }
+                    ],
+                    "id": "1d8aeebd-0bc4-4b18-b489-8ab72e895b31",
+                    "tokenType": "token",
+                    "misc": [],
+                    "deprel": "parataxis",
+                    "form": "rising",
+                    "xpos": "NN",
+                    "deps": [
+                        {
+                            "id": "f214e3a6-3f8a-459b-8b59-250658ad8e34",
+                            "key": "25f99f1d-3b2a-4efd-962c-f79029064bee",
+                            "value": "parataxis"
+                        }
+                    ]
+                },
+                {
+                    "lemma": "of",
+                    "head": "9e879f8b-d368-4e58-82bd-ca6036cd66da",
+                    "upos": "ADP",
+                    "feats": [],
+                    "id": "25ccf7cf-ccf6-45c4-8e6a-dfd6e5a42374",
+                    "tokenType": "token",
+                    "misc": [],
+                    "deprel": "case",
+                    "form": "of",
+                    "xpos": "IN",
+                    "deps": [
+                        {
+                            "id": "57a23f5f-8238-4588-97d0-9669a564091e",
+                            "key": "9e879f8b-d368-4e58-82bd-ca6036cd66da",
+                            "value": "case"
+                        }
+                    ]
+                },
+                {
+                    "lemma": "water",
+                    "head": "1d8aeebd-0bc4-4b18-b489-8ab72e895b31",
+                    "upos": "NOUN",
+                    "feats": [
+                        {
+                            "id": "3a1fab93-0815-472a-ad4c-73deb306ba43",
+                            "key": "Number",
+                            "value": "Sing"
+                        }
+                    ],
+                    "id": "9e879f8b-d368-4e58-82bd-ca6036cd66da",
+                    "tokenType": "token",
+                    "misc": [
+                        {
+                            "id": "e0241cb5-19d8-42ed-a973-e5e3194d2c05",
+                            "key": "Entity",
+                            "value": "(substance-6)"
+                        }
+                    ],
+                    "deprel": "nmod",
+                    "form": "water",
+                    "xpos": "NN",
+                    "deps": [
+                        {
+                            "id": "181dd6f9-80b2-4327-813e-92c83878eebd",
+                            "key": "1d8aeebd-0bc4-4b18-b489-8ab72e895b31",
+                            "value": "nmod:of"
+                        }
+                    ]
+                },
+                {
+                    "lemma": "to",
+                    "head": "0166d7e2-1c4b-40d0-b41e-9e1e24036d75",
+                    "upos": "ADP",
+                    "feats": [],
+                    "id": "e47a7d8a-f6f5-489c-b408-596679d6d11c",
+                    "tokenType": "token",
+                    "misc": [],
+                    "deprel": "case",
+                    "form": "to",
+                    "xpos": "IN",
+                    "deps": [
+                        {
+                            "id": "41d5da22-7f8c-4040-8ca4-b473f18d9c13",
+                            "key": "0166d7e2-1c4b-40d0-b41e-9e1e24036d75",
+                            "value": "case"
+                        }
+                    ]
+                },
+                {
+                    "lemma": "the",
+                    "head": "0166d7e2-1c4b-40d0-b41e-9e1e24036d75",
+                    "upos": "DET",
+                    "feats": [
+                        {
+                            "id": "2a29f63e-3a3b-4ece-8636-91199bdcc478",
+                            "key": "Definite",
+                            "value": "Def"
+                        },
+                        {
+                            "id": "ac735594-621b-4cc7-87aa-dfe7f27abd7a",
+                            "key": "PronType",
+                            "value": "Art"
+                        }
+                    ],
+                    "id": "c76ed5d5-c90d-46e8-917a-d6a552ffe59a",
+                    "tokenType": "token",
+                    "misc": [
+                        {
+                            "id": "aaf82905-9959-4c58-af2b-f105ee65b9a8",
+                            "key": "Entity",
+                            "value": "(abstract-7"
+                        }
+                    ],
+                    "deprel": "det",
+                    "form": "the",
+                    "xpos": "DT",
+                    "deps": [
+                        {
+                            "id": "b6eb4248-e148-4cb1-936c-45777dc98076",
+                            "key": "0166d7e2-1c4b-40d0-b41e-9e1e24036d75",
+                            "value": "det"
+                        }
+                    ]
+                },
+                {
+                    "lemma": "brim",
+                    "head": "1d8aeebd-0bc4-4b18-b489-8ab72e895b31",
+                    "upos": "NOUN",
+                    "feats": [
+                        {
+                            "id": "6e36684e-87cc-4327-9a91-f68f7f70bb15",
+                            "key": "Number",
+                            "value": "Sing"
+                        }
+                    ],
+                    "id": "0166d7e2-1c4b-40d0-b41e-9e1e24036d75",
+                    "tokenType": "token",
+                    "misc": [
+                        {
+                            "id": "6ce4edc3-1444-402c-8533-fe634f2724ba",
+                            "key": "Entity",
+                            "value": "event-5)abstract-7)"
+                        }
+                    ],
+                    "deprel": "nmod",
+                    "form": "brim",
+                    "xpos": "NN",
+                    "deps": [
+                        {
+                            "id": "b5ff8362-ba89-4724-8ab2-f1858b83c2e4",
+                            "key": "1d8aeebd-0bc4-4b18-b489-8ab72e895b31",
+                            "value": "nmod:to"
+                        }
+                    ]
+                },
+                {
+                    "lemma": ",",
+                    "head": "d301cd33-24fc-455f-9411-7d0fe01d6522",
+                    "upos": "PUNCT",
+                    "feats": [],
+                    "id": "ac6df196-401e-4991-99e4-72be6029ed3f",
+                    "tokenType": "token",
+                    "misc": [],
+                    "deprel": "punct",
+                    "form": ",",
+                    "xpos": ",",
+                    "deps": [
+                        {
+                            "id": "054774ac-789d-4c00-800f-59ddd3fe4da3",
+                            "key": "d301cd33-24fc-455f-9411-7d0fe01d6522",
+                            "value": "punct"
+                        }
+                    ]
+                },
+                {
+                    "lemma": "the",
+                    "head": "d301cd33-24fc-455f-9411-7d0fe01d6522",
+                    "upos": "DET",
+                    "feats": [
+                        {
+                            "id": "3a8ff98f-4204-4bf3-98c1-25d1be14c3f1",
+                            "key": "Definite",
+                            "value": "Def"
+                        },
+                        {
+                            "id": "683fee2d-ff3b-4e56-bcba-62d56e613ff5",
+                            "key": "PronType",
+                            "value": "Art"
+                        }
+                    ],
+                    "id": "4216edf9-ed66-440d-9bbf-38642b40f5b5",
+                    "tokenType": "token",
+                    "misc": [
+                        {
+                            "id": "f5459299-ed53-4ec4-abfe-2289f1d29b3f",
+                            "key": "Entity",
+                            "value": "(abstract-8"
+                        }
+                    ],
+                    "deprel": "det",
+                    "form": "the",
+                    "xpos": "DT",
+                    "deps": [
+                        {
+                            "id": "b6d319f8-6930-4600-bd7a-3537ccd0ce99",
+                            "key": "d301cd33-24fc-455f-9411-7d0fe01d6522",
+                            "value": "det"
+                        }
+                    ]
+                },
+                {
+                    "lemma": "sense",
+                    "head": "1d8aeebd-0bc4-4b18-b489-8ab72e895b31",
+                    "upos": "NOUN",
+                    "feats": [
+                        {
+                            "id": "50eec9e2-d62e-46c5-950f-820a9796464e",
+                            "key": "Number",
+                            "value": "Sing"
+                        }
+                    ],
+                    "id": "d301cd33-24fc-455f-9411-7d0fe01d6522",
+                    "tokenType": "token",
+                    "misc": [],
+                    "deprel": "conj",
+                    "form": "sense",
+                    "xpos": "NN",
+                    "deps": [
+                        {
+                            "id": "65ccef3a-91b9-4134-a4b0-662c991db35b",
+                            "key": "1d8aeebd-0bc4-4b18-b489-8ab72e895b31",
+                            "value": "conj"
+                        }
+                    ]
+                },
+                {
+                    "lemma": "of",
+                    "head": "6573a8cf-914f-4697-aa56-4812743fe840",
+                    "upos": "ADP",
+                    "feats": [],
+                    "id": "19ddda00-da55-4ebb-a26b-45344cf74f56",
+                    "tokenType": "token",
+                    "misc": [],
+                    "deprel": "case",
+                    "form": "of",
+                    "xpos": "IN",
+                    "deps": [
+                        {
+                            "id": "cae5c59f-c147-4ff5-a34e-97450315f091",
+                            "key": "6573a8cf-914f-4697-aa56-4812743fe840",
+                            "value": "case"
+                        }
+                    ]
+                },
+                {
+                    "lemma": "panic",
+                    "head": "d301cd33-24fc-455f-9411-7d0fe01d6522",
+                    "upos": "NOUN",
+                    "feats": [
+                        {
+                            "id": "cdf4ac7c-bf44-4550-8785-0f9828797445",
+                            "key": "Number",
+                            "value": "Sing"
+                        }
+                    ],
+                    "id": "6573a8cf-914f-4697-aa56-4812743fe840",
+                    "tokenType": "token",
+                    "misc": [
+                        {
+                            "id": "b5e8adef-d505-4210-ace7-4062223f35d0",
+                            "key": "Entity",
+                            "value": "abstract-8)(abstract-9)"
+                        }
+                    ],
+                    "deprel": "nmod",
+                    "form": "panic",
+                    "xpos": "NN",
+                    "deps": [
+                        {
+                            "id": "e8163a3c-9fb9-4c53-b782-3352767d3497",
+                            "key": "d301cd33-24fc-455f-9411-7d0fe01d6522",
+                            "value": "nmod:of"
+                        }
+                    ]
+                },
+                {
+                    "lemma": "as",
+                    "head": "6027aef9-aa59-4293-8375-7602b6dabc40",
+                    "upos": "SCONJ",
+                    "feats": [],
+                    "id": "c39fe7fa-c79f-40ac-ad07-968e7f36558d",
+                    "tokenType": "token",
+                    "misc": [
+                        {
+                            "id": "dfcc5fcf-b875-4a0f-98ca-1c1ba94c0f8b",
+                            "key": "Discourse",
+                            "value": "joint:5->4"
+                        }
+                    ],
+                    "deprel": "mark",
+                    "form": "as",
+                    "xpos": "IN",
+                    "deps": [
+                        {
+                            "id": "a524c1a0-8dca-4c50-b3ed-2d7ffefeff69",
+                            "key": "6027aef9-aa59-4293-8375-7602b6dabc40",
+                            "value": "mark"
+                        }
+                    ]
+                },
+                {
+                    "lemma": "it",
+                    "head": "6027aef9-aa59-4293-8375-7602b6dabc40",
+                    "upos": "PRON",
+                    "feats": [
+                        {
+                            "id": "b61b3504-382c-4b11-a034-ab14eee52feb",
+                            "key": "Case",
+                            "value": "Nom"
+                        },
+                        {
+                            "id": "1b7e86ce-06ab-4497-b375-86a043c86ae8",
+                            "key": "Gender",
+                            "value": "Neut"
+                        },
+                        {
+                            "id": "90184f52-f6cb-455a-acfb-902a213d842d",
+                            "key": "Number",
+                            "value": "Sing"
+                        },
+                        {
+                            "id": "fdb76faf-9b3f-4696-bf1b-70f315b6d454",
+                            "key": "Person",
+                            "value": "3"
+                        },
+                        {
+                            "id": "fe53acbf-7561-4d9a-9a84-a568eb14f714",
+                            "key": "PronType",
+                            "value": "Prs"
+                        }
+                    ],
+                    "id": "8f70f73e-4d83-484e-9707-1aa3d9af5ec0",
+                    "tokenType": "token",
+                    "misc": [
+                        {
+                            "id": "b0995501-d231-4b54-85e6-2f0e1994305b",
+                            "key": "Entity",
+                            "value": "(abstract-1)"
+                        }
+                    ],
+                    "deprel": "nsubj",
+                    "form": "it",
+                    "xpos": "PRP",
+                    "deps": [
+                        {
+                            "id": "4092bceb-d787-436a-8db0-482d6bc44ab0",
+                            "key": "6027aef9-aa59-4293-8375-7602b6dabc40",
+                            "value": "nsubj"
+                        }
+                    ]
+                },
+                {
+                    "lemma": "do",
+                    "head": "6027aef9-aa59-4293-8375-7602b6dabc40",
+                    "upos": "AUX",
+                    "feats": [
+                        {
+                            "id": "b51738fb-8a62-4c86-83de-936202365b3e",
+                            "key": "Mood",
+                            "value": "Ind"
+                        },
+                        {
+                            "id": "35122ee3-057f-4a3a-a95a-b432aab5e3c5",
+                            "key": "Number",
+                            "value": "Sing"
+                        },
+                        {
+                            "id": "90bdaedf-6294-47db-bbdb-29ed5fcf0bf3",
+                            "key": "Person",
+                            "value": "3"
+                        },
+                        {
+                            "id": "c42af54e-c700-4c25-9c31-97b47f46b5ce",
+                            "key": "Tense",
+                            "value": "Pres"
+                        },
+                        {
+                            "id": "d6312e8f-4f8c-4e3f-9e91-42c4041306c1",
+                            "key": "VerbForm",
+                            "value": "Fin"
+                        }
+                    ],
+                    "id": "cac2f366-b9ef-46f1-b18c-1e26e7d54223",
+                    "tokenType": "token",
+                    "misc": [],
+                    "deprel": "aux",
+                    "form": "does",
+                    "xpos": "VBZ",
+                    "deps": [
+                        {
+                            "id": "e497c15d-cb41-40c2-8bca-ffa410021151",
+                            "key": "6027aef9-aa59-4293-8375-7602b6dabc40",
+                            "value": "aux"
+                        }
+                    ]
+                },
+                {
+                    "lemma": "not",
+                    "head": "6027aef9-aa59-4293-8375-7602b6dabc40",
+                    "upos": "ADV",
+                    "feats": [
+                        {
+                            "id": "e49e00af-66c4-4747-a0f9-ed96186f1565",
+                            "key": "Polarity",
+                            "value": "Neg"
+                        }
+                    ],
+                    "id": "40d25517-bdc5-4f31-b109-0989855b6556",
+                    "tokenType": "token",
+                    "misc": [],
+                    "deprel": "advmod",
+                    "form": "n't",
+                    "xpos": "RB",
+                    "deps": [
+                        {
+                            "id": "0ef76f94-2ee0-4fe5-aecc-a591599959cb",
+                            "key": "6027aef9-aa59-4293-8375-7602b6dabc40",
+                            "value": "advmod"
+                        }
+                    ]
+                },
+                {
+                    "lemma": "stop",
+                    "head": "d301cd33-24fc-455f-9411-7d0fe01d6522",
+                    "upos": "VERB",
+                    "feats": [
+                        {
+                            "id": "fa01a104-97a6-4090-94fb-000162d439d0",
+                            "key": "VerbForm",
+                            "value": "Inf"
+                        }
+                    ],
+                    "id": "6027aef9-aa59-4293-8375-7602b6dabc40",
+                    "tokenType": "token",
+                    "misc": [],
+                    "deprel": "orphan",
+                    "form": "stop",
+                    "xpos": "VB",
+                    "deps": [
+                        {
+                            "id": "33840fff-8f28-4e64-8818-e030ff6c35d3",
+                            "key": "d301cd33-24fc-455f-9411-7d0fe01d6522",
+                            "value": "orphan"
+                        }
+                    ]
+                },
+                {
+                    "lemma": ",",
+                    "head": "ad901999-cd53-462d-b1ef-af746c3f6111",
+                    "upos": "PUNCT",
+                    "feats": [],
+                    "id": "b29e8661-0cfc-4941-a32a-fd68e107546d",
+                    "tokenType": "token",
+                    "misc": [],
+                    "deprel": "punct",
+                    "form": ",",
+                    "xpos": ",",
+                    "deps": [
+                        {
+                            "id": "fec9189b-ea6d-4970-bb02-23b9a7d69e9e",
+                            "key": "ad901999-cd53-462d-b1ef-af746c3f6111",
+                            "value": "punct"
+                        }
+                    ]
+                },
+                {
+                    "lemma": "the",
+                    "head": "ad901999-cd53-462d-b1ef-af746c3f6111",
+                    "upos": "DET",
+                    "feats": [
+                        {
+                            "id": "ff44b2aa-8564-451a-99f3-cd89b22dc4fc",
+                            "key": "Definite",
+                            "value": "Def"
+                        },
+                        {
+                            "id": "735fcf21-6ae7-4bcd-8354-17aad3f563a1",
+                            "key": "PronType",
+                            "value": "Art"
+                        }
+                    ],
+                    "id": "da2b5296-239c-4bc9-bc8f-96c54bd7ca3d",
+                    "tokenType": "token",
+                    "misc": [
+                        {
+                            "id": "642bd404-b6aa-4b31-9852-83af2ade82ba",
+                            "key": "Discourse",
+                            "value": "joint:6->5"
+                        },
+                        {
+                            "id": "5a5816ee-ac67-4556-8a0c-88d410ec2ce1",
+                            "key": "Entity",
+                            "value": "(event-10"
+                        }
+                    ],
+                    "deprel": "det",
+                    "form": "the",
+                    "xpos": "DT",
+                    "deps": [
+                        {
+                            "id": "2c3a0ebc-58f8-4cb0-9bb8-b4fb4696b145",
+                            "key": "ad901999-cd53-462d-b1ef-af746c3f6111",
+                            "value": "det"
+                        }
+                    ]
+                },
+                {
+                    "lemma": "scurrying",
+                    "head": "1d8aeebd-0bc4-4b18-b489-8ab72e895b31",
+                    "upos": "NOUN",
+                    "feats": [
+                        {
+                            "id": "125a4b5d-d33f-42f1-a36c-34b54eff4032",
+                            "key": "Number",
+                            "value": "Sing"
+                        }
+                    ],
+                    "id": "ad901999-cd53-462d-b1ef-af746c3f6111",
+                    "tokenType": "token",
+                    "misc": [],
+                    "deprel": "conj",
+                    "form": "scurrying",
+                    "xpos": "NN",
+                    "deps": [
+                        {
+                            "id": "1613012b-e720-4c7e-9ead-147e090e007c",
+                            "key": "1d8aeebd-0bc4-4b18-b489-8ab72e895b31",
+                            "value": "conj"
+                        }
+                    ]
+                },
+                {
+                    "lemma": "for",
+                    "head": "1982d7ce-2e47-41ea-9a49-8280bcae7eec",
+                    "upos": "ADP",
+                    "feats": [],
+                    "id": "0fa165b0-3092-466e-baae-3913bef25415",
+                    "tokenType": "token",
+                    "misc": [],
+                    "deprel": "case",
+                    "form": "for",
+                    "xpos": "IN",
+                    "deps": [
+                        {
+                            "id": "1716f362-5fad-4f17-894f-50d03ccadb69",
+                            "key": "1982d7ce-2e47-41ea-9a49-8280bcae7eec",
+                            "value": "case"
+                        }
+                    ]
+                },
+                {
+                    "lemma": "the",
+                    "head": "1982d7ce-2e47-41ea-9a49-8280bcae7eec",
+                    "upos": "DET",
+                    "feats": [
+                        {
+                            "id": "a63f07d1-923b-4263-a4fc-a4679a395851",
+                            "key": "Definite",
+                            "value": "Def"
+                        },
+                        {
+                            "id": "da14ad27-9837-4ea0-a7e9-57d9a1c250ab",
+                            "key": "PronType",
+                            "value": "Art"
+                        }
+                    ],
+                    "id": "797eb4a8-1790-42a1-97d5-35113f7b8737",
+                    "tokenType": "token",
+                    "misc": [
+                        {
+                            "id": "8d02adbd-e7f4-4fc7-95ea-61188587e0dc",
+                            "key": "Entity",
+                            "value": "(object-11"
+                        }
+                    ],
+                    "deprel": "det",
+                    "form": "the",
+                    "xpos": "DT",
+                    "deps": [
+                        {
+                            "id": "36827360-b74d-4f01-acf8-20ee06eee8cb",
+                            "key": "1982d7ce-2e47-41ea-9a49-8280bcae7eec",
+                            "value": "det"
+                        }
+                    ]
+                },
+                {
+                    "lemma": "plunger",
+                    "head": "ad901999-cd53-462d-b1ef-af746c3f6111",
+                    "upos": "NOUN",
+                    "feats": [
+                        {
+                            "id": "6497c126-d480-495e-8c29-f07c07332a63",
+                            "key": "Number",
+                            "value": "Sing"
+                        }
+                    ],
+                    "id": "1982d7ce-2e47-41ea-9a49-8280bcae7eec",
+                    "tokenType": "token",
+                    "misc": [
+                        {
+                            "id": "f90513f1-6164-4aca-ab93-0b4337ef0401",
+                            "key": "Entity",
+                            "value": "event-10)object-11)"
+                        }
+                    ],
+                    "deprel": "nmod",
+                    "form": "plunger",
+                    "xpos": "NN",
+                    "deps": [
+                        {
+                            "id": "1ff63ab2-f65f-4a13-8c7f-3f7ac3f04464",
+                            "key": "ad901999-cd53-462d-b1ef-af746c3f6111",
+                            "value": "nmod:for"
+                        }
+                    ]
+                },
+                {
+                    "lemma": ".",
+                    "head": "25f99f1d-3b2a-4efd-962c-f79029064bee",
+                    "upos": "PUNCT",
+                    "feats": [],
+                    "id": "3e737972-d120-44db-904d-b1d715a94cea",
+                    "tokenType": "token",
+                    "misc": [],
+                    "deprel": "punct",
+                    "form": ".",
+                    "xpos": ".",
+                    "deps": [
+                        {
+                            "id": "62e6f54c-f777-416c-982c-9193e97e77eb",
+                            "key": "25f99f1d-3b2a-4efd-962c-f79029064bee",
+                            "value": "punct"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

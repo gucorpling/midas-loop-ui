@@ -20,3 +20,17 @@ input.addEventListener("input", async function(e) {
     window.location.href = "/index.html"
   }
 });
+
+
+// react demo
+import React from 'react'
+import ReactDOM from 'react-dom'
+import App from '../ud-tree/App';
+
+const mount = document.getElementById("react-root");
+mount.attachShadow({mode: "open"});
+const root = mount.shadowRoot;
+const style = document.createElement("style");
+ReactDOM.render(<App />, root);
+root.appendChild(style)
+console.log(style)
