@@ -23,9 +23,8 @@ module.exports = {
   // https://webpack.js.org/concepts/entry-points/#multi-page-application
   entry: {
     index: './src/page-index/main.js',
+    login: './src/page-login/main.js',
     open: './src/page-open/main.js',
-    //about: './src/page-index/main.js',
-    //contacts: './src/page-contacts/main.js'
   },
 
   // https://webpack.js.org/configuration/dev-server/
