@@ -1,14 +1,9 @@
 import '../css/main.css'
-//import './page.css'
+import './page.css'
+import '../js/common.js'
 import $ from 'jquery'
 import 'jquery-ui'
 import 'jquery-ui/themes/base/theme.css';
-import 'bootstrap/dist/css/bootstrap.min.css'
-import '../js/common.js'
-import '@fortawesome/fontawesome-free/js/fontawesome'
-import '@fortawesome/fontawesome-free/js/solid'
-import '@fortawesome/fontawesome-free/js/regular'
-import '@fortawesome/fontawesome-free/js/brands'
 require('../../node_modules/jqgrid/js/i18n/grid.locale-en.js')($)
 require('../../node_modules/jqgrid/js/jquery.jqGrid.src.js')($)
 //require("modules/jquery-ui/themes/black-tie/jquery-ui.css");
