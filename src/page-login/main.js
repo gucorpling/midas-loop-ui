@@ -30,7 +30,4 @@ import App from '../ud-tree/App';
 const mount = document.getElementById("react-root");
 mount.attachShadow({mode: "open"});
 const root = mount.shadowRoot;
-const style = document.createElement("style");
 ReactDOM.render(<App />, root);
-root.appendChild(style)
-console.log(style)
