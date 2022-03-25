@@ -10,7 +10,6 @@ import Api from '../js/api';
 
 function getCookie(key) {
     const pieces = document.cookie.split(";");
-    console.log(pieces)
     for (let piece of pieces) {
         const [k, v] = piece.split("=");
         if (k.trim() === key.trim()) {
