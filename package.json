@@ -9,8 +9,10 @@
   "keywords": [],
   "license": "MIT",
   "dependencies": {
+    "core-js": "^3.21.1",
     "jquery": "^3.6.0",
-    "popper.js": "^1.16.1"
+    "popper.js": "^1.16.1",
+    "regenerator-runtime": "^0.13.9"
   },
   "scripts": {
     "start": "webpack serve --config webpack.dev.js",

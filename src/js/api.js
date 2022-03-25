@@ -4,22 +4,23 @@ export default class Api {
      * @param {string} baseUrl - point to the `/api` endpoint, e.g. `"http://localhost:3000/api"`
      * @param {string} token   - security token. Required for all API methods except `checkToken`.
      */
-    constructor (baseUrl, token) {
+    constructor (baseUrl = "http://localhost:3000/api", token = null) {
         this.baseUrl = baseUrl;
         this.token = token;
     }
 
-    _getRequest(endpoint) {
+    async _getRequest(endpoint) {
         const url = this.baseUrl + endpoint;
         const opts = {
             method: "GET",
             headers: {"Authorization": `Token ${this.token}`},
             mode: "cors"
         }
-        return fetch(url, opts);
+        const resp = await fetch(url, opts);
+        return resp;
     }
 
-    _postRequest(endpoint, body) {
+    async _postRequest(endpoint, body) {
         const url = this.baseUrl + endpoint;
         const opts = {
             method: "POST",
@@ -30,7 +31,8 @@ export default class Api {
             body: JSON.stringify(body),
             mode: "cors"
         }
-        return fetch(url, opts);
+        const resp = await fetch(url, opts);
+        return resp;
     }
 
     // --------------------------------------------------------------------------------
