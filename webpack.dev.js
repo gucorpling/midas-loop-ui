@@ -81,6 +81,12 @@ module.exports = {
       chunks: ['index'],
       filename: 'index.html'
     }),
+    new HtmlWebpackPlugin({
+      template: './src/page-login/tmpl.html',
+      inject: true,
+      chunks: ['login'],
+      filename: 'login.html'
+    }),
     //new HtmlWebpackPlugin({
     //  template: './src/page-index/tmpl.html',
     //  inject: true,
