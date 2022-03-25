@@ -1,4 +1,9 @@
 export default class Api {
+    /**
+     * Create a new API wrapper object.
+     * @param {string} baseUrl - point to the `/api` endpoint, e.g. `"http://localhost:3000/api"`
+     * @param {string} token   - security token. Required for all API methods except `checkToken`.
+     */
     constructor (baseUrl, token) {
         this.baseUrl = baseUrl;
         this.token = token;
