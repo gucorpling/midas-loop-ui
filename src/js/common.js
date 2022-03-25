@@ -5,9 +5,6 @@ import '@fortawesome/fontawesome-free/js/regular'
 import '@fortawesome/fontawesome-free/js/brands'
 import Api from '../js/api';
 
-
-"gold;secret=xxcCIyLMHc0IMd7_svZdjANQG5xV3bFum0lI23stHkw"
-
 function getCookie(key) {
     const pieces = document.cookie.split(";");
     for (let piece of pieces) {
