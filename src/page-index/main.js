@@ -6,6 +6,7 @@ import '../css/main.css'
 import '../js/common.js'
 //import './page.css'
 import {segmenter_read_conllu, select} from '../js/segmenter.js'
+import {entities_read_conllu, change_entity} from '../js/spannotator.js'
 import img from '../img/unicorn.jpg'
 import { Tooltip, Toast, Popover, Tab } from 'bootstrap'
 
@@ -75,6 +76,13 @@ function open_segment(){
   }
 }
 
+function open_entities(){
+  window.selected_tab = "entities";
+  if (window.docs.length > 0){
+    get_conllu(window.docs[doc_index],entities_read_conllu);
+  }
+}
+
 function cycle_docs(offset){
   if (docs.length>1){
       if (offset<0){ // prev doc
@@ -101,5 +109,7 @@ function cycle_docs(offset){
 }
 
 window.open_segment = open_segment;
+window.open_entities = open_entities;
+window.change_entity = change_entity;
 window.select = select;
 window.cycle_docs = cycle_docs;
