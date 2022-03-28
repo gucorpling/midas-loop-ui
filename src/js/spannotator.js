@@ -553,7 +553,7 @@ function bind_tok_events(){
 	});
 }
 
-function set_color_mode(color_mode){
+export function set_color_mode(color_mode){
 	if (color_mode == null){color_mode=$("#color_mode").val();}
 	active_group = anno_mode = color_mode;
 	
@@ -654,7 +654,7 @@ function get_new_group_id(group_type){
 	}
 }
 
-function ungroup_selected(group_type){
+export function ungroup_selected(group_type){
 	color_mode=$("#color_mode").val();
 	if (color_mode=="entities"){return false;} // entity highlighting mode, disable grouping
 	
@@ -691,7 +691,7 @@ function ungroup_selected(group_type){
 	
 }
 
-function group_selected(group_type){  // add all selected entities to a single group of the current group type
+export function group_selected(group_type){  // add all selected entities to a single group of the current group type
 	color_mode=$("#color_mode").val();
 	if (color_mode=="entities"){return false;} // entity highlighting mode, disable grouping
 
@@ -1101,7 +1101,7 @@ function check_sequential(arr){
 }
 
 // Create a new entity
-function add_entity(tok_ids, entity_type, batch){
+export function add_entity(tok_ids, entity_type, batch){
 	if (batch === undefined) batch = false;
 	if (entity_type== null){
 		var entity_type = DEFAULT_ENTITY_TYPE;
@@ -1319,7 +1319,7 @@ $(document).on("mousedown",".close", function () {
 });
 
 
-function toggle_sents(){
+export function toggle_sents(){
 	$(".sent").toggleClass("break");
 	$(".sent").toggleClass("offset");
 	$(".sent").toggleClass("numbered");

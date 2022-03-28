@@ -6,7 +6,7 @@ import '../css/main.css'
 import '../js/common.js'
 //import './page.css'
 import {segmenter_read_conllu, select} from '../js/segmenter.js'
-import {entities_read_conllu, change_entity} from '../js/spannotator.js'
+import {entities_read_conllu, change_entity, toggle_sents, set_color_mode, group_selected, ungroup_selected, add_entity} from '../js/spannotator.js'
 import img from '../img/unicorn.jpg'
 import { Tooltip, Toast, Popover, Tab } from 'bootstrap'
 
@@ -111,5 +111,7 @@ function cycle_docs(offset){
 window.open_segment = open_segment;
 window.open_entities = open_entities;
 window.change_entity = change_entity;
+// spannotator toolbar function
+window.toggle_sents = toggle_sents; window.set_color_mode = set_color_mode; window.group_selected = group_selected; window.ungroup_selected = ungroup_selected; window.add_entity = add_entity;
 window.select = select;
 window.cycle_docs = cycle_docs;

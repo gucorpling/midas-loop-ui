@@ -8,10 +8,10 @@
 #toolbar{
     background-color: navy;
     width: 100%;
-    position: fixed;
+    position: relative;
     margin-right: 5px;
     margin-left: -5px;
-    margin-bottom: 20px;
+    margin-bottom: 2px;
     z-index: 100;
 	top: 0px;
 }
