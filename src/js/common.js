@@ -15,6 +15,7 @@ function getCookie(key) {
     }
 }
 
+// A shared API object for all modules to use
 export var api;
 
 // Ensure user has good credentials, otherwise redirect to login page
@@ -26,7 +27,7 @@ async function checkAuth () {
     if (!response.ok) {
         //window.location.href = "/login.html";
     } else {
-        api = new Api("http://localhost:3000/api", token);   
+        api = new Api(token);   
     }
 }
 checkAuth();
