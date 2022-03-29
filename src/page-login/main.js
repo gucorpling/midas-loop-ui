@@ -1,6 +1,5 @@
 import '../css/main.css';
 import { api } from '../js/common.js';
-import './page.css';
 
 const input = document.getElementById("token");
 const msg = document.getElementById("bad-token");

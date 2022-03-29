@@ -15,19 +15,22 @@ function getCookie(key) {
     }
 }
 
-// A shared API object for all modules to use
-export var api;
+function getToken() {
+    return getCookie("token").replace("__SEMI__", ";").replace("__EQ__", "=");
+}
+
+export const api = new Api(getToken());
 
 // Ensure user has good credentials, otherwise redirect to login page
 async function checkAuth () {
     const location = window.location.href;
-    api = new Api();
-    let token = getCookie("token").replace("__SEMI__", ";").replace("__EQ__", "=");
+    let token = getToken();
     const response = await api.checkToken(token);
+    console.log("Token is " + (response.ok ? "valid" : "invalid"));
     if (!response.ok) {
-        //window.location.href = "/login.html";
+        window.location.href = "/login.html";
     } else {
-        api = new Api(token);   
+        api.token = token;
     }
 }
 checkAuth();
