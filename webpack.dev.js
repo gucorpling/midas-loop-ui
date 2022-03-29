@@ -1,5 +1,6 @@
 
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const webpack = require('webpack')
 
 module.exports = {
 
@@ -67,6 +68,9 @@ module.exports = {
 
   // https://webpack.js.org/concepts/plugins/
   plugins: [
+    new webpack.DefinePlugin({
+      API_ENDPOINT: JSON.stringify("http://localhost:3000/api"),
+    }),
     new HtmlWebpackPlugin({
       template: './src/page-index/tmpl.html',
       inject: true,

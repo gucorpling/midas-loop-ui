@@ -4,8 +4,9 @@ export default class Api {
      * @param {string} baseUrl - point to the `/api` endpoint, e.g. `"http://localhost:3000/api"`
      * @param {string} token   - security token. Required for all API methods except `checkToken`.
      */
-    constructor (baseUrl = "http://localhost:3000/api", token = null) {
-        this.baseUrl = baseUrl;
+    constructor (token = null) {
+        // defined in webpack.dev.js and webpack.prod.js
+        this.baseUrl = API_ENDPOINT;
         this.token = token;
     }
 

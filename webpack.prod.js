@@ -1,4 +1,5 @@
 const path = require('path')
+const webpack = require('webpack')
 
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
@@ -76,6 +77,9 @@ module.exports = {
 
   // https://webpack.js.org/concepts/plugins/
   plugins: [
+    new webpack.DefinePlugin({
+      API_ENDPOINT: JSON.stringify("http://localhost:3000/api"),
+    }),
     new HtmlWebpackPlugin({
       template: './src/page-index/tmpl.html',
       inject: true,
