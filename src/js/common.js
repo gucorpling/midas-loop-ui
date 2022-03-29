@@ -15,14 +15,18 @@ function getCookie(key) {
     }
 }
 
+export var api;
+
 // Ensure user has good credentials, otherwise redirect to login page
 async function checkAuth () {
     const location = window.location.href;
-    const api = new Api();
+    api = new Api();
     let token = getCookie("token").replace("__SEMI__", ";").replace("__EQ__", "=");
     const response = await api.checkToken(token);
     if (!response.ok) {
         //window.location.href = "/login.html";
+    } else {
+        api = new Api("http://localhost:3000/api", token);   
     }
 }
 checkAuth();
