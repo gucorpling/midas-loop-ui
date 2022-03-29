@@ -1,9 +1,6 @@
 import '../css/main.css';
-import '../js/common.js';
-import './page.css'
-import Api from '../js/api';
-
-const api = new Api();
+import { api } from '../js/common.js';
+import './page.css';
 
 const input = document.getElementById("token");
 const msg = document.getElementById("bad-token");
@@ -30,4 +27,4 @@ import App from '../ud-tree/App';
 const mount = document.getElementById("react-root");
 mount.attachShadow({mode: "open"});
 const root = mount.shadowRoot;
-ReactDOM.render(<App />, root);
+//ReactDOM.render(<App />, root);
