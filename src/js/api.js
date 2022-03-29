@@ -44,7 +44,7 @@ export default class Api {
      * 
      * @param {int} offset - offset from the start of all the server's documents
      * @param {int} limit - the maximum number of documents to return from the offset
-     * @param {string} orderBy - ordering criterion. Matches this regex: /(name|xpos|upos|head)-(inc|dec)/. 
+     * @param {string} orderBy - ordering criterion. Matches this regex: /(name|xpos-gold|upos-gold|head-gold)-(inc|dec)/. 
      *                           xpos, upos, and head refer to the proportion of gold annotations.
      * @return {Object} Key `total` has total count of all docs in the database, key `docs` has the requested docs.
      */
@@ -60,8 +60,8 @@ export default class Api {
      */
     getDocument(id, format = "json") {
         this.queryDocuments
-        return this._getRequest(`/conllu/document/id/${id}`)
-            .then(result => result.json());
+        return this._getRequest(`/conllu/document/id/${id}?format=${format}`)
+            .then(result => format === "json" ? result.json() : result.text());
     }
 
     /**
