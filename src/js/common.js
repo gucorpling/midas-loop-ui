@@ -13,6 +13,7 @@ function getCookie(key) {
             return v;
         }
     }
+    return "";
 }
 
 function getToken() {
@@ -25,7 +26,16 @@ export const api = new Api(getToken());
 async function checkAuth () {
     const location = window.location.href;
     let token = getToken();
-    const response = await api.checkToken(token);
+    try {
+        const response = await api.checkToken(token);
+    } catch (e) {
+        console.log("Failed to contact API");
+        console.log(e);
+        if (!window.location.href.endsWith("/login.html")) {
+            window.location.href = "/login.html";
+        }
+        return;
+    }
     console.log("Token is " + (response.ok ? "valid" : "invalid"));
     if (!response.ok) {
         window.location.href = "/login.html";
