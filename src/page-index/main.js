@@ -92,8 +92,9 @@ async function cycle_docs(offset){
     }
 }
 
-window.open_segment = open_segment;
-window.open_entities = open_entities;
+document.getElementById("pills-segmentation-tab").addEventListener("click", () => open_segment())
+document.getElementById("pills-entities-tab").addEventListener("click", () => open_entities())
+
 window.change_entity = change_entity;
 // spannotator toolbar function
 window.toggle_sents = toggle_sents; window.set_color_mode = set_color_mode; window.group_selected = group_selected; window.ungroup_selected = ungroup_selected; window.add_entity = add_entity;
