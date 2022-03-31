@@ -26,8 +26,9 @@ export const api = new Api(getToken());
 async function checkAuth () {
     const location = window.location.href;
     let token = getToken();
+    let response;
     try {
-        const response = await api.checkToken(token);
+        response = await api.checkToken(token);
     } catch (e) {
         console.log("Failed to contact API");
         console.log(e);
