@@ -24,24 +24,21 @@ export const api = new Api(getToken());
 
 // Ensure user has good credentials, otherwise redirect to login page
 async function checkAuth () {
-    const location = window.location.href;
-    let token = getToken();
-    let response;
+    const token = getToken();
     try {
-        response = await api.checkToken(token);
+        const response = await api.checkToken(token);
+        console.log("Token is " + (response.ok ? "valid" : "invalid"));
+        if (!response.ok) {
+            window.location.href = "/login.html";
+        } else {
+            api.token = token;
+        }
     } catch (e) {
         console.log("Failed to contact API");
         console.log(e);
         if (!window.location.href.endsWith("/login.html")) {
             window.location.href = "/login.html";
         }
-        return;
-    }
-    console.log("Token is " + (response.ok ? "valid" : "invalid"));
-    if (!response.ok) {
-        window.location.href = "/login.html";
-    } else {
-        api.token = token;
     }
 }
 checkAuth();
