@@ -87,7 +87,7 @@ async function cycle_docs(offset){
       $("#selected_docname").html(docJson.name, docs[docIndex]);
       $("#doc_count").html("Document " + (docIndex+1) + "/" + docs.length);
       if (window.selected_tab=="segment"){
-        window.open_segment();
+        open_segment();
       }
     }
 }
