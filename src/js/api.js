@@ -44,7 +44,7 @@ export default class Api {
      * 
      * @param {int} offset - offset from the start of all the server's documents
      * @param {int} limit - the maximum number of documents to return from the offset
-     * @param {string} orderBy - ordering criterion. Matches this regex: /(name|xpos-gold|upos-gold|head-gold)-(inc|dec)/. 
+     * @param {string} orderBy - ordering criterion. Matches this regex: /(name|((xpos|upos|head)-gold)|((xpos|upos|head)-mean-top-proba))-(inc|dec)/. 
      *                           xpos, upos, and head refer to the proportion of gold annotations.
      * @return {Object} Key `total` has total count of all docs in the database, key `docs` has the requested docs.
      */
