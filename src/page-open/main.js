@@ -20,18 +20,19 @@ async function initGrid() {
         datastr: data.docs,
         datatype: 'jsonstring',
         width: '100%',
-        colNames: ["id", "name", "token_count", "sentence_count", "xpos_gold_rate"],
+        colNames: ["id","name", "token_count", "sentence_count", "xpos_gold_rate"],
         colModel: [
             { name: 'id', width: 0, }, 
             { name: 'name', width: 250, }, 
-            { name: 'token_count', width: 50, }, 
-            { name: 'sentence_count', width: 50, }, 
-            { name: 'xpos_gold_rate', width: 100 }
+            { name: 'token_count', width: 50, formatter: "number", align: "right", sorttype: "number", formatoptions: { decimalPlaces: 0 }, searchoptions: { sopt: ["eq", "ne", "lt", "le", "gt", "ge"] }}, 
+            { name: 'sentence_count', width: 50, formatter: "number", align: "right", sorttype: "number", formatoptions: { decimalPlaces: 0 }, searchoptions: { sopt: ["eq", "ne", "lt", "le", "gt", "ge"] }}, 
+            { name: 'xpos_gold_rate', width: 100, formatter: "number", align: "right", sorttype: "number", searchoptions: { sopt: ["eq", "ne", "lt", "le", "gt", "ge"] } }
         ],
 
-        pager: '#pager',
+        pager: '#pager', 
         jsonReader: { repeatitems: false },
-        rowNum: 5,
+        rowNum: 15,
+        rowList: [15,30,50,100],
         viewrecords: true,
         caption: "Documents",
         height: "auto",
@@ -53,6 +54,14 @@ async function initGrid() {
             document.location.href = "./index.html?" + aQryStr;
         },
     }).hideCol("id");
+    $(window).on('resize', function() {
+        $("#grid").setGridWidth($(window).width()-50);
+     }).trigger('resize');
+
+     //$("#grid").jqGrid('navGrid','#pager', {position: 'right'});
+     $('#pager').css("height", "35px");
+
+    $("#grid").jqGrid('filterToolbar', { stringResult: true, searchOnEnter: false, defaultSearch: "cn" });
 }
 
 initGrid();

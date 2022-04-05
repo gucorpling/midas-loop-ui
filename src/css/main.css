@@ -147,3 +147,5 @@ footer > ul > li > a {
 
 .sel-genre{height:150px;    overflow-y: auto;
 }
+
+.ui-pg-button .ui-icon{display: inline-block !important;}
