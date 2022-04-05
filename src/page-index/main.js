@@ -8,7 +8,7 @@ import { Tooltip, Toast, Popover, Tab } from 'bootstrap'
 import '../css/main.css'
 import { api } from '../js/common.js'
 import {segmenter_read_conllu, select} from '../js/segmenter.js'
-import {entities_read_conllu, change_entity, toggle_sents, set_color_mode, group_selected, ungroup_selected, add_entity} from '../js/spannotator.js'
+import {spannotator_read_conllu, change_entity, toggle_sents, set_color_mode, group_selected, ungroup_selected, add_entity} from '../js/spannotator.js'
 
 window.current_conllu = "";
 window.doc2conllu = {};
@@ -26,6 +26,7 @@ async function get_conllu(docId, readerFunction){
 }
 
 window.segmenter_read_conllu = segmenter_read_conllu;
+window.spannotator_read_conllu = spannotator_read_conllu;
 
 const queryString = window.location.search;
 //console.log(queryString);
@@ -61,7 +62,7 @@ function open_segment(){
 function open_entities(){
   window.selected_tab = "entities";
   if (window.docs.length > 0){
-    get_conllu(window.docs[docIndex],entities_read_conllu);
+    get_conllu(window.docs[docIndex],spannotator_read_conllu);
   }
 }
 

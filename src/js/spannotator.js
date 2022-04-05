@@ -59,6 +59,9 @@ var color_mode;
 var hovered_entity;
 var tok_ids = null;
 
+var is_conllu_input = false; // if the input is conllu, keep other annotations
+var line_fields = {};
+
 for (var key in global_defaults){
 	if ($('#' + key).val()){
 		window[key] = $('#' + key).val();
@@ -82,6 +85,12 @@ class Entity{
 		this.annos = {};  // key-value pairs of additional annotations, such as "infstat": "new"
 		this.identity = "_";
 		this.next = {};  // object mapping group types (e.g. coref) to next entity object in chain; only filled during export
+
+		// Additional properties for conllu import support
+		this.link = "";
+		this.mention_type = "";
+		this.min_span = "";
+
 		let g = {};
 		let def_group = global_defaults["DEFAULT_GROUP"];
 		for (let init_grp in groups){
@@ -556,10 +565,9 @@ function bind_tok_events(){
 export function set_color_mode(color_mode){
 	if (color_mode == null){color_mode=$("#color_mode").val();}
 	active_group = anno_mode = color_mode;
-	
-	var col;
+	var col; var entity_to_color;
 	for (var div_id in entities){
-		var entity_to_color = entities[div_id];
+		entity_to_color = entities[div_id];
 		if (color_mode=="entities"){
 			$("#btn_group").prop("disabled",true);
 			$("#btn_ungroup").prop("disabled",true);
@@ -777,13 +785,14 @@ function init_doc(){
 	bind_tok_events();
 	bind_entity_events();
 	$("#editor").bind("mousemove", track_hover);
+	/*
 	$("#editor, .ui-selectee").bind("click", function (){ 
 		// in case spannotator is loaded in an iFrame, make sure it gets focus on click
 		var container = window.parent.document.getElementById("spannotator_container");
 		if (typeof container != "undefined" && container != null){
 			container.contentWindow.focus();
 		}
-	});
+	});*/
 	$("#selectable").selectable({filter: '.tok', distance: 10});
 	set_color_mode();
 }
@@ -809,6 +818,8 @@ $(document).ready(function() {
 					if ($(this).find('textarea').val().length) {
 						if ($(this).find('textarea').val().includes("#FORMAT=WebAnno")){
 							read_webanno($(this).find('textarea').val());
+						} else if ($(this).find('textarea').val().includes("# newdoc id =")){
+							read_conllu($(this).find('textarea').val());
 						} else if ($(this).find('textarea').val().includes("<")){
 							read_tt($(this).find('textarea').val());
 						}
@@ -1388,6 +1399,289 @@ function make_token_div(tok){ // Take a Token object and return HTML representat
 
 /* IMPORT/EXPORT*/
 
+
+export function spannotator_read_conllu(data){
+	read_conllu(data);
+}
+
+function read_conllu(data){
+	let is_conllu_input = true;
+	$("#selectable").html("");  // Clear editor
+	// Clear data model
+	entities = {};
+	toks2entities = {};
+	tokens = {};
+	groups = {};
+	var is2group = {};
+	assigned_colors = {};
+	assigned_colors[def_group] = {0: def_color};
+	color_modes = new Set();
+	color_modes.add("entities");	
+	anno_keys = [];
+	anno_values = {};
+
+	let lines = data.split("\n");
+	let sent = 0;
+	let tid= 0;
+	let toknum_in_sent = 0;
+	let e2tok = {};
+	let e2type = {};
+	let e2annos = {};
+	let e2minspan = {};
+	let e2mention_type = {};
+	let e2identity = {};
+	let e2link = {};
+	let e2groups = {};
+	let senttok2globaltok = {};  // maps IDs like 2-3 (sent 2, tok 3) to IDs like 6 (sixth token in document)
+	let edges = [];
+	let e_id = 0;
+	let group2eid = {};
+
+	let line_fields = {};
+	let meta_anno = {};
+	let super_tokens = {};
+	let sent_info;
+	let new_sent;
+
+	for (var line of lines){
+		if (line.includes("\t")){
+			// Read text
+			tid += 1;
+			line = line.trim();
+			let fields = line.split("\t");
+			if (fields[0].includes("-") || fields[0].includes(".")){ // remove super tokens in conllu
+				super_tokens[tid] = line;
+				continue;
+			}
+			if (fields[0] == "1"){ //new sentence
+				sent += 1;
+				new_sent = true;
+				sent_info = sent;
+				toknum_in_sent = 0;
+			}
+			else{
+				new_sent = false;
+				sent_info = null;
+			}
+			toknum_in_sent +=1;
+			senttok2globaltok[sent.toString() + "-" + toknum_in_sent.toString()] = tid;
+			let tok = new Token(tid.toString(), toknum_in_sent, fields[1],sent_info,sent,'');
+			tokens[tid.toString()] = tok;
+			$("#selectable").append(make_token_div(tok));
+
+			// Read span annotations
+			if (fields.length>=10){
+				let other_annos = [];
+				let coref_fields = "";
+				let last_fields = fields[fields.length-1].split("|");
+				for (i in last_fields){
+					if (last_fields[i].startsWith("Entity=")){
+						coref_fields = last_fields[i];
+					} else if (!(last_fields[i].startsWith("Bridge"))) {
+						other_annos.push(last_fields[i]);
+					}
+				}
+
+				line_fields[tid] = fields;
+				line_fields[tid][fields.length-1] = other_annos.join('|');
+
+				// Continue if the last field does not contain any coreference relation
+				if (!coref_fields){
+					continue;
+				}
+
+				// Read and split coref string
+				coref_fields = coref_fields.replace("Entity=", "");
+				let stack = [];
+				for (var idx in coref_fields){
+					if (coref_fields[idx] == "("){
+						stack.push(coref_fields[idx]);
+					} else if (stack.length != 0 && stack[stack.length-1].endsWith(")")){
+						stack.push(coref_fields[idx]);
+					} else {
+						if (stack.length == 0){
+							stack.push(coref_fields[idx]);
+						} else {
+							stack[stack.length-1] += coref_fields[idx];
+						}
+					}
+				}
+
+				// Read each mention field
+				var e_group; var e_type; var infstat; var min_span; var mention_type; let link; var mapping_eid;
+				for (var i in stack){
+					var ent = stack[i];
+					if (ent.startsWith("(")){ // if it's the left boundary of the entity block
+						ent = ent.replace("(", "");
+						let is_one = false;
+						if (ent.endsWith(")")){
+							ent = ent.replace(")", "");
+							is_one = true;
+						}
+
+						e_id ++;
+						let ent_field = ent.split("-");
+						e_type = ent_field[1];
+						e_group = ent_field[0];
+						infstat = ent_field[2];
+						min_span = ent_field[3];
+						mention_type = ent_field[4];
+						link = "";
+
+						// check if the entity links to any named entities
+						if (ent_field.length == 6){
+							link = ent_field[5];
+						}
+
+						// check if the entity span is 1
+						if (is_one == false){
+							// check if the entity group is visited
+							if (!(e_id in group2eid)){group2eid[e_group] = [];}
+							group2eid[e_group].push(e_id);
+						}
+
+						// save coref information for the current entity, referenced by the unique entity id
+						e2tok[e_id] = [tid];
+						e2type[e_id] = e_type;
+						if (!(e_id in e2annos)) {e2annos[e_id] = {};}
+						e2annos[e_id]['infstat'] = infstat;
+						e2minspan[e_id] = min_span;
+						e2mention_type[e_id] = mention_type;
+						e2link[e_id] = link;
+						e2groups[e_id] = e_group;
+					} else if (ent.endsWith(")")){ // if it's the right boundary of the entity block
+						ent = ent.replace(")", "");
+						e_group = ent;
+
+						// Get the entity id in the cache
+						mapping_eid = group2eid[e_group][group2eid[e_group].length-1];
+						// Find token ids from the beginning of the entity span recursively
+						if (e2tok[mapping_eid]==null){
+							let a=4;
+						}
+						for (var j=e2tok[mapping_eid][0]+1; j<=tid; j++) {
+							e2tok[mapping_eid].push(j);
+						}
+
+						// Clear cache
+						group2eid[e_group].pop();
+					}
+				}
+			}
+		} else {
+			if (line.startsWith('# sent_id') || line.startsWith('# s_type') || line.startsWith('# newpar') || line.startsWith('# text')){
+				let new_sent_id = sent + 1;
+				if (!(new_sent_id in meta_anno)){meta_anno[new_sent_id] = [];}
+				meta_anno[new_sent_id].push(line);
+
+			} else if (tid == 0 && line.startsWith('#')){
+				if (!('meta' in meta_anno)){meta_anno['meta'] = [];}
+				meta_anno['meta'].push(line);
+			}
+		}
+	}
+
+
+	let ent2div = {};  // maps webanno ids to div ids
+	let group_list = {};  // group mentions into lists
+	for (e_id in e2tok){
+		e_type = e2type[e_id];
+		let tok_span = e2tok[e_id];
+		let new_ent = add_entity(tok_span);
+		if (e_id in e2annos) {new_ent.annos = e2annos[e_id];}
+		if (e_id in e2link) {new_ent.link = e2link[e_id];}
+		if (e_id in e2mention_type) {new_ent.mention_type = e2mention_type[e_id];}
+		if (e_id in e2minspan) {new_ent.min_span = e2minspan[e_id];}
+
+		change_entity(e_type);
+		ent2div[e_id] = new_ent.div_id;
+
+		let cur_group = e2groups[e_id];
+		if (!(cur_group in group_list)){
+			group_list[cur_group] = [];
+		}
+		group_list[cur_group].push(new_ent.div_id);
+	}
+
+	// Remove singletons from group_list
+	for (var g_id in group_list){
+		if (group_list[g_id].length == 1){
+			delete group_list[g_id];
+		}
+	}	
+
+	var src; var trg; var mention_type; var old_group;
+	var etype_counts = {};
+	// Assign coref groups
+	if (Object.keys(group_list).length > 0){
+		let max_group = 1;
+		var grouping = {};
+
+		for (var g_id in group_list){
+			for (var k=1; k<group_list[g_id].length; k++){
+				src = group_list[g_id][k];
+				trg = group_list[g_id][k-1];
+				mention_type = entities[src].mention_type;
+
+				if (!(mention_type in grouping)){grouping[mention_type] = {};}
+				if (!(mention_type in etype_counts)){etype_counts[mention_type] = 0;}
+				etype_counts[mention_type]++;
+
+				let found = false;
+				for (var group in grouping[mention_type]){
+					if (grouping[mention_type][group].includes(src)){
+						old_group = parseInt(entities[trg].groups[mention_type]);
+						if (old_group!=0){
+							for (var div_id in entities){
+								e = entities[div_id];
+								if (e.groups[mention_type] == old_group){
+									assign_group(e, mention_type, group);
+								}
+							}
+						}
+						assign_group(entities[trg], mention_type, group);
+						grouping[mention_type][group].push(trg);
+						found=true;
+					}
+					else if (grouping[mention_type][group].includes(trg)){
+						old_group = parseInt(entities[src].groups[mention_type]);
+						if (old_group!=0){
+							for (var e of entities){
+								if (e.groups[mention_type] == old_group){
+									assign_group(e, mention_type, group);
+								}
+							}
+						}
+						assign_group(entities[src], mention_type, group);
+						grouping[mention_type][group].push(src);
+						found=true;
+					}
+				}
+				if (found){continue};
+
+				// no match found, need a new group
+				assign_group(entities[src], mention_type, max_group);
+				assign_group(entities[trg], mention_type, max_group);
+				grouping[mention_type][max_group] = [src,trg];
+				max_group++;
+			}
+		}
+	}
+
+	let max_type = Object.keys(etype_counts).reduce((a, b) => etype_counts[a] > etype_counts[b] ? a : b);
+	let sel_opts = '<option value="entities">entity types</option>\n';
+	for (var etype in grouping){
+		color_modes.add(etype);
+		sel_opts += '<option value="'+etype+'"';
+		if (max_type == etype){ sel_opts += ' selected="selected"';}
+		sel_opts += '>' + etype + '</option>\n';
+	}
+	$("#color_mode").html(sel_opts);
+
+
+	set_entity_classes();
+	init_doc();
+}
 
 function read_webanno(data){
 	anno_mode = "entities";
@@ -2240,16 +2534,16 @@ function reset_coref_groupids(){ // "entities" and "groups"
 }
 
 function write_conllu(){
-	output = [];
-	buffer = [];
-	toknum = 1;
-	e_ids = {};
-	webanno2div = {};
-	chars = 0;
-	max_ent_id = 1;
-	sent_id = 1;
+	let output = [];
+	let buffer = [];
+	let toknum = 1;
+	let e_ids = {};
+	let webanno2div = {};
+	let chars = 0;
+	let max_ent_id = 1;
+	let sent_id = 1;
 
-	new_coref_groups = reset_coref_groupids();
+	let new_coref_groups = reset_coref_groupids();
 
 	// reset 'next' attribute of all entities
 	for (var div_id in entities){entities[div_id].next = {};}
@@ -2258,42 +2552,55 @@ function write_conllu(){
 		for (var group_num in groups[gtype]){
 			// sort by entity start and reverse end
 			if (parseInt(group_num)==0){continue;}
-			div_ids = groups[gtype][group_num];
-			ents_to_sort = [];
+			let div_ids = groups[gtype][group_num];
+			let ents_to_sort = [];
 			for (var div_id of div_ids){
 				ents_to_sort.push(entities[div_id]);
 			}
 			ents_to_sort.sort(function(a, b){if (a.start == b.start){return b.end - a.end} return a.start - b.start});
 			for (var i in range(0,ents_to_sort.length-1)){
 				// make an edge specification pointing from next member of chain
-				i = parseInt(i);
-				ent = ents_to_sort[i];
-				next_ent = ents_to_sort[i+1];
-				next_start = tokens[next_ent.start].sentnum + "-" + tokens[next_ent.start].toknum_in_sent;
+				let i = parseInt(i);
+				let ent = ents_to_sort[i];
+				let next_ent = ents_to_sort[i+1];
+				let next_start = tokens[next_ent.start].sentnum + "-" + tokens[next_ent.start].toknum_in_sent;
 				// this_webanno_id = (ent.length > 1 ? e_ids[ent.div_id] : "0");
 				// next_webanno_id = (next_ent.length > 1 ? e_ids[next_ent.div_id] : "0");
 				// id_part = "[" + next_webanno_id.toString() + "_" + this_webanno_id.toString()+"]";
 				// if (id_part == "[0_0]"){id_part = "";}  // edges between single token entities are implicit in webanno, with only the source token number indicating edge source
-				edge = next_ent;  // e.g. 3-15[20_18]  meaning an edge from entity 20 which starts at token 3-15, to current entity 18
+				let edge = next_ent;  // e.g. 3-15[20_18]  meaning an edge from entity 20 which starts at token 3-15, to current entity 18
 				ent.next[gtype] = edge;
 
-				ante_edge = ent;
+				let ante_edge = ent;
 				next_ent.ante[gtype] = ante_edge;
 			}
 		}
 	}
 
-	output.push('# newdoc id = 001');
-
-	sent = '# text = ';
+	// Add meta data of the doc
+	if (is_conllu_input == true){
+		for (i in meta_anno['meta']){
+			output.push(meta_anno['meta'][i]);
+		}
+	} else {
+		output.push('# newdoc id = 001');
+	}
+	let sent = '# text = ';
 	for (var t in tokens){
-		tok = tokens[t];
+		let tok = tokens[t];
 		if (sent != '# text = ' && tok.toknum_in_sent == 1){
 			if (tok.sent != 2) {
 				output.push('');
 			}
-			output.push('# sent_id = 001-' + sent_id);
-			output.push($.trim(sent));
+			// Add meta data of the sent
+			if (is_conllu_input == true){
+				for (i in meta_anno[sent_id]){
+					output.push(meta_anno[sent_id][i]);
+				}
+			} else {
+				output.push('# sent_id = 001-' + sent_id);
+				output.push($.trim(sent));
+			}
 			output.push(buffer.join("\n"));
 			sent = '# text = ';
 			buffer = [];
@@ -2301,36 +2608,42 @@ function write_conllu(){
 			sent_id ++;
 		}
 
-		anno_array = [];
-		bridge_array = [];
-		anno_string = '';
-		bridge_string = '';
+		let anno_array = [];
+		let bridge_array = [];
+		let anno_string = '';
+		let bridge_string = '';
 		if (tok.tid in toks2entities){
-			overlapped_ents = toks2entities[tok.tid];
+			let overlapped_ents = toks2entities[tok.tid];
 			for (var span_id in overlapped_ents){
-				e = overlapped_ents[span_id];
+				let e = overlapped_ents[span_id];
 				if (!(e.div_id in e_ids)){
 					e_ids[e.div_id] = max_ent_id;
 					webanno2div[max_ent_id] = e.div_id;
 					max_ent_id +=1;
 				}
 				tok_id = tok.tid;
-				coref_type = '';
-				identity = '';
-				bridge_string = '';
+				let coref_type = '';
+				//identity = '';
+				let bridge_string = '';
 
 				// Deal with coreference
-				coref_g = e.groups.coref;
-				if (coref_g != '0'){
-					identity = 'coref';
-				} else {
-					identity = 'sgl';
-				}
+				let coref_g = e.groups.coref;
+				let mention_type = e.mention_type;
+				let link = e.link;
+				let min_span = e.min_span;
 
 				if (tok_id == e.start == e.end){ // entity=()
-					anno_string += '(' + e_ids[e.div_id] + '-' + e.type + '-' + e.annos.infstat + '-' + new_coref_groups[e.div_id] + '-' + identity + ')';
+					cur_entity_string = e_ids[e.div_id] + '-' + e.type + '-' + e.annos.infstat + '-' + min_span + '-' + mention_type;
+					if (!(link == '')){
+						cur_entity_string += link;
+					}
+					anno_string += '(' + cur_entity_string + ')';
 				} else if (tok_id == e.start){ // entity=(
-					anno_string += '(' + e_ids[e.div_id] + '-' + e.type + '-' + e.annos.infstat + '-' + new_coref_groups[e.div_id] + '-' + identity;
+					cur_entity_string = e_ids[e.div_id] + '-' + e.type + '-' + e.annos.infstat + '-' + min_span + '-' + mention_type;
+					if (!(link == '')){
+						cur_entity_string += '-' + link;
+					}
+					anno_string += '(' + cur_entity_string;
 				} else if (tok_id == e.end){ // entity=)
 					anno_string += e_ids[e.div_id] + ')';
 				}
@@ -2344,10 +2657,6 @@ function write_conllu(){
 				}
 				// find the beginning and ending of the entity
 
-				// anno_string += e.type;
-				// if (e.length > 1 || true){ // Remove true to reproduce older WebAnno behavior with no ID for single token spans
-				// 	anno_string += e_ids[e.div_id];
-				// }
 				anno_array.push(anno_string);
 				anno_string = '';
 				bridge_string = '';
@@ -2362,13 +2671,38 @@ function write_conllu(){
 		if (bridge_string != ''){
 			bridge_string = 'Bridge:' + bridge_string + '|';
 		}
-		if (anno_string==''){
+		if (anno_string == ''){
 			anno_string = '_';
 		} else{
 			anno_string = bridge_string + 'Entity=' + anno_string;
 			anno_string += "";
 		}
-		line = [toknum.toString() + "\t" + tok.word + "\t_\t_\t_\t_\t_\t_\t_\t" + anno_string];
+		if (is_conllu_input){
+			if (tok.tid-1 in super_tokens){
+				buffer.push(super_tokens[tok.tid-1]);
+			}
+
+			line_field = line_fields[tok.tid];
+			line = [];
+			for (l in line_fields[tok.tid]){
+				line.push(line_fields[tok.tid][l]);
+			}
+
+			if (line[line.length-1] == '_' || line[line.length-1] == ''){
+				if (anno_string == '_'){
+					line[line.length-1] = '_';
+				} else {
+					line[line.length-1] = anno_string;
+				}
+			} else {
+				if (!(anno_string == '_')){
+					line[line.length-1] += '|' + anno_string;
+				}
+			}
+			line = line.join('\t');
+		} else {
+			line = [toknum.toString() + "\t" + tok.word + "\t_\t_\t_\t_\t_\t_\t_\t" + anno_string];
+		}
 		buffer.push(line);
 		sent += tok.word + " ";
 		chars += tok.word.length + 1;
@@ -2379,8 +2713,14 @@ function write_conllu(){
 	if (tok.sent != 1) {
 		output.push('');
 	}
-	output.push('# sent_id = 001-' + sent_id);
-	output.push($.trim(sent));
+	if (is_conllu_input == true){
+		for (i in meta_anno[sent_id]){
+			output.push(meta_anno[sent_id][i]);
+		}
+	} else {
+		output.push('# sent_id = 001-' + sent_id);
+		output.push($.trim(sent));
+	}
 	output.push(buffer.join("\n"));
 	output = output.join("\n");
 
