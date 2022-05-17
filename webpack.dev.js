@@ -1,15 +1,6 @@
 
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-//var webpack = require('webpack');
-
-//var $ = require('jquery');
-//require('jquery-ui')($);
-//require('jqgrid')($);
-
-/*new webpack.ProvidePlugin({
-  $: 'jquery',
-  jQuery: 'jquery',
-});*/
+const webpack = require('webpack')
 
 module.exports = {
 
@@ -23,9 +14,8 @@ module.exports = {
   // https://webpack.js.org/concepts/entry-points/#multi-page-application
   entry: {
     index: './src/page-index/main.js',
+    login: './src/page-login/main.js',
     open: './src/page-open/main.js',
-    //about: './src/page-index/main.js',
-    //contacts: './src/page-contacts/main.js'
   },
 
   // https://webpack.js.org/configuration/dev-server/
@@ -46,7 +36,10 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['@babel/preset-env']
+            presets: [
+              ['@babel/preset-env', {"useBuiltIns": "usage", "corejs": 3, "targets": "> 0.25%, not dead"}],
+              '@babel/preset-react'
+            ]
           }
         }
       },
@@ -75,18 +68,21 @@ module.exports = {
 
   // https://webpack.js.org/concepts/plugins/
   plugins: [
+    new webpack.DefinePlugin({
+      API_ENDPOINT: JSON.stringify("http://localhost:3000/api"),
+    }),
     new HtmlWebpackPlugin({
       template: './src/page-index/tmpl.html',
       inject: true,
       chunks: ['index'],
       filename: 'index.html'
     }),
-    //new HtmlWebpackPlugin({
-    //  template: './src/page-index/tmpl.html',
-    //  inject: true,
-    //  chunks: ['about'],
-    //  filename: 'about.html'
-    //}),
+    new HtmlWebpackPlugin({
+      template: './src/page-login/tmpl.html',
+      inject: true,
+      chunks: ['login'],
+      filename: 'login.html'
+    }),
     new HtmlWebpackPlugin({
       template: './src/page-open/tmpl.html',
       inject: true,

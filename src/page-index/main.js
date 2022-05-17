@@ -2,6 +2,7 @@ import $, { post } from 'jquery'
 import 'jquery-ui'
 import 'jquery-ui-bundle'
 import {spinner} from 'jquery-ui-bundle'
+
 import '../css/main.css'
 //import './page.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
@@ -12,8 +13,14 @@ import '@fortawesome/fontawesome-free/js/fontawesome'
 import '@fortawesome/fontawesome-free/js/solid'
 import '@fortawesome/fontawesome-free/js/regular'
 import '@fortawesome/fontawesome-free/js/brands'
+
 import img from '../img/unicorn.jpg'
 import { Tooltip, Toast, Popover, Tab } from 'bootstrap'
+
+import '../css/main.css'
+import { api } from '../js/common.js'
+import {segmenter_read_conllu, select} from '../js/segmenter.js'
+import {spannotator_read_conllu, change_entity, toggle_sents, set_color_mode, group_selected, ungroup_selected, add_entity} from '../js/spannotator.js'
 
 window.current_conllu = "";
 window.doc2conllu = {};
@@ -21,65 +28,49 @@ window.selected_tab = "home";
 
 /**
  * 
- * @param {string} docname - Name of the document to fetch from the backend
- * @param {*} reader_function - Reader function of the target widget, which is expected to take a conllu string
+ * @param {string} docId - Name of the document to fetch from the backend
+ * @param {*} readerFunction - Reader function of the target widget, which is expected to take a conllu string
  * @returns 
  */
-function get_conllu(docname, reader_function){
-  let genre = "academic";
-
-  // TODO: replace this with proper API call to backend
-  // get genre, needed for github URL to fetch
-  if (docname.split("_").length > 1){
-    genre = docname.split("_")[1];
-  }
-  let prefix = "https://raw.githubusercontent.com/gucorpling/amalgum/dev/amalgum/"+genre+"/dep/";
-  var myRequest = new Request(prefix + docname + '.conllu');
-  fetch(myRequest).then(function(response) {
-    return response.text().then(function(conllu_string) {
-      reader_function(conllu_string);
-    });
-  });
+async function get_conllu(docId, readerFunction){
+  const doc = await api.getDocument(docId, "conllu")
+  readerFunction(doc);
 }
 
 window.segmenter_read_conllu = segmenter_read_conllu;
-
-document.addEventListener('DOMContentLoaded', () => {
-  console.log('DOMContentLoaded', 'page-index')
-  console.log('Image through require()', img)
-})
+window.spannotator_read_conllu = spannotator_read_conllu;
 
 const queryString = window.location.search;
 //console.log(queryString);
 const urlParams = new URLSearchParams(queryString);
 
 var docs = [];
-var doc_index = 0;
+var docIndex = 0;
 window.docs = [];
 
-
-
-
-if (urlParams.has('docs')){
-  docs = urlParams.getAll('docs')[0].split(";");  
-  console.log(docs);
-  for (let i in docs){
-    window.docs.push(docs[i]);
+async function initPage() {
+  if (urlParams.has('docs')) {
+    docs = urlParams.getAll('docs')[0].split(";");
+    console.log(docs);
+    for (let i in docs) {
+      window.docs.push(docs[i]);
+    }
+    const docJson = await api.getDocument(docs[0], "json");
+    $("#selected_docname").html(docJson.name);
+    docIndex = 0;
+    $("#doc_count").html("Document " + (docIndex + 1) + "/" + docs.length);
   }
-  $("#selected_docname").html(docs[0]);
-  doc_index = 0;
-  $("#doc_count").html("Document " + (doc_index+1) + "/" + docs.length);
-
 }
 
-//console.log(current_conllu);
+initPage()
 
 function open_segment(){
   window.selected_tab = "segment";
   if (window.docs.length > 0){
-    get_conllu(window.docs[doc_index],segmenter_read_conllu);
+    get_conllu(window.docs[docIndex],segmenter_read_conllu);
   }
 }
+
 
 function open_syntax(){
   window.selected_tab = "syntax";
@@ -88,27 +79,38 @@ function open_syntax(){
   }
 }
 
-function cycle_docs(offset){
+// function cycle_docs(offset){
+
+function open_entities(){
+  window.selected_tab = "entities";
+  if (window.docs.length > 0){
+    get_conllu(window.docs[docIndex],spannotator_read_conllu);
+  }
+}
+
+async function cycle_docs(offset){
   if (docs.length>1){
       if (offset<0){ // prev doc
-        doc_index--;
-        if (doc_index<0){ // no more documents
+        docIndex--;
+        if (docIndex<0){ // no more documents
           alert("Reached first document of " + docs.length + " selected documents");
-          doc_index++;
+          docIndex++;
           return;
         }
       }else{ //next doc
-        doc_index++;
-        if (doc_index>=docs.length){ // no more documents
+        docIndex++;
+        if (docIndex>=docs.length){ // no more documents
           alert("Reached last document of " + docs.length + " selected documents");
-          doc_index--;
+          docIndex--;
           return;
         }
       }
-      $("#selected_docname").html(docs[doc_index]);
-      $("#doc_count").html("Document " + (doc_index+1) + "/" + docs.length);
+
+      const docJson = await api.getDocument(docs[docIndex], "json");
+      $("#selected_docname").html(docJson.name, docs[docIndex]);
+      $("#doc_count").html("Document " + (docIndex+1) + "/" + docs.length);
       if (window.selected_tab=="segment"){
-        window.open_segment();
+        open_segment();
       }
       if (window.selected_tab=="syntax"){
         window.open_syntax();
@@ -116,7 +118,16 @@ function cycle_docs(offset){
     }
 }
 
+
 window.open_segment = open_segment;
 window.open_syntax = open_syntax;
+
+document.getElementById("pills-segmentation-tab").addEventListener("click", () => open_segment())
+document.getElementById("pills-entities-tab").addEventListener("click", () => open_entities())
+
+window.change_entity = change_entity;
+// spannotator toolbar function
+window.toggle_sents = toggle_sents; window.set_color_mode = set_color_mode; window.group_selected = group_selected; window.ungroup_selected = ungroup_selected; window.add_entity = add_entity;
+
 window.select = select;
 window.cycle_docs = cycle_docs;

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html style="height:100%">
+
+<head>
+  <title>Midas Loop</title>
+  <%= require('../partials/head.html?raw') %>
+</head>
+
+<body class="d-flex flex-column h-100">
+  <div class="flex-grow-1">
+    <%= require('../partials/nav_plain.html?raw') %>
+  </div>
+
+  <main class="d-flex flex-grow-1">
+    <div class="container">
+      <form class="align-middle">
+        <div class="form-group validated">
+          <label for="token">Token:</label>
+          <input type="password" class="form-control" id="token">
+          <div id="bad-token" class="invalid-feedback"></div>
+        </div>
+      </form>
+    </div>
+
+  </main>
+
+  <!-- react demo -->
+  <div id="react-root" class="d-flex flex-grow-1">
+
+  </div>
+
+
+  <%= require('../partials/footer.html?raw') %>
+</body>
+
+</html>

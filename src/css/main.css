@@ -67,8 +67,6 @@ nav > ul > li > a {
 footer {
   background: #282828;
   color: beige;
-  flex: 1 0 auto;
-  padding-top: 20px;
 }
 
 footer a {
@@ -149,3 +147,5 @@ footer > ul > li > a {
 
 .sel-genre{height:150px;    overflow-y: auto;
 }
+
+.ui-pg-button .ui-icon{display: inline-block !important;}
