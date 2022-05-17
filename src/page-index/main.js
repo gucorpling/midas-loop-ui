@@ -9,6 +9,7 @@ import '../css/main.css'
 import { api } from '../js/common.js'
 import {segmenter_read_conllu, select} from '../js/segmenter.js'
 import {spannotator_read_conllu, change_entity, toggle_sents, set_color_mode, group_selected, ungroup_selected, add_entity} from '../js/spannotator.js'
+import {syntax_read_conllu} from '../js/syntax.js'
 
 window.current_conllu = "";
 window.doc2conllu = {};
@@ -27,6 +28,7 @@ async function get_conllu(docId, readerFunction){
 
 window.segmenter_read_conllu = segmenter_read_conllu;
 window.spannotator_read_conllu = spannotator_read_conllu;
+window.syntax_read_conllu = syntax_read_conllu;
 
 const queryString = window.location.search;
 //console.log(queryString);
@@ -66,6 +68,14 @@ function open_entities(){
   }
 }
 
+function open_syntax(){
+  window.selected_tab = "syntax";
+  syntax_read_conllu("testing"); // just for testing
+  //if (window.docs.length > 0){
+  //  get_conllu(window.docs[doc_index],syntax_read_conllu);
+  //}
+}
+
 async function cycle_docs(offset){
   if (docs.length>1){
       if (offset<0){ // prev doc
@@ -95,6 +105,7 @@ async function cycle_docs(offset){
 
 document.getElementById("pills-segmentation-tab").addEventListener("click", () => open_segment())
 document.getElementById("pills-entities-tab").addEventListener("click", () => open_entities())
+document.getElementById("pills-syntax-tab").addEventListener("click", () => open_syntax())
 
 window.change_entity = change_entity;
 // spannotator toolbar function
