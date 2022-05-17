@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html style="height:100%">
+
+<head>
+  <title>Midas Loop</title>
+  <%= require('../partials/head.html?raw') %>
+</head>
+
+<body class="d-flex flex-column h-100">
+  <%= require('../partials/nav.html?raw') %>
+  <div id="doc-ribbon" class="ribbon">
+    <div>
+      <div class="btn btn-prev" onclick="window.cycle_docs(-1);"><i class="fa fa-caret-square-left"> </i></div>
+      <div class="btn btn-next" onclick="window.cycle_docs(1);"><i class="fa fa-caret-square-right"> </i></div>
+    </div>
+    <div><span id="doc_count">Document: </span> <span id="selected_docname">(no document selected)</span></div>
+  </div>
+
+  <main class="flex-grow-1">
+    <ul class="nav nav-pills">
+      <li class="nav-item">
+        <button class="nav-link active" onclick="window.selected_tab='home';" id="pills-home-tab" data-bs-toggle="pill"
+          data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home"
+          aria-selected="true">Home</button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" id="pills-segmentation-tab" data-bs-toggle="pill"
+          data-bs-target="#pills-segmentation" type="button" role="tab" aria-controls="pills-segmentation"
+          aria-selected="false">Segmentation</button>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Syntax</a>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" id="pills-entities-tab" data-bs-toggle="pill" 
+        data-bs-target="#pills-entities" type="button" role="tab" aria-controls="pills-entities" 
+        aria-selected="false">Entities</button>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Discourse</a>
+      </li>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content" id="tab-content">
+      <div class="tab-pane active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+        <h1 class="page-title">
+          <i class="fas fa-user-secret"></i>
+          Welcome to Midas Loop
+        </h1>
+      </div>
+      <div class="tab-pane fade" id="pills-segmentation" role="tabpanel" aria-labelledby="pills-segmentation-tab">
+        <div id="outputDialog"></div>
+        <div id="inputDialog"></div>
+
+        <div id="main" class="boarder">
+          <div id="canvas">
+          </div>
+        </div>
+      </div>
+      <div class="tab-pane fade" id="pills-syntax" role="tabpanel" aria-labelledby="pills-syntax-tab">...</div>
+      <div class="tab-pane fade" id="pills-entities" role="tabpanel" aria-labelledby="pills-entities-tab">
+    
+        <input type="hidden" name="active_entity" id="active_entity" value="">
+        <input type="hidden" name="entity_annos" id="entity_annos" value="%%entity_annos%%">
+        <input type="hidden" name="DEFAULT_SGML_SENT_TAG" id="DEFAULT_SGML_SENT_TAG" value="%%DEFAULT_SGML_SENT_TAG%%">
+        <input type="hidden" name="DEFAULT_SGML_TOK_ATTR" id="DEFAULT_SGML_TOK_ATTR" value="%%DEFAULT_SGML_TOK_ATTR%%">
+        <input type="hidden" name="DOC_TT_STRING" id="DOC_TT_STRING" value="%%DOC_TT_STRING%%">
+        <input type="hidden" name="DOC_ENTITY_LIST" id="DOC_ENTITY_LIST" value="%%DOC_ENTITY_LIST%%">
+        <input type="hidden" name="ALL_ENTITY_LIST" id="ALL_ENTITY_LIST" value="%%ALL_ENTITY_LIST%%">
+    
+        <ul  id="anno-context" class='custom-menu'>
+        </ul>
+    
+        <div id="spannotator">
+        <div id="loading_screen" class="loading"><i class="fa fa-spinner fa-spin"></i><br/>Loading...</div>
+          <div id="toolbar">
+          <div class="col-md-12">
+            <button type="button" class="btn" onclick="add_entity(null);" title="Add span (Enter)"><i class="fa fa-plus"></i></button>
+            <button type="button" class="btn" onclick="group_selected(null);" title="Group spans (Enter)" id="btn_group"><i class="fa fa-object-group"></i></button>
+            <button type="button" class="btn" onclick="ungroup_selected(null);" title="Ungroup spans (Del)" id="btn_ungroup"><i class="fa fa-object-ungroup"></i></button>
+            <button type="button" class="btn" onclick="toggle_sents();" title="Toggle sentence view"><i class="fa fa-paragraph"></i></button>
+            <span style="color:white">| use colors for: </span><select id="color_mode" onchange="set_color_mode();" disabled="disabled">
+              <option value="entities" selected="selected">entity types</option>
+              <option value="coref">coref</option>
+            </select>
+          </div>
+          </div>
+    
+          <div id="annotation_dialog" class="dialog">
+            <p>
+              <div id="anno_entity_text"></div>
+              <select id="sel_anno_key" onchange="select_anno_key();"></select>
+              <select id="sel_anno_value" onchange="select_anno_value();"></select>
+            </p>
+          </div>
+    
+    
+          <div id="editor">
+            <div id="selectable"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div style="text-align: center">
+      <!--<img class="img-src-uses-require" src="<%= require('../img/unicorn.jpg') %>" width="200">-->
+
+      <!-- uses a specific "template" resourceQuery (webpack config) which will load a file like a esModule by default, hence ".default" -->
+      <%= require('../partials/images.html?template').default %>
+    </div>
+  </main>
+
+  <%= require('../partials/footer.html?raw') %>
+</body>
+
+</html>

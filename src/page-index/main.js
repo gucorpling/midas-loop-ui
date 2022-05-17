@@ -1,103 +1,87 @@
-import $, { post } from 'jquery'
+import $ from 'jquery'
 import 'jquery-ui'
-import 'jquery-ui-bundle'
-import {spinner} from 'jquery-ui-bundle'
-import img from '../img/unicorn.jpg'
-import { Tooltip, Toast, Popover, Tab } from 'bootstrap'
+import 'jquery-ui/themes/base/theme.css';
+require('../../node_modules/jqgrid/js/i18n/grid.locale-en.js')($)
+require('../../node_modules/jqgrid/js/jquery.jqGrid.src.js')($)
+//require("modules/jquery-ui/themes/black-tie/jquery-ui.css");
+//require("modules/jquery-ui/themes/black-tie/jquery-ui.theme.css");
+require("../../node_modules/jquery-ui/");
+require("../../node_modules/jquery-ui-bundle/jquery-ui.theme.min.css");
+import { Tooltip, Toast, Popover } from 'bootstrap'
 
 import '../css/main.css'
 import { api } from '../js/common.js'
-import {segmenter_read_conllu, select} from '../js/segmenter.js'
-import {spannotator_read_conllu, change_entity, toggle_sents, set_color_mode, group_selected, ungroup_selected, add_entity} from '../js/spannotator.js'
 
-window.current_conllu = "";
-window.doc2conllu = {};
-window.selected_tab = "home";
+async function initGrid() {
+    var data = await api.queryDocuments(0, 9999999, "xpos-gold-dec");
+    console.log("Received data:", data.docs)
 
-/**
- * 
- * @param {string} docId - Name of the document to fetch from the backend
- * @param {*} readerFunction - Reader function of the target widget, which is expected to take a conllu string
- * @returns 
- */
-async function get_conllu(docId, readerFunction){
-  const doc = await api.getDocument(docId, "conllu")
-  readerFunction(doc);
+    $("#grid").jqGrid({
+        datastr: data.docs,
+        datatype: 'jsonstring',
+        width: '100%',
+        colNames: ["id","name", "token_count", "sentence_count", "xpos_gold_rate"],
+        colModel: [
+            { name: 'id', width: 0, }, 
+            { name: 'name', width: 250, }, 
+            { name: 'token_count', width: 50, formatter: "number", align: "right", sorttype: "number", formatoptions: { decimalPlaces: 0 }, searchoptions: { sopt: ["eq", "ne", "lt", "le", "gt", "ge"] }}, 
+            { name: 'sentence_count', width: 50, formatter: "number", align: "right", sorttype: "number", formatoptions: { decimalPlaces: 0 }, searchoptions: { sopt: ["eq", "ne", "lt", "le", "gt", "ge"] }}, 
+            { name: 'xpos_gold_rate', width: 100, formatter: "number", align: "right", sorttype: "number", searchoptions: { sopt: ["eq", "ne", "lt", "le", "gt", "ge"] } }
+        ],
+
+        pager: '#pager', 
+        jsonReader: { repeatitems: false },
+        rowNum: 15,
+        rowList: [15,30,50,100],
+        viewrecords: true,
+        caption: "Documents",
+        height: "auto",
+        ignoreCase: true,
+        gridview: true,
+        autoencode: true,
+        rownumbers: true,
+        shrinkToFit: true,
+        emptyrecords: "no documents found",
+        autowidth: true,
+        pgbuttons: true,
+        multiselect: true,
+        multiboxonly: false,
+        ondblClickRow: function (rowId) {
+            var rowData = $(this).getRowData(rowId);
+            var docname = rowData['name'];
+            var aQryStr = "docs=" + docname;
+            console.log("./index.html?" + aQryStr);
+            document.location.href = "./index.html?" + aQryStr;
+        },
+    }).hideCol("id");
+    $(window).on('resize', function() {
+        $("#grid").setGridWidth($(window).width()-50);
+     }).trigger('resize');
+
+     //$("#grid").jqGrid('navGrid','#pager', {position: 'right'});
+     $('#pager').css("height", "35px");
+
+    $("#grid").jqGrid('filterToolbar', { stringResult: true, searchOnEnter: false, defaultSearch: "cn" });
 }
 
-window.segmenter_read_conllu = segmenter_read_conllu;
-window.spannotator_read_conllu = spannotator_read_conllu;
+initGrid();
 
-const queryString = window.location.search;
-//console.log(queryString);
-const urlParams = new URLSearchParams(queryString);
 
-var docs = [];
-var docIndex = 0;
-window.docs = [];
-
-async function initPage() {
-  if (urlParams.has('docs')) {
-    docs = urlParams.getAll('docs')[0].split(";");
-    console.log(docs);
-    for (let i in docs) {
-      window.docs.push(docs[i]);
+export function open_selected() {
+    var sel_rows_ids;
+    sel_rows_ids = $("#grid").jqGrid('getGridParam', 'selarrrow');
+    var sel_rows = [];
+    for (var rid of sel_rows_ids) {
+        var row_data = $('#grid').getRowData(rid);
+        sel_rows.push(row_data);
     }
-    const docJson = await api.getDocument(docs[0], "json");
-    $("#selected_docname").html(docJson.name);
-    docIndex = 0;
-    $("#doc_count").html("Document " + (docIndex + 1) + "/" + docs.length);
-  }
-}
-
-initPage()
-
-function open_segment(){
-  window.selected_tab = "segment";
-  if (window.docs.length > 0){
-    get_conllu(window.docs[docIndex],segmenter_read_conllu);
-  }
-}
-
-function open_entities(){
-  window.selected_tab = "entities";
-  if (window.docs.length > 0){
-    get_conllu(window.docs[docIndex],spannotator_read_conllu);
-  }
-}
-
-async function cycle_docs(offset){
-  if (docs.length>1){
-      if (offset<0){ // prev doc
-        docIndex--;
-        if (docIndex<0){ // no more documents
-          alert("Reached first document of " + docs.length + " selected documents");
-          docIndex++;
-          return;
-        }
-      }else{ //next doc
-        docIndex++;
-        if (docIndex>=docs.length){ // no more documents
-          alert("Reached last document of " + docs.length + " selected documents");
-          docIndex--;
-          return;
-        }
-      }
-
-      const docJson = await api.getDocument(docs[docIndex], "json");
-      $("#selected_docname").html(docJson.name, docs[docIndex]);
-      $("#doc_count").html("Document " + (docIndex+1) + "/" + docs.length);
-      if (window.selected_tab=="segment"){
-        open_segment();
-      }
+    let sel_docs = [];
+    for (var row of sel_rows) {
+        sel_docs.push(row["id"]);
     }
+    var aQryStr = "docs=" + sel_docs.join(";");
+    console.log("./index.html?" + aQryStr);
+    document.location.href = "./index.html?" + aQryStr;
 }
 
-document.getElementById("pills-segmentation-tab").addEventListener("click", () => open_segment())
-document.getElementById("pills-entities-tab").addEventListener("click", () => open_entities())
-
-window.change_entity = change_entity;
-// spannotator toolbar function
-window.toggle_sents = toggle_sents; window.set_color_mode = set_color_mode; window.group_selected = group_selected; window.ungroup_selected = ungroup_selected; window.add_entity = add_entity;
-window.select = select;
-window.cycle_docs = cycle_docs;
+window.open_selected = open_selected;

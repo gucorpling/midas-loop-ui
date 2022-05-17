@@ -19,9 +19,9 @@ module.exports = {
 
   // https://webpack.js.org/concepts/entry-points/#multi-page-application
   entry: {
-    index: './src/page-index/main.js',
+    document: './src/page-document/main.js',
     login: './src/page-login/main.js',
-    open: './src/page-open/main.js',
+    index: './src/page-index/main.js',
   },
 
   // how to write the compiled files to disk
@@ -81,10 +81,10 @@ module.exports = {
       API_ENDPOINT: JSON.stringify("http://localhost:3000/api"),
     }),
     new HtmlWebpackPlugin({
-      template: './src/page-index/tmpl.html',
+      template: './src/page-document/tmpl.html',
       inject: true,
-      chunks: ['index'],
-      filename: 'index.html'
+      chunks: ['document'],
+      filename: 'document.html'
     }),
     new HtmlWebpackPlugin({
       template: './src/page-login/tmpl.html',
@@ -93,10 +93,10 @@ module.exports = {
       filename: 'login.html'
     }),
     new HtmlWebpackPlugin({
-      template: './src/page-open/tmpl.html',
+      template: './src/page-index/tmpl.html',
       inject: true,
-      chunks: ['open'],
-      filename: 'open.html'
+      chunks: ['index'],
+      filename: 'index.html'
     }),
     new MiniCssExtractPlugin({
       filename: '[name].[contenthash].css',
