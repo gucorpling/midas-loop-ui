@@ -41,7 +41,8 @@ export function Document(props) {
 	  const firstToken = props.tokens && props.tokens.length > 0 && props.tokens[0]
 	  const outProb = firstToken && firstToken.probas && firstToken.probas.O
 	  const maybeMerge = outProb && outProb > 0.9
-	  if (maybeMerge) {
+	  const isGold = firstToken.quality && firstToken.quality === "gold"
+	  if (!isGold && maybeMerge) {
 		  className += " sentence-maybe-merge"
 	  }
 	  if (!insideToken) {
@@ -66,7 +67,8 @@ export function Document(props) {
 		}
 	  }
 	  let tokenAreaClassName;
-	  if (props.index > 0 && props.probas && props.probas.B > 0.1) {
+	  const isGold = props.quality && props.quality === "gold"
+	  if (props.index > 0 && props.probas && props.probas.B > 0.1 && !isGold) {
 		tokenAreaClassName = "token-area token-area-maybe-split"
 	  } else {
 		tokenAreaClassName = "token-area"
