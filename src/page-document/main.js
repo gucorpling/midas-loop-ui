@@ -72,10 +72,15 @@ function Metadata(props) {
       if (format === "json") {
         res = JSON.stringify(res)
       }
-      const promise = navigator.clipboard.writeText(res);
-      await promise
-      setState("copied_" + format)
-      setTimeout(() => setState("default"), 1000)
+      try {
+        const promise = navigator.clipboard.writeText(res);
+        await promise
+        setState("copied_" + format)
+        setTimeout(() => setState("default"), 1000)
+      } catch (e) {
+        console.error("Error encountered while copying:", e)
+        setState("default")
+      }
     }
   }
 
