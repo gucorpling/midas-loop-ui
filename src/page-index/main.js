@@ -32,13 +32,17 @@ function DocumentList(props) {
     }, [queryParams, pageNumber])
 
     const _makeNumericColumn = (name, selector) => {
+        const format = name.indexOf("MTP") > -1 
+        ? (v) => !selector(v) ? "–" : <span>{`${(selector(v) * 100).toFixed(2)}%`}</span> 
+        : selector
         return {
-            name: name, 
-            selector: selector, 
+            name, 
+            selector, 
             sortable: true, 
             reorder: true, 
             right: true, 
-            compact: true
+            compact: true,
+            format
         }
     }
 
@@ -61,6 +65,9 @@ function DocumentList(props) {
     }
     if (!docs.map(x => x.head_mean_top_proba).every(x => x === null || x === undefined)) {
         columns.push(_makeNumericColumn("HEAD MTP", r => r.head_mean_top_proba))
+    }
+    if (!docs.map(x => x.sentence_mean_top_proba).every(x => x === null || x === undefined)) {
+        columns.push(_makeNumericColumn("Sentence MTP", r => r.sentence_mean_top_proba))
     }
 
     return (
