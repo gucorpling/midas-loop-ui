@@ -40,7 +40,7 @@ export function Document(props) {
 	  let className = "sentence"
 	  const firstToken = props.tokens && props.tokens.length > 0 && props.tokens[0]
 	  const outProb = firstToken && firstToken.probas && firstToken.probas.O
-	  const maybeMerge = props.tokens[0].form.value[0]=="T"//outProb && outProb > 0.9
+	  const maybeMerge = outProb && outProb > 0.9
 	  if (maybeMerge) {
 		  className += " sentence-maybe-merge"
 	  }
