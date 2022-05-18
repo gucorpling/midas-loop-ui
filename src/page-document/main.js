@@ -63,15 +63,20 @@ initPage()
 
 function Metadata(props) {
   const [doc, setDoc] = useState(null)
+  const [state, setState] = useState("default")
   useEffect(() => { api.getDocument(props.id, "json").then(d => setDoc(d))}, [props.id])
   function makeCopy(format) {
     return async function (e) {
       e.preventDefault;
+      setState("busy")
       let res = await api.getDocument(props.id, format);
       if (format === "json") {
         res = JSON.stringify(res)
       }
-      navigator.clipboard.writeText(res);
+      const promise = navigator.clipboard.writeText(res);
+      await promise
+      setState("copied_" + format)
+      setTimeout(() => setState("default"), 1000)
     }
   }
 
@@ -82,11 +87,11 @@ function Metadata(props) {
         <p><strong>Internal ID:</strong> {doc.id}</p>
         <p><strong>Sentences:</strong> {doc.sentences.length}</p>
         <p><strong>Tokens:</strong> {doc.sentences.map(s => s.tokens.length).reduce((a,b) => a + b)}</p>
-        <p>
-          <span className="btn btn-outline-primary me-1" onClick={(e) => { e.preventDefault; api.downloadConlluFileWithPrompt(props.id); }}>Download CoNLL-U</span>
-          <span className="btn btn-outline-primary me-1" onClick={makeCopy("conllu")}>Copy CoNLL-U</span>
-          <span className="btn btn-outline-secondary me-1" onClick={makeCopy("json")}>Copy JSON</span>
-        </p>
+        <div>
+          <button disabled={state !== "default"} className="btn btn-outline-primary me-1" onClick={(e) => { e.preventDefault; api.downloadConlluFileWithPrompt(props.id); }}>Download CoNLL-U</button>
+          <button disabled={state !== "default"} className="btn btn-outline-primary me-1" onClick={makeCopy("conllu")}>{state === "copied_conllu" ? "Copied!" : "Copy CoNLL-U"}</button>
+          <button disabled={state !== "default"} className="btn btn-outline-secondary me-1" onClick={makeCopy("json")}>{state === "copied_json" ? "Copied!" : "Copy JSON"}</button>
+        </div>
       </div>
     ) : (
       <div className="d-flex justify-content-center mt-4">
