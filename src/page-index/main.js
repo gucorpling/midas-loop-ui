@@ -16,6 +16,7 @@ import '../css/main.css'
 import { api } from '../js/common.js'
 
 function DocumentList(props) {
+    const [loading, setLoading] = useState(true)
     const [docs, setDocs] = useState([])
     const [total, setTotal] = useState(0)
     const [pageNumber, setPageNumber] = useState(0)
@@ -26,6 +27,7 @@ function DocumentList(props) {
             const result = await api.queryDocuments(queryParams.offset, queryParams.limit, queryParams.orderBy);
             setDocs(result.docs)
             setTotal(result.total)
+            setLoading(false);
         }
         inner()
     }, [queryParams, pageNumber])
@@ -72,14 +74,23 @@ function DocumentList(props) {
     return (
         <div className="container container-md">
             <h1>Documents</h1>
-            <DataTable 
-                columns={columns} 
-                data={docs} 
-                responsive
-                dense
-                pagination
-                paginationPerPage={10}
-                />
+            {loading
+                ? (
+                    <div className="d-flex justify-content-center mt-4">
+                        <div className="spinner-border" role="status">
+                            <span className="sr-only">Loading...</span>
+                        </div>
+                    </div>
+                ) : (
+                    <DataTable
+                        columns={columns}
+                        data={docs}
+                        responsive
+                        dense
+                        pagination
+                        paginationPerPage={10}
+                    />
+                )}
         </div>
     )
 }
