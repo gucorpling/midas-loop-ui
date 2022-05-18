@@ -171,6 +171,22 @@ export default class Api {
         return this._getRequest(`/conllu/files/download/${documentId}`);
     }
 
+    /**
+     * Helper: download a CoNLL-U file and immediately start a download prompt for it
+     * @param {string} documentId
+     */
+    async downloadConlluFileWithPrompt(documentId) {
+        const result = await this.downloadConlluFile(documentId)
+        const doc = await this.getDocument(documentId)
+        const blob = await result.blob()
+        const url = await URL.createObjectURL(blob)
+        Object.assign(document.createElement('a'), {
+            href: url,
+            download: doc.name + '.conllu',
+        }).click();
+    }
+  
+
     // --------------------------------------------------------------------------------
     // Posts
     // --------------------------------------------------------------------------------
