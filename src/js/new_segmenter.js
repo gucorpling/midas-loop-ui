@@ -37,8 +37,18 @@ export function Document(props) {
 		  setBusy(false);
 		}
 	  }
+	  let className = "sentence"
+	  const firstToken = props.tokens && props.tokens.length > 0 && props.tokens[0]
+	  const outProb = firstToken && firstToken.probas && firstToken.probas.O
+	  const maybeMerge = props.tokens[0].form.value[0]=="T"//outProb && outProb > 0.9
+	  if (maybeMerge) {
+		  className += " sentence-maybe-merge"
+	  }
+	  if (!insideToken) {
+		  className += " sentence--hoverable"
+	  }
 	  return (
-		  <div key={props.id} className={insideToken ? "sentence" : "sentence sentence--hoverable"} onClick={merge}>
+		  <div key={props.id} className={className} onClick={merge}>
 			<span className="sentence-icon"><Merge fontSize="small" /></span>
 			{props.tokens.map((v, i) => Token({...v, index: i}))}
 		  </div>
@@ -55,7 +65,13 @@ export function Document(props) {
 		  setBusy(false);
 		}
 	  }
-	  return <span className="token-area"
+	  let tokenAreaClassName;
+	  if (props.index > 0 && props.probas && props.probas.B > 0.1) {
+		tokenAreaClassName = "token-area token-area-maybe-split"
+	  } else {
+		tokenAreaClassName = "token-area"
+	  }
+	  return <span className={tokenAreaClassName}
 				   title="Split sentence"
 				   onClick={split}
 				   key={props.id}

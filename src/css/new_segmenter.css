@@ -21,11 +21,16 @@
     padding: 4px;
     background-color: #dbffc7;
 }
+/* special styles if we suspect a split */
+.token-area:not(:first-child):not(:hover).token-area-maybe-split .token { 
+    background-color: #b0bbff;
+}
 
 .sentence {
     padding: 0.8em;
     margin-top: 0;
 }
+.sentence:not(:first-child) {border-top: #eee 1px solid;}
 .sentence:first-child {border-radius: 8px 8px 0 0;}
 .sentence:last-child {border-radius: 0 0 8px 8px;}
 .sentence-icon {
@@ -42,7 +47,10 @@
 .sentence:nth-child(odd) {
     background-color: #f5f5f5;
 }
-
 .sentence:nth-child(even) {
     background-color: #e7efff;
+}
+/* special styles if we suspect a merge */
+.sentence-maybe-merge.sentence--hoverable {
+    background-color: #F6FFCD;
 }
