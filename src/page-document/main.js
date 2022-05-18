@@ -44,7 +44,6 @@ const segmentationContentRoot = ReactDOM.createRoot(document.getElementById("can
 async function initPage() {
   if (urlParams.has('docs')) {
     docs = urlParams.getAll('docs')[0].split(";");
-    console.log(docs);
     for (let i in docs) {
       window.docs.push(docs[i]);
     }

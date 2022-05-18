@@ -24,7 +24,6 @@ function DocumentList(props) {
     useEffect(() => {
         async function inner() {
             const result = await api.queryDocuments(queryParams.offset, queryParams.limit, queryParams.orderBy);
-            console.log(result)
             setDocs(result.docs)
             setTotal(result.total)
         }
