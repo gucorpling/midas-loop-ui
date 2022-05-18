@@ -1,0 +1,48 @@
+.token {
+    text-decoration: underline darkgreen;
+}
+.token-button {
+    display: none;
+    margin-bottom: -1em;
+}
+.token-area:not(:first-child):hover {
+    cursor: pointer;
+}
+.token-area:not(:first-child):hover .token-button {
+    display: initial;
+}
+.token-area:not(:first-child):hover .token {
+    border-radius: 0 5px 5px 0;
+    padding: 4px;
+    background-color: #dbffc7;
+}
+.token-area:not(:first-child):hover .token-button {
+    border-radius: 5px 0 0 5px;
+    padding: 4px;
+    background-color: #dbffc7;
+}
+
+.sentence {
+    padding: 0.8em;
+    margin-top: 0;
+}
+.sentence:first-child {border-radius: 8px 8px 0 0;}
+.sentence:last-child {border-radius: 0 0 8px 8px;}
+.sentence-icon {
+    display: none;
+}
+.sentence--hoverable:not(:first-child):hover {
+    cursor: pointer;
+    background-color: #dbffc7;
+}
+.sentence--hoverable:not(:first-child):hover .sentence-icon {
+    display: initial;
+}
+
+.sentence:nth-child(odd) {
+    background-color: #f5f5f5;
+}
+
+.sentence:nth-child(even) {
+    background-color: #e7efff;
+}

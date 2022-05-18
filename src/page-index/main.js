@@ -1,87 +1,82 @@
-import $ from 'jquery'
-import 'jquery-ui'
-import 'jquery-ui/themes/base/theme.css';
-require('../../node_modules/jqgrid/js/i18n/grid.locale-en.js')($)
-require('../../node_modules/jqgrid/js/jquery.jqGrid.src.js')($)
+//import $ from 'jquery'
+//import 'jquery-ui'
+//import 'jquery-ui/themes/base/theme.css';
+//require('../../node_modules/jqgrid/js/i18n/grid.locale-en.js')($)
+//require('../../node_modules/jqgrid/js/jquery.jqGrid.src.js')($)
 //require("modules/jquery-ui/themes/black-tie/jquery-ui.css");
 //require("modules/jquery-ui/themes/black-tie/jquery-ui.theme.css");
-require("../../node_modules/jquery-ui/");
-require("../../node_modules/jquery-ui-bundle/jquery-ui.theme.min.css");
+//require("../../node_modules/jquery-ui/");
+//require("../../node_modules/jquery-ui-bundle/jquery-ui.theme.min.css");
+import React, { useEffect, useState } from 'react';
+import * as ReactDOM from 'react-dom/client';
 import { Tooltip, Toast, Popover } from 'bootstrap'
+import DataTable from 'react-data-table-component';
 
 import '../css/main.css'
 import { api } from '../js/common.js'
 
-async function initGrid() {
-    var data = await api.queryDocuments(0, 9999999, "xpos-gold-dec");
-    console.log("Received data:", data.docs)
+function DocumentList(props) {
+    const [docs, setDocs] = useState([])
+    const [total, setTotal] = useState(0)
+    const [pageNumber, setPageNumber] = useState(0)
+    const [queryParams, setQueryParams] = useState({offset: 0, limit: 1_000_000, orderBy: "name-inc"})
 
-    $("#grid").jqGrid({
-        datastr: data.docs,
-        datatype: 'jsonstring',
-        width: '100%',
-        colNames: ["id","name", "token_count", "sentence_count", "xpos_gold_rate"],
-        colModel: [
-            { name: 'id', width: 0, }, 
-            { name: 'name', width: 250, }, 
-            { name: 'token_count', width: 50, formatter: "number", align: "right", sorttype: "number", formatoptions: { decimalPlaces: 0 }, searchoptions: { sopt: ["eq", "ne", "lt", "le", "gt", "ge"] }}, 
-            { name: 'sentence_count', width: 50, formatter: "number", align: "right", sorttype: "number", formatoptions: { decimalPlaces: 0 }, searchoptions: { sopt: ["eq", "ne", "lt", "le", "gt", "ge"] }}, 
-            { name: 'xpos_gold_rate', width: 100, formatter: "number", align: "right", sorttype: "number", searchoptions: { sopt: ["eq", "ne", "lt", "le", "gt", "ge"] } }
-        ],
+    useEffect(() => {
+        async function inner() {
+            const result = await api.queryDocuments(queryParams.offset, queryParams.limit, queryParams.orderBy);
+            console.log(result)
+            setDocs(result.docs)
+            setTotal(result.total)
+        }
+        inner()
+    }, [queryParams, pageNumber])
 
-        pager: '#pager', 
-        jsonReader: { repeatitems: false },
-        rowNum: 15,
-        rowList: [15,30,50,100],
-        viewrecords: true,
-        caption: "Documents",
-        height: "auto",
-        ignoreCase: true,
-        gridview: true,
-        autoencode: true,
-        rownumbers: true,
-        shrinkToFit: true,
-        emptyrecords: "no documents found",
-        autowidth: true,
-        pgbuttons: true,
-        multiselect: true,
-        multiboxonly: false,
-        ondblClickRow: function (rowId) {
-            var rowData = $(this).getRowData(rowId);
-            var docname = rowData['name'];
-            var aQryStr = "docs=" + docname;
-            console.log("./index.html?" + aQryStr);
-            document.location.href = "./index.html?" + aQryStr;
+    const _makeNumericColumn = (name, selector) => {
+        return {
+            name: name, 
+            selector: selector, 
+            sortable: true, 
+            reorder: true, 
+            right: true, 
+            compact: true
+        }
+    }
+
+    const columns = [
+        {
+            name: "Name",
+            selector: r => r.name,
+            sortable: true,
+            allowOverflow: true,
+            format: r => <a href={"/document.html?docs=" + r.id}>{r.name}</a>
         },
-    }).hideCol("id");
-    $(window).on('resize', function() {
-        $("#grid").setGridWidth($(window).width()-50);
-     }).trigger('resize');
+    ]
+    columns.push(_makeNumericColumn("Sentences", r => r.sentence_count))
+    columns.push(_makeNumericColumn("Tokens", r => r.token_count))
+    if (!docs.map(x => x.upos_mean_top_proba).every(x => x === null || x === undefined)) {
+        columns.push(_makeNumericColumn("UPOS MTP", r => r.upos_mean_top_proba))
+    }
+    if (!docs.map(x => x.xpos_mean_top_proba).every(x => x === null || x === undefined)) {
+        columns.push(_makeNumericColumn("XPOS MTP", r => r.xpos_mean_top_proba))
+    }
+    if (!docs.map(x => x.head_mean_top_proba).every(x => x === null || x === undefined)) {
+        columns.push(_makeNumericColumn("HEAD MTP", r => r.head_mean_top_proba))
+    }
 
-     //$("#grid").jqGrid('navGrid','#pager', {position: 'right'});
-     $('#pager').css("height", "35px");
-
-    $("#grid").jqGrid('filterToolbar', { stringResult: true, searchOnEnter: false, defaultSearch: "cn" });
+    return (
+        <div className="container container-md">
+            <h1>Documents</h1>
+            <DataTable 
+                columns={columns} 
+                data={docs} 
+                responsive
+                dense
+                pagination
+                paginationPerPage={10}
+                />
+        </div>
+    )
 }
 
-initGrid();
-
-
-export function open_selected() {
-    var sel_rows_ids;
-    sel_rows_ids = $("#grid").jqGrid('getGridParam', 'selarrrow');
-    var sel_rows = [];
-    for (var rid of sel_rows_ids) {
-        var row_data = $('#grid').getRowData(rid);
-        sel_rows.push(row_data);
-    }
-    let sel_docs = [];
-    for (var row of sel_rows) {
-        sel_docs.push(row["id"]);
-    }
-    var aQryStr = "docs=" + sel_docs.join(";");
-    console.log("./index.html?" + aQryStr);
-    document.location.href = "./index.html?" + aQryStr;
-}
-
-window.open_selected = open_selected;
+const root = ReactDOM.createRoot(document.getElementById("mount"))
+root.render(<DocumentList />)

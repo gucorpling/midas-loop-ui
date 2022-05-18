@@ -13,16 +13,19 @@
     "@emotion/styled": "^11.8.1",
     "@mui/icons-material": "^5.5.1",
     "@mui/material": "^5.5.2",
+    "conllu": "^0.1.2",
     "core-js": "^3.21.1",
     "distinct-colors": "^3.0.0",
     "jquery": "^3.6.0",
     "popper.js": "^1.16.1",
-    "react": "^17.0.2",
+    "react": "^18.1.0",
     "react-contenteditable": "^3.3.6",
-    "react-dom": "^17.0.2",
+    "react-data-table-component": "^7.5.2",
+    "react-dom": "^18.1.0",
     "react-input-autosize": "^3.0.0",
     "react-scripts": "^5.0.0",
-    "regenerator-runtime": "^0.13.9"
+    "regenerator-runtime": "^0.13.9",
+    "styled-components": "^5.3.5"
   },
   "scripts": {
     "start": "webpack serve --config webpack.dev.js",

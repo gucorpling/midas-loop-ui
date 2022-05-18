@@ -1,13 +1,16 @@
 import $, { post } from 'jquery'
 import 'jquery-ui'
 import 'jquery-ui-bundle'
-import {spinner} from 'jquery-ui-bundle'
+import { spinner } from 'jquery-ui-bundle'
 import img from '../img/unicorn.jpg'
 import { Tooltip, Toast, Popover, Tab } from 'bootstrap'
+import React, { useEffect, useState } from 'react'
+import * as ReactDOM from 'react-dom/client';
 
 import '../css/main.css'
 import { api } from '../js/common.js'
 import {segmenter_read_conllu, select} from '../js/segmenter.js'
+import { Document } from '../js/new_segmenter.js'
 import {spannotator_read_conllu, change_entity, toggle_sents, set_color_mode, group_selected, ungroup_selected, add_entity} from '../js/spannotator.js'
 
 window.current_conllu = "";
@@ -22,7 +25,7 @@ window.selected_tab = "home";
  */
 async function get_conllu(docId, readerFunction){
   const doc = await api.getDocument(docId, "conllu")
-  readerFunction(doc);
+  readerFunction(doc, docId);
 }
 
 window.segmenter_read_conllu = segmenter_read_conllu;
@@ -35,6 +38,8 @@ const urlParams = new URLSearchParams(queryString);
 var docs = [];
 var docIndex = 0;
 window.docs = [];
+const homeContentRoot = ReactDOM.createRoot(document.getElementById("tab-home-content"))
+const segmentationContentRoot = ReactDOM.createRoot(document.getElementById("canvas"))
 
 async function initPage() {
   if (urlParams.has('docs')) {
@@ -47,17 +52,53 @@ async function initPage() {
     $("#selected_docname").html(docJson.name);
     docIndex = 0;
     $("#doc_count").html("Document " + (docIndex + 1) + "/" + docs.length);
+    $("#document-name").html(docJson.name)
+    open_metadata()
+  } else {
+    window.location = "/"
   }
 }
 
 initPage()
 
+function Metadata(props) {
+  const [doc, setDoc] = useState(null)
+  useEffect(() => { api.getDocument(props.id, "json").then(d => setDoc(d))}, [props.id])
+
+  return (
+    doc ? (
+      <div className="container-sm pt-4">
+        <p><strong>Name:</strong> {doc.name}</p>
+        <p><strong>Internal ID:</strong> {doc.id}</p>
+        <p><strong>Sentences:</strong> {doc.sentences.length}</p>
+        <p><strong>Tokens:</strong> {doc.sentences.map(s => s.tokens.length).reduce((a,b) => a + b)}</p>
+      </div>
+    ) : (
+      <div className="d-flex justify-content-center mt-4">
+        <div className="spinner-border" role="status"> 
+          <span className="sr-only">Loading...</span> 
+        </div> 
+      </div>
+    )
+  )
+}
+
+function open_metadata() {
+  window.selected_tab = "home";
+  if (window.docs.length > 0) {
+    homeContentRoot.render(<Metadata id={window.docs[0]} />)
+  }
+}
+document.getElementById("pills-home-tab").addEventListener("click", () => open_metadata())
+
 function open_segment(){
   window.selected_tab = "segment";
   if (window.docs.length > 0){
-    get_conllu(window.docs[docIndex],segmenter_read_conllu);
+    //get_conllu(window.docs[docIndex], segmenter_read_conllu);
+    segmentationContentRoot.render(<Document id={window.docs[0]} />)
   }
 }
+document.getElementById("pills-segmentation-tab").addEventListener("click", () => open_segment())
 
 function open_entities(){
   window.selected_tab = "entities";
@@ -65,7 +106,8 @@ function open_entities(){
     get_conllu(window.docs[docIndex],spannotator_read_conllu);
   }
 }
-
+document.getElementById("pills-entities-tab").addEventListener("click", () => open_entities())
+/*
 async function cycle_docs(offset){
   if (docs.length>1){
       if (offset<0){ // prev doc
@@ -92,12 +134,15 @@ async function cycle_docs(offset){
       }
     }
 }
+window.cycle_docs = cycle_docs;
+*/
 
-document.getElementById("pills-segmentation-tab").addEventListener("click", () => open_segment())
-document.getElementById("pills-entities-tab").addEventListener("click", () => open_entities())
 
 window.change_entity = change_entity;
 // spannotator toolbar function
-window.toggle_sents = toggle_sents; window.set_color_mode = set_color_mode; window.group_selected = group_selected; window.ungroup_selected = ungroup_selected; window.add_entity = add_entity;
+window.toggle_sents = toggle_sents; 
+window.set_color_mode = set_color_mode; 
+window.group_selected = group_selected; 
+window.ungroup_selected = ungroup_selected; 
+window.add_entity = add_entity;
 window.select = select;
-window.cycle_docs = cycle_docs;
