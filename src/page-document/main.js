@@ -47,12 +47,11 @@ async function initPage() {
     for (let i in docs) {
       window.docs.push(docs[i]);
     }
-    const docJson = await api.getDocument(docs[0], "json");
-    $("#selected_docname").html(docJson.name);
     docIndex = 0;
-    $("#doc_count").html("Document " + (docIndex + 1) + "/" + docs.length);
-    $("#document-name").html(docJson.name)
-    open_metadata()
+    open_metadata((docJson) => { 
+      $("#document-name").html(docJson.name)
+      $("#selected_docname").html(docJson.name);
+    })
   } else {
     window.location = "/"
   }
@@ -69,6 +68,7 @@ function Metadata(props) {
       e.preventDefault;
       setState("busy")
       let res = await api.getDocument(props.id, format);
+      props.loadedCallback(res)
       if (format === "json") {
         res = JSON.stringify(res)
       }
@@ -116,10 +116,10 @@ function Metadata(props) {
   )
 }
 
-function open_metadata() {
+function open_metadata(callback) {
   window.selected_tab = "home";
   if (window.docs.length > 0) {
-    homeContentRoot.render(<Metadata id={window.docs[0]} />)
+    homeContentRoot.render(<Metadata id={window.docs[0]} loadedCallback={callback} />)
   }
 }
 document.getElementById("pills-home-tab").addEventListener("click", () => open_metadata())
