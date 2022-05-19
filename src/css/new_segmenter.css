@@ -1,28 +1,28 @@
-.token {
+.token-area .token {
     text-decoration: underline darkgreen;
 }
 .token-button {
     display: none;
     margin-bottom: -1em;
 }
-.token-area:not(:first-child):hover {
+.token-area:hover {
     cursor: pointer;
 }
-.token-area:not(:first-child):hover .token-button {
+.token-area:hover .token-button {
     display: initial;
 }
-.token-area:not(:first-child):hover .token {
+.token-area:hover .token {
     border-radius: 0 5px 5px 0;
     padding: 4px;
     background-color: #dbffc7;
 }
-.token-area:not(:first-child):hover .token-button {
+.token-area:hover .token-button {
     border-radius: 5px 0 0 5px;
     padding: 4px;
     background-color: #dbffc7;
 }
 /* special styles if we suspect a split */
-.token-area:not(:first-child):not(:hover).token-area-maybe-split .token { 
+.token-area:not(:hover).token-area-maybe-split .token { 
     background-color: #b0bbff;
 }
 
