@@ -84,6 +84,15 @@ function Metadata(props) {
     }
   }
 
+  function download(e) {
+    (async () => {
+      e.preventDefault
+      setState("download_conllu")
+      await api.downloadConlluFileWithPrompt(props.id)
+      setState("default")
+    })()
+  }
+
   return (
     doc ? (
       <div className="container-sm pt-4">
@@ -92,7 +101,7 @@ function Metadata(props) {
         <p><strong>Sentences:</strong> {doc.sentences.length}</p>
         <p><strong>Tokens:</strong> {doc.sentences.map(s => s.tokens.length).reduce((a,b) => a + b)}</p>
         <div>
-          <button disabled={state !== "default"} className="btn btn-outline-primary me-1" onClick={(e) => { e.preventDefault; api.downloadConlluFileWithPrompt(props.id); }}>Download CoNLL-U</button>
+          <button disabled={state !== "default"} className="btn btn-outline-primary me-1" onClick={download}>{state === "download_conllu" ? "Downloading..." : "Download CoNLL-U"}</button>
           <button disabled={state !== "default"} className="btn btn-outline-primary me-1" onClick={makeCopy("conllu")}>{state === "copied_conllu" ? "Copied!" : "Copy CoNLL-U"}</button>
           <button disabled={state !== "default"} className="btn btn-outline-secondary me-1" onClick={makeCopy("json")}>{state === "copied_json" ? "Copied!" : "Copy JSON"}</button>
         </div>
