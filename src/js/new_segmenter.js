@@ -105,11 +105,9 @@ export function Document(props) {
     <Container maxWidth="md" style={{ cursor: busy ? "progress" : "initial" }}>
       {busy ? <LinearProgress /> : <LinearProgress style={{ visibility: "hidden" }} />}
       <Stack spacing={2} my={5}>
-        {doc === null ? <LoadPlaceholder />
-          : <>
-            {Sentences(doc)}
-            <Button onClick={download} fullWidth>Download</Button>
-          </>}
+				{doc === null
+					? <LoadPlaceholder />
+					: Sentences(doc)}
       </Stack>
     </Container>
   )
