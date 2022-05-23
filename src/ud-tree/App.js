@@ -20,14 +20,14 @@ const theme = createTheme({
 });
 
 
-function App() {
+function SyntaxEditor(props) {
   useEffect(() => document.title = "UD Tree");
   return (
     <ThemeProvider theme={theme}>
-      <Base />
+      <Base data={props.data} />
       <CssBaseline />
     </ThemeProvider>
   );
 }
 
-export default App;
+export default SyntaxEditor;

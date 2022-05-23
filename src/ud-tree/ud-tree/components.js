@@ -1,6 +1,5 @@
 import React from 'react';
 import { Stack } from '@mui/material';
-import data from "./data.json";
 import getDeprelColor from './deprel_colors';
 import {getXpos, getDeprel} from './vocabs';
 import ContentEditable from 'react-contenteditable';
@@ -11,7 +10,7 @@ export default class Base extends React.Component {
   render() {
     return (
       <div style={{padding: containerPadding}}>
-        <Document data={data} />
+        <Document data={this.props.data} />
         <style>
           {`
 .form {
