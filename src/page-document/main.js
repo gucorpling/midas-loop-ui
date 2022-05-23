@@ -12,6 +12,7 @@ import { api } from '../js/common.js'
 import {segmenter_read_conllu, select} from '../js/segmenter.js'
 import { Document } from '../js/new_segmenter.js'
 import {spannotator_read_conllu, change_entity, toggle_sents, set_color_mode, group_selected, ungroup_selected, add_entity} from '../js/spannotator.js'
+import {syntax_read_conllu} from '../js/syntax.js'
 
 window.current_conllu = "";
 window.doc2conllu = {};
@@ -30,6 +31,7 @@ async function get_conllu(docId, readerFunction){
 
 window.segmenter_read_conllu = segmenter_read_conllu;
 window.spannotator_read_conllu = spannotator_read_conllu;
+window.syntax_read_conllu = syntax_read_conllu;
 
 const queryString = window.location.search;
 //console.log(queryString);
@@ -38,6 +40,7 @@ const urlParams = new URLSearchParams(queryString);
 var docs = [];
 var docIndex = 0;
 window.docs = [];
+
 const homeContentRoot = ReactDOM.createRoot(document.getElementById("tab-home-content"))
 const segmentationContentRoot = ReactDOM.createRoot(document.getElementById("canvas"))
 
@@ -56,7 +59,6 @@ async function initPage() {
     window.location = "/"
   }
 }
-
 initPage()
 
 function Metadata(props) {
@@ -132,6 +134,14 @@ function open_segment(){
   }
 }
 document.getElementById("pills-segmentation-tab").addEventListener("click", () => open_segment())
+
+function open_syntax() {
+  window.selected_tab = "syntax";
+  if (window.docs.length > 0) {
+    get_conllu(window.docs[docIndex], syntax_read_conllu)
+  }
+}
+document.getElementById("pills-syntax-tab").addEventListener("click", () => open_syntax())
 
 function open_entities(){
   window.selected_tab = "entities";

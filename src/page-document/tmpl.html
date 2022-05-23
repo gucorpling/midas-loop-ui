@@ -32,7 +32,11 @@
           aria-selected="false">Segmentation</button>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Syntax</a>
+        <button class="nav-link" id="pills-syntax-tab" data-bs-toggle="pill"
+          data-bs-target="#pills-syntax" type="button" role="tab" aria-controls="pills-syntax"
+          aria-selected="false">Syntax</button>
+        <!-- <button class="nav-link" onclick="open_syntax();" id="pills-syntax-tab" data-bs-toggle="pill" data-bs-target="#pills-syntax" type="button" role="tab" aria-controls="pills-syntax" aria-selected="false">Syntax</button>
+         <a class="nav-link" href="#">Syntax</a> -->
       </li>
       <li class="nav-item">
         <button class="nav-link" id="pills-entities-tab" data-bs-toggle="pill" 
@@ -58,7 +62,9 @@
           </div>
         </div>
       </div>
-      <div class="tab-pane fade" id="pills-syntax" role="tabpanel" aria-labelledby="pills-syntax-tab">...</div>
+      <div class="tab-pane fade" id="pills-syntax" role="tabpanel" aria-labelledby="pills-syntax-tab">
+        <div id="syntax_main"></div> 
+      </div>  <!--TO DO -->
       <div class="tab-pane fade" id="pills-entities" role="tabpanel" aria-labelledby="pills-entities-tab">
     
         <input type="hidden" name="active_entity" id="active_entity" value="">

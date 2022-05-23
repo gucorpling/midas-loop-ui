@@ -35,6 +35,13 @@ export default class Base extends React.Component {
     position: absolute;
     left: -12px;
 }
+.highlighted-xpos {
+    display: flex;
+    font-size: 10px;
+    color: red;
+    cursor: pointer;
+    font-weight: bold;
+}
 .deprel {
     font-size: 9px;
     cursor: pointer;
@@ -43,7 +50,11 @@ export default class Base extends React.Component {
     width: 50px;
     margin: 20px;
 }
-
+.highlighted-deprel {
+    font-size: 9px;
+    cursor: pointer;
+    font-weight: bold;
+}
 .row {
     display: flex;
     gap: 6px;
@@ -133,10 +144,12 @@ function getTokenX(elt) {
 const svgMaxY = 200;
 const tokenY = svgMaxY - 10;
 const rootHeight = 10;
-function computeEdge (x, y, dx, dy, maxHeight, color) {
+function computeEdge (x, y, dx, dy, maxHeight, color, highlighted=false) {
   var d;
   const destX = x + dx;
   const destY = y + dy;
+  // highlighted should be passed in as a parameter
+  const line_width = highlighted ? "2" : "1";
   // We're drawing the root
   if (maxHeight === null) {
     d = `M ${x} ${y} l ${dx} ${dy}`
@@ -157,9 +170,44 @@ function computeEdge (x, y, dx, dy, maxHeight, color) {
 
   }
   return [
-    <path d={d} stroke={color} fill="transparent" />,
+    <path d={d} stroke={color} fill="transparent" strokeWidth={line_width}/>,
     <polygon points={`${destX-3},${destY - 3} ${destX+3},${destY - 3} ${destX},${destY + 2}`} fill={color} />
   ];
+}
+
+// active learning functions for determiniting which annotations should be highlighted
+function isDeprelSuspicious(head) {
+  // if quality included, and quality is "gold", return false
+  if (head.quality) {
+    if (head.quality === "gold") {
+      return false;
+    }
+  }
+  // if probas is included, if probas[head.value] < 0.9, return true 
+  if (head.probas) {
+    if(head.probas[head.value] < 0.9) {
+      return true;
+    }
+  }
+  // otherwise return false
+  return false;
+}
+
+function isXposSuspicious(xpos) {
+  // if quality included, and quality is "gold", return false
+  if (xpos.quality) {
+    if (xpos.quality === "gold") {
+      return false;
+    }
+  }
+  // if probas is included, if probas[head.value] < 0.9, return true 
+  if (xpos.probas) {
+    if(xpos.probas[xpos.value] < 0.9) {
+      return true;
+    }
+  }
+  // otherwise return false
+  return false;
 }
 
 // Component for sentence that renders tokens in a row and an SVG element with edges
@@ -321,26 +369,28 @@ class Sentence extends React.Component {
 
     // get edges for drawing
     const edges = tokens.map(t => {
-      const color = getDeprelColor(t.deprel.value);
+      const highlighted = isDeprelSuspicious(t.head);
+      const color = highlighted ? "red" : getDeprelColor(t.deprel.value);
       if (!this.state.mounted || !tokenXIndex[t.id]) {
         return null;
       } else if (t.head.value === "root") {
         const x = tokenXIndex[t.id];
         return [
-          computeEdge(x, 0, 0, tokenY, null, color),
-          <text className="deprel" x={x+2} y="50" fill={color}>{t.deprel.value}</text>
+          computeEdge(x, 0, 0, tokenY, null, color, highlighted),
+          <text className={highlighted ? "highlighted-deprel" : "deprel"} x={x+2} y="50" fill={color}>{t.deprel.value}</text>
         ]
       } else {
         const headX = tokenXIndex[t.head.value];
         const x = tokenXIndex[t.id]
         const dx = x - headX;
         const maxHeight = getMaxHeight(x, headX);
-        return computeEdge(headX, tokenY, dx, 0, maxHeight, color)
+        return computeEdge(headX, tokenY, dx, 0, maxHeight, color, highlighted)
       }
     });
 
     const labels = tokens.map(t => {
-      const color = getDeprelColor(t.deprel.value);
+      const highlighted = isDeprelSuspicious(t.head);
+      const color = highlighted ? "red" : getDeprelColor(t.deprel.value);
       const label = t.deprel.value;
       if (!this.state.mounted || !tokenXIndex[t.id]) {
         return null;
@@ -351,8 +401,12 @@ class Sentence extends React.Component {
         const x = tokenXIndex[t.id]
         const dx = x - headX;
         const maxHeight = getMaxHeight(x, headX);
+        var whichClass = this.state.deprelEditTokenId === t.id ? "hidden" : "deprel";
+        if (whichClass == "deprel" && highlighted) {
+          whichClass = "highlighted-deprel";
+        }
         return (
-          <text key={"deprel-label-" + t.id} className={this.state.deprelEditTokenId === t.id ? "hidden" : "deprel"}
+          <text key={"deprel-label-" + t.id} className={whichClass}
             textAnchor="middle" x={x - dx / 2} y={svgMaxY - maxHeight - 12} fill={color}
             onClick={() => {this.setState({ deprelEditTokenId: t.id })}}>
             {label}
@@ -436,6 +490,8 @@ class Token extends React.Component {
   render() {
     const {handleMouseDown, handleMouseUp, handleLemmaChange, handleXposChange, setXposEditTokenId, xposEditTokenId, token} = this.props;
     const { id, tokenType, form, lemma, upos, xpos, feats, head, deprel, deps, misc} = token;
+    const xpos_highlighted = isXposSuspicious(xpos);
+    const xpos_color = xpos_highlighted ? "highlighted-xpos" : "xpos";
     return (
       <div ref={this.props.innerRef}>
         <Col style={{ alignItems: "center" }}>
@@ -451,7 +507,7 @@ class Token extends React.Component {
                 {getXpos("en").map(l => <option key={l} value={l}>{l}</option>)}
               </select>
             </div>
-          : <div className="xpos" onMouseOver={() => setXposEditTokenId(id)}>{xpos.value}</div>}
+          : <div className={xpos_color} onMouseOver={() => setXposEditTokenId(id)}>{xpos.value}</div>}
         </Col>
       </div>
     )
