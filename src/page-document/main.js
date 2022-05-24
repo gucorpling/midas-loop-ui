@@ -12,7 +12,7 @@ import { api } from '../js/common.js'
 import {segmenter_read_conllu, select} from '../js/segmenter.js'
 import { Document } from '../js/new_segmenter.js'
 import {spannotator_read_conllu, change_entity, toggle_sents, set_color_mode, group_selected, ungroup_selected, add_entity} from '../js/spannotator.js'
-import {syntax_read_conllu} from '../js/syntax.js'
+import {syntax_read_json} from '../js/syntax.js'
 
 window.current_conllu = "";
 window.doc2conllu = {};
@@ -29,9 +29,14 @@ async function get_conllu(docId, readerFunction){
   readerFunction(doc, docId);
 }
 
+async function get_json(docId, readerFunction){
+  const doc = await api.getDocument(docId, "json")
+  readerFunction(doc, docId);
+}
+
 window.segmenter_read_conllu = segmenter_read_conllu;
 window.spannotator_read_conllu = spannotator_read_conllu;
-window.syntax_read_conllu = syntax_read_conllu;
+window.syntax_read_json = syntax_read_json;
 
 const queryString = window.location.search;
 //console.log(queryString);
@@ -138,7 +143,7 @@ document.getElementById("pills-segmentation-tab").addEventListener("click", () =
 function open_syntax() {
   window.selected_tab = "syntax";
   if (window.docs.length > 0) {
-    get_conllu(window.docs[docIndex], syntax_read_conllu)
+    get_json(window.docs[docIndex], syntax_read_json)
   }
 }
 document.getElementById("pills-syntax-tab").addEventListener("click", () => open_syntax())
