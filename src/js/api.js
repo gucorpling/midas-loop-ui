@@ -36,6 +36,21 @@ export default class Api {
         return resp;
     }
 
+    async _putRequest(endpoint, body) {
+        const url = this.baseUrl + endpoint;
+        const opts = {
+            method: "PUT",
+            headers: {
+                "Authorization": `Token ${this.token}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(body),
+            mode: "cors"
+        }
+        const resp = await fetch(url, opts);
+        return resp;
+    }
+
     // --------------------------------------------------------------------------------
     // Gets
     // --------------------------------------------------------------------------------
@@ -237,6 +252,45 @@ export default class Api {
      */
     postAnnotationDiff(documentId, oldConllu, newConllu) {
         return this._postRequest("/conllu/document/diff", {"id": documentId, "old-conllu": oldConllu, "new-conllu": newConllu});
+    }
+
+    // --------------------------------------------------------------------------------
+    // Puts
+    // --------------------------------------------------------------------------------
+    /**
+     * Update the value of a head with the given Id.
+     * @param {string} headId 
+     * @param {string} value 
+     */
+    updateHead(headId, value) {
+        return this._putRequest("/conllu/head/id/" + headId, {"value": value});
+    }
+
+    /**
+     * Update the value of a deprel with the given Id.
+     * @param {string} deprelId 
+     * @param {string} value 
+     */
+    updateDeprel(deprelId, value) {
+        return this._putRequest("/conllu/deprel/id/" + deprelId, {"value": value});
+    }
+
+    /**
+     * Update the value of an xpos with the given Id.
+     * @param {string} xposId 
+     * @param {string} value 
+     */
+    updateXpos(xposId, value) {
+        return this._putRequest("/conllu/xpos/id/" + xposId, {"value": value});
+    }
+
+    /**
+     * Update the value of a lemma with the given Id.
+     * @param {string} lemmaId 
+     * @param {string} value 
+     */
+    updateLemma(lemmaId, value) {
+        return this._putRequest("/conllu/lemma/id/" + lemmaId, {"value": value});
     }
 
 }

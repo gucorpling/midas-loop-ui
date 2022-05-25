@@ -3,6 +3,7 @@ import { Stack } from '@mui/material';
 import getDeprelColor from './deprel_colors';
 import {getXpos, getDeprel} from './vocabs';
 import ContentEditable from 'react-contenteditable';
+import { api } from '../../js/common.js'
 
 const containerPadding = 12;
 
@@ -209,6 +210,23 @@ function isXposSuspicious(xpos) {
   return false;
 }
 
+async function updateHead(id, head){
+    await api.updateHead(id, head)
+}
+
+async function updateDeprel(id, deprel){
+    await api.updateDeprel(id, deprel)
+}
+
+async function updateXpos(id, xpos){
+    await api.updateXpos(id, xpos)
+}
+
+async function updateLemma(id, lemma){
+    await api.updateLemma(id, lemma)
+}
+
+
 // Component for sentence that renders tokens in a row and an SVG element with edges
 class Sentence extends React.Component {
   constructor(props) {
@@ -242,13 +260,18 @@ class Sentence extends React.Component {
     const token = sentence.tokens.filter(t => t.id === id)[0];
     const headToken = sentence.tokens.filter(t => t.id === headId)[0];
     token.head.value = headId;
+    updateHead(token.head.id, headId)
     if (headId === "root") {
       token.deprel.value = "root";
+      updateDeprel(token.deprel.id, "root")
     }
     if (headId !== "root" && headToken.head.value === id) {
       headToken.head.value = "root";
+      updateHead(headToken.head.id, "root")
       token.deprel.value = headToken.deprel.value;
+      updateDeprel(token.deprel.id, headToken.deprel.value)
       headToken.deprel.value = "root"
+      updateDeprel(headToken.deprel.id, "root")
     }
     return sentence;
   }
@@ -256,18 +279,21 @@ class Sentence extends React.Component {
   setDeprel(sentence, id, deprel) {
     const token = sentence.tokens.filter(t => t.id === id)[0];
     token.deprel.value = deprel;
+    updateDeprel(token.deprel.id, deprel)
     return sentence;
   }
 
   setXpos(sentence, id, xpos) {
     const token = sentence.tokens.filter(t => t.id === id)[0];
     token.xpos.value = xpos;
+    updateXpos(token.xpos.id, xpos)
     return sentence;
   }
 
   setLemma(sentence, id, lemma) {
     const token = sentence.tokens.filter(t => t.id === id)[0];
     token.lemma.value = lemma;
+    updateLemma(token.lemma.id, lemma)
     return sentence;
   }
   // End methods that need to talk to API
