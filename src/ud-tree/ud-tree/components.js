@@ -83,6 +83,21 @@ export default class Base extends React.Component {
     fill: #eeeeee;
 }
 
+.button {
+  background-color: transparent;
+  border: none;
+  padding: 10px 16px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 12px;
+  border-radius: 12px;
+}
+
+.button:hover {
+    background-color: #eeeeee
+}
+
 .hidden {
     display: none;
 }
@@ -273,6 +288,7 @@ class Sentence extends React.Component {
       headToken.deprel.value = "root"
       updateDeprel(headToken.deprel.id, "root")
     }
+    token.head.quality = "gold"
     return sentence;
   }
 
@@ -280,6 +296,7 @@ class Sentence extends React.Component {
     const token = sentence.tokens.filter(t => t.id === id)[0];
     token.deprel.value = deprel;
     updateDeprel(token.deprel.id, deprel)
+    token.head.quality = "gold"
     return sentence;
   }
 
@@ -287,6 +304,7 @@ class Sentence extends React.Component {
     const token = sentence.tokens.filter(t => t.id === id)[0];
     token.xpos.value = xpos;
     updateXpos(token.xpos.id, xpos)
+    token.xpos.quality = "gold"
     return sentence;
   }
 
@@ -296,10 +314,32 @@ class Sentence extends React.Component {
     updateLemma(token.lemma.id, lemma)
     return sentence;
   }
+
+  approveSentenceHighlights(sentence) {
+    // needs additional click to update...
+    sentence.tokens.forEach(token => {
+      if (isXposSuspicious(token.xpos)) {
+        this.setXpos(sentence, token.id, token.xpos.value)
+        //token.xpos.quality = "gold"
+      }
+      if (isDeprelSuspicious(token.head)) {
+        this.setHead(sentence, token.id, token.head.value)
+        this.setDeprel(sentence, token.id, token.deprel.value)
+        //token.head.quality = "gold"
+      }
+      })
+    return
+
+  }
+
   // End methods that need to talk to API
 
   setXposEditTokenId(id) {
     this.setState({xposEditTokenId: id});
+  }
+
+  approveHighlights() {
+    this.approveSentenceHighlights(this.state.sentence)
   }
 
   handleXposChange(tokenId, newVal) {
@@ -411,7 +451,7 @@ class Sentence extends React.Component {
         const maxHeight = getMaxHeight(x, headX);
         return computeEdge(headX, tokenY, dx, 0, maxHeight, color, highlighted)
       }
-    });
+    }); 
 
     const labels = tokens.map(t => {
       const highlighted = isDeprelSuspicious(t.head);
@@ -433,7 +473,7 @@ class Sentence extends React.Component {
         return (
           <text key={"deprel-label-" + t.id} className={whichClass}
             textAnchor="middle" x={x - dx / 2} y={svgMaxY - maxHeight - 12} fill={color}
-            onClick={() => {this.setState({ deprelEditTokenId: t.id })}}>
+            onMouseOver={() => {this.setState({ deprelEditTokenId: t.id })}}>
             {label}
           </text>
         )
@@ -481,8 +521,9 @@ class Sentence extends React.Component {
     }
 
     // event handlers for handling mouse events
-    return (
+    return ( 
       <div className="sentence" onMouseMove={this.handleMouseMove}>
+      <button type="button" className="button" onClick={() => this.approveHighlights()}>Approve Highlights</button>
         <svg key="svg" className="tree-svg" ref={this.svgRef}>
           <rect key="root-bar" width="50000" height="20" x="0" y="0" className="root-bar"  
                 onMouseDown={this.handleRootMouseDown} onMouseUp={this.handleMouseUp} />
