@@ -21,7 +21,6 @@ const theme = createTheme({
 
 
 function SyntaxEditor(props) {
-  useEffect(() => document.title = "UD Tree");
   return (
     <ThemeProvider theme={theme}>
       <Base data={props.data} />
