@@ -320,16 +320,15 @@ class Sentence extends React.Component {
     sentence.tokens.forEach(token => {
       if (isXposSuspicious(token.xpos)) {
         this.setXpos(sentence, token.id, token.xpos.value)
-        //token.xpos.quality = "gold"
+        token.xpos.quality = "gold"
       }
       if (isDeprelSuspicious(token.head)) {
         this.setHead(sentence, token.id, token.head.value)
         this.setDeprel(sentence, token.id, token.deprel.value)
-        //token.head.quality = "gold"
+        token.head.quality = "gold"
       }
-      })
-    return
-
+    })
+    this.setState({sentence: sentence})
   }
 
   // End methods that need to talk to API
