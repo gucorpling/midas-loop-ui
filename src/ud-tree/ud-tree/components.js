@@ -288,6 +288,10 @@ class Sentence extends React.Component {
       headToken.deprel.value = "root"
       updateDeprel(headToken.deprel.id, "root")
     }
+    if (!token.deprel.value) {
+      token.deprel.value = "<none>"
+      updateDeprel(token.deprel.id, "<none>")
+    }
     token.head.quality = "gold"
     return sentence;
   }
@@ -446,6 +450,9 @@ class Sentence extends React.Component {
       } else {
         const headX = tokenXIndex[t.head.value];
         const x = tokenXIndex[t.id]
+        if (!x || !headX) {
+          return null;
+        }
         const dx = x - headX;
         const maxHeight = getMaxHeight(x, headX);
         return computeEdge(headX, tokenY, dx, 0, maxHeight, color, highlighted)
@@ -463,6 +470,9 @@ class Sentence extends React.Component {
       } else {
         const headX = tokenXIndex[t.head.value];
         const x = tokenXIndex[t.id]
+        if (!headX || !x) {
+          return null
+        }
         const dx = x - headX;
         const maxHeight = getMaxHeight(x, headX);
         var whichClass = this.state.deprelEditTokenId === t.id ? "hidden" : "deprel";
@@ -489,6 +499,9 @@ class Sentence extends React.Component {
       } else {
         const headX = tokenXIndex[t.head.value];
         const x = tokenXIndex[t.id]
+        if (!headX || !x) {
+          return null;
+        }
         const dx = x - headX;
         const maxHeight = getMaxHeight(x, headX);
         return (
