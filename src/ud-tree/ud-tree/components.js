@@ -269,7 +269,7 @@ class Sentence extends React.Component {
 
   // Begin methods that need to talk to API
   setHead(sentence, id, headId) {
-    if (id === headId) {
+    if (id === headId || !id) {
       return sentence;
     }
     const token = sentence.tokens.filter(t => t.id === id)[0];
