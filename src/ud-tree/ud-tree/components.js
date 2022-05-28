@@ -505,7 +505,7 @@ class Sentence extends React.Component {
         const dx = x - headX;
         const maxHeight = getMaxHeight(x, headX);
         return (
-          <foreignObject x={x - dx / 2 - 40} y={svgMaxY - maxHeight - 40} 
+          <foreignObject x={x - dx / 2 - 40} y={svgMaxY - maxHeight - 43} 
                          textAnchor="middle" width="80" height="50" 
                          key={"object-" + t.id} className={this.state.deprelEditTokenId === t.id ? "" : "hidden"}>
             <div onMouseLeave={() => this.setState({ deprelEditTokenId: null })}>

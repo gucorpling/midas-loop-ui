@@ -67,8 +67,8 @@ export function getDeprel(languageCode) {
         return [
             "nsubj",
             "csubj",
-            "nsubjpass",
-            "csubjpass",
+            "nsubj:pass",
+            "csubj:pass",
             "obj",
             "ccomp",
             "xcomp",
