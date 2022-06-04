@@ -159,7 +159,7 @@ function getTokenX(elt) {
 const svgMaxY = 200;
 const tokenY = svgMaxY - 10;
 const rootHeight = 10;
-function computeEdge (x, y, dx, dy, maxHeight, color, highlighted=false) {
+function computeEdge (key, x, y, dx, dy, maxHeight, color, highlighted=false) {
   var d;
   const destX = x + dx;
   const destY = y + dy;
@@ -184,9 +184,11 @@ function computeEdge (x, y, dx, dy, maxHeight, color, highlighted=false) {
          a ${dx/2} ${maxHeight} 0 0 ${x < destX ? "1" : "0"} ${dx} 0`
 
   }
+  const pathKey = `${key}-edge-path`
+  const polyKey = `${key}-edge-polygon`
   return [
-    <path d={d} stroke={color} fill="transparent" strokeWidth={line_width}/>,
-    <polygon points={`${destX-3},${destY - 3} ${destX+3},${destY - 3} ${destX},${destY + 2}`} fill={color} />
+    <path key={pathKey} d={d} stroke={color} fill="transparent" strokeWidth={line_width}/>,
+    <polygon key={polyKey} points={`${destX-3},${destY - 3} ${destX+3},${destY - 3} ${destX},${destY + 2}`} fill={color} />
   ];
 }
 
@@ -444,8 +446,8 @@ class Sentence extends React.Component {
       } else if (t.head.value === "root") {
         const x = tokenXIndex[t.id];
         return [
-          computeEdge(x, 0, 0, tokenY, null, color, highlighted),
-          <text className={highlighted ? "highlighted-deprel" : "deprel"} x={x+2} y="50" fill={color}>{t.deprel.value}</text>
+          computeEdge(t.id, x, 0, 0, tokenY, null, color, highlighted),
+          //<text className={highlighted ? "highlighted-deprel" : "deprel"} x={x+2} y="50" fill={color}>{t.deprel.value}</text>
         ]
       } else {
         const headX = tokenXIndex[t.head.value];
@@ -455,7 +457,7 @@ class Sentence extends React.Component {
         }
         const dx = x - headX;
         const maxHeight = getMaxHeight(x, headX);
-        return computeEdge(headX, tokenY, dx, 0, maxHeight, color, highlighted)
+        return computeEdge(t.id, headX, tokenY, dx, 0, maxHeight, color, highlighted)
       }
     }); 
 
@@ -523,6 +525,7 @@ class Sentence extends React.Component {
       const dx = this.state.cursorCoords.x - this.state.cursorOrigin.x;
       const dy = this.state.cursorCoords.y - this.state.cursorOrigin.y;
       edges.push(computeEdge(
+        "cursor",
         this.state.cursorOrigin.x,
         this.state.cursorOrigin.y,
         dx,
