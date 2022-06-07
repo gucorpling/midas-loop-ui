@@ -83,9 +83,9 @@ export default class Base extends React.Component {
     fill: #eeeeee;
 }
 
-.button {
+/* Style The Dropdown Button */
+.dropbtn {
   background-color: transparent;
-  border: none;
   padding: 10px 16px;
   text-align: center;
   text-decoration: none;
@@ -94,8 +94,45 @@ export default class Base extends React.Component {
   border-radius: 12px;
 }
 
-.button:hover {
-    background-color: #eeeeee
+.dropbtn:hover {
+  background-color: #eeeeee;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #f1f1f1}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .button {
+  background-color: #eeeeee;
 }
 
 .hidden {
@@ -321,18 +358,40 @@ class Sentence extends React.Component {
     return sentence;
   }
 
-  approveSentenceHighlights(sentence) {
-    // needs additional click to update...
+  approveSentenceDeprelHighlights(sentence) {
     sentence.tokens.forEach(token => {
-      if (isXposSuspicious(token.xpos)) {
-        this.setXpos(sentence, token.id, token.xpos.value)
-        token.xpos.quality = "gold"
-      }
       if (isDeprelSuspicious(token.head)) {
         this.setHead(sentence, token.id, token.head.value)
         this.setDeprel(sentence, token.id, token.deprel.value)
         token.head.quality = "gold"
       }
+    })
+    this.setState({sentence: sentence})
+  }
+
+  approveSentencePOSHighlights(sentence) {
+    sentence.tokens.forEach(token => {
+      if (isXposSuspicious(token.xpos)) {
+        this.setXpos(sentence, token.id, token.xpos.value)
+        token.xpos.quality = "gold"
+      }
+    })
+    this.setState({sentence: sentence})
+  }
+
+  approveSentenceDeprelAll(sentence) {
+    sentence.tokens.forEach(token => {
+      this.setHead(sentence, token.id, token.head.value)
+      this.setDeprel(sentence, token.id, token.deprel.value)
+      token.head.quality = "gold"
+    })
+    this.setState({sentence: sentence})
+  }
+
+  approveSentencePOSAll(sentence) {
+    sentence.tokens.forEach(token => {
+      this.setXpos(sentence, token.id, token.xpos.value)
+      token.xpos.quality = "gold"
     })
     this.setState({sentence: sentence})
   }
@@ -343,8 +402,20 @@ class Sentence extends React.Component {
     this.setState({xposEditTokenId: id});
   }
 
-  approveHighlights() {
-    this.approveSentenceHighlights(this.state.sentence)
+  approveDeprelHighlights() {
+    this.approveSentenceDeprelHighlights(this.state.sentence)
+  }
+
+  approvePOSHighlights() {
+    this.approveSentencePOSHighlights(this.state.sentence)
+  }
+
+  approveDeprelAll() {
+    this.approveSentenceDeprelAll(this.state.sentence)
+  }
+
+  approvePOSAll() {
+    this.approveSentencePOSAll(this.state.sentence)
   }
 
   handleXposChange(tokenId, newVal) {
@@ -538,7 +609,20 @@ class Sentence extends React.Component {
     // event handlers for handling mouse events
     return ( 
       <div className="sentence" onMouseMove={this.handleMouseMove}>
-      <button type="button" className="button" onClick={() => this.approveHighlights()}>Approve Highlights</button>
+        <div className="dropdown">
+          <button className="dropbtn">Approve Deprel</button>
+          <div className="dropdown-content">
+            <a onClick={() => this.approveDeprelHighlights()}>Highlighted</a>
+            <a onClick={() => this.approveDeprelAll()}>All</a>
+          </div>
+        </div>
+        <div className="dropdown">
+          <button className="dropbtn">Approve POS</button>
+          <div className="dropdown-content">
+            <a onClick={() => this.approvePOSHighlights()}>Highlighted</a>
+            <a onClick={() => this.approvePOSAll()}>All</a>
+          </div>
+        </div>
         <svg key="svg" className="tree-svg" ref={this.svgRef}>
           <rect key="root-bar" width="50000" height="20" x="0" y="0" className="root-bar"  
                 onMouseDown={this.handleRootMouseDown} onMouseUp={this.handleMouseUp} />
