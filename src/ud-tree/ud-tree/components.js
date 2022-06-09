@@ -135,6 +135,10 @@ export default class Base extends React.Component {
   background-color: #eeeeee;
 }
 
+.check-mark {
+  font-size: 12px;
+}
+
 .hidden {
     display: none;
 }
@@ -295,6 +299,7 @@ class Sentence extends React.Component {
     this.handleLemmaChange = this.handleLemmaChange.bind(this);
     this.handleXposChange = this.handleXposChange.bind(this);
     this.setXposEditTokenId = this.setXposEditTokenId.bind(this);
+    this.approveSingleXpos = this.approveSingleXpos.bind(this);
     this.state = {
       sentence: props.sentence,
       mounted: false,
@@ -356,6 +361,19 @@ class Sentence extends React.Component {
     token.lemma.value = lemma;
     updateLemma(token.lemma.id, lemma)
     return sentence;
+  }
+
+  approveSingleXpos(token) {
+    this.setXpos(this.state.sentence, token.id, token.xpos.value)
+    token.xpos.quality = "gold"
+    this.setState({sentence: this.state.sentence});
+  }
+
+  approveSingleDeprel(sentence, token) {
+    this.setHead(sentence, token.id, token.head.value);
+    this.setDeprel(sentence, token.id, token.deprel.value);
+    token.head.quality = "gold";
+    this.setState({sentence: sentence});
   }
 
   approveSentenceDeprelHighlights(sentence) {
@@ -562,6 +580,34 @@ class Sentence extends React.Component {
       }
     });
 
+    const deprel_approve = tokens.map(t => {
+      if (!this.state.mounted || !tokenXIndex[t.id]) {
+        return null;
+      } else if (t.head.value === "root") {
+        const x = tokenXIndex[t.id]
+        return (
+          <text id={"id-approve-deprel-label-" + t.id} key={"approve-deprel-label-" + t.id} className="check-mark"
+          textAnchor="middle" x={x + 8} y={svgMaxY/2} 
+          onClick={() => {this.approveSingleDeprel(this.state.sentence, t)}}>&#10004;</text>
+        ); 
+      } else {
+        const headX = tokenXIndex[t.head.value];
+        const x = tokenXIndex[t.id]
+        if (!headX || !x) {
+          return null
+        }
+        const dx = x - headX;
+        const maxHeight = getMaxHeight(x, headX);
+        var whichClass = this.state.deprelEditTokenId === t.id ? "hidden" : "deprel";
+        //console.log(t)
+        return (
+          <text id={"id-approve-deprel-label-" + t.id} key={"approve-deprel-label-" + t.id} className="check-mark"
+          textAnchor="middle" x={x - dx / 2} y={svgMaxY - maxHeight - 20} 
+          onClick={() => {this.approveSingleDeprel(this.state.sentence, t)}}>&#10004;</text>
+        )
+      }
+    });
+
     const selects = tokens.map(t => {
       const color = getDeprelColor(t.deprel.value);
       const label = t.deprel.value;
@@ -629,6 +675,7 @@ class Sentence extends React.Component {
           {edges}
           {labels}
           {selects}
+          {deprel_approve}
         </svg>
         <Row key="row">
           {tokens.map(t => <TokenWithRef key={t.id} 
@@ -639,7 +686,8 @@ class Sentence extends React.Component {
                                          handleXposChange={this.handleXposChange}
                                          handleLemmaChange={this.handleLemmaChange}
                                          xposEditTokenId={this.state.xposEditTokenId} 
-                                         setXposEditTokenId={this.setXposEditTokenId} />)}
+                                         setXposEditTokenId={this.setXposEditTokenId} 
+                                         approveSingleXpos={this.approveSingleXpos}/>)}
         </Row>
       </div>
     )
@@ -653,7 +701,7 @@ class Token extends React.Component {
   }
 
   render() {
-    const {handleMouseDown, handleMouseUp, handleLemmaChange, handleXposChange, setXposEditTokenId, xposEditTokenId, token} = this.props;
+    const {handleMouseDown, handleMouseUp, handleLemmaChange, handleXposChange, setXposEditTokenId, xposEditTokenId, token, approveSingleXpos} = this.props;
     const { id, tokenType, form, lemma, upos, xpos, feats, head, deprel, deps, misc} = token;
     const xpos_highlighted = isXposSuspicious(xpos);
     const xpos_color = xpos_highlighted ? "highlighted-xpos" : "xpos";
@@ -664,6 +712,7 @@ class Token extends React.Component {
             {form.value}
           </div>
           <ContentEditable className="lemma" html={lemma.value} onChange={(e) => handleLemmaChange(id, e.target.value)} />
+          <a className="check-mark" onClick={(e) => approveSingleXpos(token)}>&#10004;</a>
           {xposEditTokenId === id
           ? <div style={{position: "relative"}}>
               <select className="xpos xpos-select" value={xpos.value}
