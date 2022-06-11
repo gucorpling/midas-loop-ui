@@ -67,6 +67,7 @@ export default class Base extends React.Component {
 
 .sentence {
     width: max-content;
+    margin-top: 60px;
 }
 
 .tree-svg {
@@ -86,12 +87,13 @@ export default class Base extends React.Component {
 /* Style The Dropdown Button */
 .dropbtn {
   background-color: transparent;
-  padding: 10px 16px;
+  padding: 5px 8px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
   font-size: 12px;
   border-radius: 12px;
+  margin: 5px
 }
 
 .dropbtn:hover {
@@ -109,9 +111,11 @@ export default class Base extends React.Component {
   display: none;
   position: absolute;
   background-color: #f9f9f9;
-  min-width: 160px;
+  min-width: 120px;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
   z-index: 1;
+  font-size: 12px;
+  border-radius: 12px;
 }
 
 /* Links inside the dropdown */
@@ -137,6 +141,7 @@ export default class Base extends React.Component {
 
 .check-mark {
   font-size: 12px;
+  margin: -10px;
 }
 
 .hidden {
