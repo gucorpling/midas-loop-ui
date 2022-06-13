@@ -23,6 +23,9 @@ export default class Base extends React.Component {
     display: flex;
     font-size: 10px;
 }
+.token-col {
+    align-items: center;
+}
 .xpos {
     display: flex;
     font-size: 10px;
@@ -30,10 +33,16 @@ export default class Base extends React.Component {
     cursor: pointer;
 }
 .xpos-select {
-    width: 40px;
+    width: 44px;
     font-size: 10px;
     position: absolute;
-    left: -12px;
+    left: 0px;
+    display: inline-block;
+}
+.xpos-approve-button {
+    position: absolute;
+    left: 56px;
+    top: 8px;
 }
 .highlighted-xpos {
     display: flex;
@@ -422,7 +431,7 @@ class Sentence extends React.Component {
   // End methods that need to talk to API
 
   setXposEditTokenId(id) {
-    this.setState({xposEditTokenId: id});
+    this.setState({xposEditTokenId: id}, () => this.forceUpdate());
   }
 
   approveDeprelHighlights() {
@@ -713,19 +722,17 @@ class Token extends React.Component {
     const xpos_color = xpos_highlighted ? "highlighted-xpos" : "xpos";
     return (
       <div ref={this.props.innerRef}>
-        <Col style={{ alignItems: "center" }}>
+        <Col className="col token-col">
           <div id={id} className="form" onMouseDown={handleMouseDown} onMouseUp={handleMouseUp}>
             {form.value}
           </div>
           <ContentEditable className="lemma" html={lemma.value} onChange={(e) => handleLemmaChange(id, e.target.value)} />
-          <a className="check-mark" onClick={(e) => approveSingleXpos(token)}>&#10004;</a>
           {xposEditTokenId === id
-          ? <div style={{position: "relative"}}>
-              <select className="xpos xpos-select" value={xpos.value}
-                    onMouseLeave={() => setXposEditTokenId(null)} 
-                    onChange={(e) => {handleXposChange(id, e.target.value);}}>
+          ? <div style={{position: "relative", width: "60px"}} onMouseLeave={() => setXposEditTokenId(null)}>
+              <select className="xpos xpos-select" value={xpos.value} onChange={(e) => {handleXposChange(id, e.target.value);}}>
                 {getXpos("en").map(l => <option key={l} value={l}>{l}</option>)}
               </select>
+              <a className="check-mark xpos-approve-button" onClick={(e) => approveSingleXpos(token)}>&#10004;</a>
             </div>
           : <div className={xpos_color} onMouseOver={() => setXposEditTokenId(id)}>{xpos.value}</div>}
         </Col>
