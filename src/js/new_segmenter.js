@@ -38,7 +38,8 @@ export function Document(props) {
       }
     }
     let className = "sentence"
-    const firstToken = props.tokens && props.tokens.length > 0 && props.tokens[0]
+    const tokens = props.tokens.filter(t => t["token-type"] !== "super");
+    const firstToken = tokens && tokens.length > 0 && tokens[0]
     const outProb = firstToken && firstToken.probas && firstToken.probas.O
     const maybeMerge = outProb && outProb > 0.9
     const isGold = firstToken.quality && firstToken.quality === "gold"
@@ -51,7 +52,7 @@ export function Document(props) {
     return (
       <div key={props.id} className={className} onClick={merge}>
         <span className="sentence-icon"><Merge fontSize="small" /></span>
-        {props.tokens.map((v, i) => Token({ ...v, index: i }))}
+        {tokens.map((v, i) => Token({ ...v, index: i }))}
       </div>
     )
   }

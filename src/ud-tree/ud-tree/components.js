@@ -519,7 +519,8 @@ class Sentence extends React.Component {
   }
 
   render() {
-    const { id, conlluMetadata, tokens } = this.state.sentence;
+    const tokens = this.state.sentence.tokens.filter(t => t["token-type"] !== "super");
+
     // Read the x coordinates of each token using the refs
     const tokenXIndex = {};
     for (let t of tokens) {
