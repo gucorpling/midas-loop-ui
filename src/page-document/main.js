@@ -39,7 +39,6 @@ window.spannotator_read_conllu = spannotator_read_conllu;
 window.syntax_read_json = syntax_read_json;
 
 const queryString = window.location.search;
-//console.log(queryString);
 const urlParams = new URLSearchParams(queryString);
 
 var docs = [];
@@ -67,9 +66,21 @@ async function initPage() {
 initPage()
 
 function Metadata(props) {
-  const [doc, setDoc] = useState(null)
+  const [doc, setDoc] = useState(undefined)
   const [state, setState] = useState("default")
-  useEffect(() => { api.getDocument(props.id, "json").then(d => setDoc(d))}, [props.id])
+  useEffect(() => {
+    try {
+      api.getDocument(props.id, "json").then(d => setDoc(d))
+    } catch (e) {
+      setDoc(null)
+    }
+  }, [props.id])
+  useEffect(() => {
+    if (doc === null) {
+      setTimeout(() => window.location = "/", 3000)
+    }
+  }, [doc])
+
   function makeCopy(format) {
     return async function (e) {
       e.preventDefault;
@@ -101,7 +112,9 @@ function Metadata(props) {
   }
 
   return (
-    doc ? (
+    doc === null ? (
+      <div className="d-flex justify-content-center mt-4">Document does not exist. Going back...</div>
+    ) : doc !== undefined ? (
       <div className="container-sm pt-4">
         <p><strong>Name:</strong> {doc.name}</p>
         <p><strong>Internal ID:</strong> {doc.id}</p>
