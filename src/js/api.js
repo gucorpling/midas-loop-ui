@@ -74,9 +74,14 @@ export default class Api {
      * @param {string} format - either "json" or "conllu" (defaults to "json")
      */
     getDocument(id, format = "json") {
-        this.queryDocuments
-        return this._getRequest(`/conllu/document/id/${id}?format=${format}`)
-            .then(result => format === "json" ? result.json() : result.text());
+        const onSuccess = (result) => {
+            if (result.status !== 200) {
+                return null
+            } else {
+                return format === "json" ? result.json() : result.text()
+            }
+        }
+        return this._getRequest(`/conllu/document/id/${id}?format=${format}`).then(onSuccess);
     }
 
     /**
