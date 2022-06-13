@@ -219,7 +219,8 @@ function computeEdge (key, x, y, dx, dy, maxHeight, color, highlighted=false) {
   const destX = x + dx;
   const destY = y + dy;
   // highlighted should be passed in as a parameter
-  const line_width = highlighted ? "2" : "1";
+  const lineWidth = highlighted ? "2" : "1";
+  const offset = destX > x ? 5 : -5
   // We're drawing the root
   if (maxHeight === null) {
     d = `M ${x} ${y} l ${dx} ${dy}`
@@ -235,14 +236,14 @@ function computeEdge (key, x, y, dx, dy, maxHeight, color, highlighted=false) {
   }
   // We're drawing a normal static edge
   else {
-    d = `M ${x} ${y} 
-         a ${dx/2} ${maxHeight} 0 0 ${x < destX ? "1" : "0"} ${dx} 0`
+    d = `M ${x + offset} ${y} 
+         a ${(dx + -offset)/2} ${maxHeight} 0 0 ${x < destX ? "1" : "0"} ${dx + -offset} 0`
 
   }
   const pathKey = `${key}-edge-path`
   const polyKey = `${key}-edge-polygon`
   return [
-    <path key={pathKey} d={d} stroke={color} fill="transparent" strokeWidth={line_width}/>,
+    <path key={pathKey} d={d} stroke={color} fill="transparent" strokeWidth={lineWidth}/>,
     <polygon key={polyKey} points={`${destX-3},${destY - 3} ${destX+3},${destY - 3} ${destX},${destY + 2}`} fill={color} />
   ];
 }
