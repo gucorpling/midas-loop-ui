@@ -40,11 +40,6 @@ export default class Base extends React.Component {
     left: 0px;
     display: inline-block;
 }
-.xpos-approve-button {
-    position: absolute;
-    left: 56px;
-    top: 8px;
-}
 .highlighted-xpos {
     display: flex;
     font-size: 10px;
@@ -149,9 +144,16 @@ export default class Base extends React.Component {
   background-color: #eeeeee;
 }
 
-.check-mark {
-  font-size: 12px;
-  margin: -10px;
+/* approvals */
+.check-mark { 
+    font-size: 12px; 
+    cursor: pointer;
+}
+.xpos-approve-button {
+    position: absolute;
+    left: 42px;
+    top: -6px;
+    padding: 6px;
 }
 
 .hidden {
@@ -348,16 +350,16 @@ class Sentence extends React.Component {
   setDeprel(sentence, id, deprel) {
     const token = sentence.tokens.filter(t => t.id === id)[0];
     token.deprel.value = deprel;
-    updateDeprel(token.deprel.id, deprel)
     token.head.quality = "gold"
+    updateDeprel(token.deprel.id, deprel)
     return sentence;
   }
 
   setXpos(sentence, id, xpos) {
     const token = sentence.tokens.filter(t => t.id === id)[0];
     token.xpos.value = xpos;
-    updateXpos(token.xpos.id, xpos)
     token.xpos.quality = "gold"
+    updateXpos(token.xpos.id, xpos)
     return sentence;
   }
 
@@ -369,9 +371,9 @@ class Sentence extends React.Component {
   }
 
   approveSingleXpos(sentence, token) {
-    this.setXpos(this.state.sentence, token.id, token.xpos.value)
+    this.setXpos(sentence, token.id, token.xpos.value)
     token.xpos.quality = "gold"
-    this.setState({sentence: this.state.sentence});
+    this.setState({sentence: sentence});
   }
 
   approveSingleHead(sentence, token) {
@@ -441,6 +443,7 @@ class Sentence extends React.Component {
   }
 
   handleXposChange(tokenId, newVal) {
+    this.setState({xposEditTokenId: null})
     this.setXpos(this.state.sentence, tokenId, newVal)
   }
 
@@ -517,7 +520,7 @@ class Sentence extends React.Component {
     document.removeEventListener("mouseup", this.handleOutsideMouseUp)
   }
 
-  componentWillReceiveProps(newProps) {
+  UNSAFE_componentWillReceiveProps(newProps) {
     this.setState({sentence: newProps.sentence})
   }
 
@@ -697,7 +700,7 @@ class Sentence extends React.Component {
                                          handleLemmaChange={this.handleLemmaChange}
                                          xposEditTokenId={this.state.xposEditTokenId} 
                                          setXposEditTokenId={this.setXposEditTokenId} 
-                                         approveSingleXpos={token => this.approveSingleXpos(sentence, token)}/>)}
+                                         approveSingleXpos={token => this.approveSingleXpos(this.state.sentence, token)}/>)}
         </Row>
       </div>
     )
