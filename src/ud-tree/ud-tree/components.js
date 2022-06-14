@@ -266,7 +266,6 @@ function computeEdge (key, x, y, dx, dy, maxHeight, color, highlighted=false) {
 // active learning functions for determiniting which annotations should be highlighted
 const SUSPICIOUS_CUTOFF = 0.9
 function isHeadSuspicious(head) {
-  // if quality included, and quality is "gold", return false
   return head.quality !== "gold" && head.probas[head.value] < SUSPICIOUS_CUTOFF;
 }
 
@@ -308,6 +307,7 @@ class Sentence extends React.Component {
     this.handleXposChange = this.handleXposChange.bind(this);
     this.setXposEditTokenId = this.setXposEditTokenId.bind(this);
     this.approveSingleXpos = this.approveSingleXpos.bind(this);
+    this.refreshSentence = this.refreshSentence.bind(this);
     this.state = {
       sentence: props.sentence,
       mounted: false,
@@ -319,8 +319,21 @@ class Sentence extends React.Component {
     };
   }
 
+  refreshSentence(delay = 2000) {
+    const refresh = async () => {
+      const newData = await api.getSentence(this.state.sentence.id)
+      console.log("!!,", newData)
+      this.setState({sentence: newData});
+    }
+    if (delay > 0) {
+      setTimeout(refresh, delay)
+    } else {
+      refresh()
+    }
+  }
+
   // Begin methods that need to talk to API
-  setHead(sentence, id, headId) {
+  async setHead(sentence, id, headId) {
     if (id === headId || !id) {
       return sentence;
     }
@@ -330,7 +343,7 @@ class Sentence extends React.Component {
     updateHead(token.head.id, headId)
     if (headId === "root") {
       token.deprel.value = "root";
-      updateDeprel(token.deprel.id, "root")
+      await updateDeprel(token.deprel.id, "root")
     }
     if (headId !== "root" && headToken.head.value === id) {
       headToken.head.value = "root";
@@ -338,88 +351,99 @@ class Sentence extends React.Component {
       token.deprel.value = headToken.deprel.value;
       updateDeprel(token.deprel.id, headToken.deprel.value)
       headToken.deprel.value = "root"
-      updateDeprel(headToken.deprel.id, "root")
+      await updateDeprel(headToken.deprel.id, "root")
     }
     if (!token.deprel.value) {
       token.deprel.value = "<none>"
-      updateDeprel(token.deprel.id, "<none>")
+      await updateDeprel(token.deprel.id, "<none>")
     }
     token.head.quality = "gold"
+    this.refreshSentence()
     return sentence;
   }
 
-  setDeprel(sentence, id, deprel) {
+  async setDeprel(sentence, id, deprel) {
+    this.setState({deprelEditTokenId: null})
     const token = sentence.tokens.filter(t => t.id === id)[0];
     token.deprel.value = deprel;
     token.head.quality = "gold"
-    updateDeprel(token.deprel.id, deprel)
+    await updateDeprel(token.deprel.id, deprel)
+    this.refreshSentence()
     return sentence;
   }
 
-  setXpos(sentence, id, xpos) {
+  async setXpos(sentence, id, xpos) {
     const token = sentence.tokens.filter(t => t.id === id)[0];
     token.xpos.value = xpos;
     token.xpos.quality = "gold"
-    updateXpos(token.xpos.id, xpos)
+    await updateXpos(token.xpos.id, xpos)
+    this.refreshSentence()
     return sentence;
   }
 
-  setLemma(sentence, id, lemma) {
+  async setLemma(sentence, id, lemma) {
     const token = sentence.tokens.filter(t => t.id === id)[0];
     token.lemma.value = lemma;
-    updateLemma(token.lemma.id, lemma)
+    await updateLemma(token.lemma.id, lemma)
+    this.refreshSentence()
     return sentence;
   }
 
-  approveSingleXpos(sentence, token) {
-    this.setXpos(sentence, token.id, token.xpos.value)
+  async approveSingleXpos(sentence, token) {
+    await this.setXpos(sentence, token.id, token.xpos.value)
     token.xpos.quality = "gold"
     this.setState({sentence: sentence});
+    this.refreshSentence()
   }
 
-  approveSingleHead(sentence, token) {
+  async approveSingleHead(sentence, token) {
     this.setHead(sentence, token.id, token.head.value);
-    this.setDeprel(sentence, token.id, token.deprel.value);
+    await this.setDeprel(sentence, token.id, token.deprel.value);
     token.head.quality = "gold";
     this.setState({sentence: sentence});
+    this.refreshSentence()
   }
 
-  approveSentenceHeadHighlights(sentence) {
-    sentence.tokens.forEach(token => {
+  async approveSentenceHeadHighlights(sentence) {
+    sentence.tokens.forEach(async (token) => {
       if (isHeadSuspicious(token.head)) {
         this.setHead(sentence, token.id, token.head.value)
-        this.setDeprel(sentence, token.id, token.deprel.value)
+        await this.setDeprel(sentence, token.id, token.deprel.value)
         token.head.quality = "gold"
       }
     })
     this.setState({sentence: sentence})
+    this.refreshSentence()
   }
 
-  approveSentencePOSHighlights(sentence) {
-    sentence.tokens.forEach(token => {
+  async approveSentencePOSHighlights(sentence) {
+    sentence.tokens.forEach(async (token) => {
       if (isXposSuspicious(token.xpos)) {
-        this.setXpos(sentence, token.id, token.xpos.value)
+        await this.setXpos(sentence, token.id, token.xpos.value)
         token.xpos.quality = "gold"
       }
     })
     this.setState({sentence: sentence})
+    this.refreshSentence()
   }
 
-  approveSentenceHeadAll(sentence) {
-    sentence.tokens.forEach(token => {
+  async approveSentenceHeadAll(sentence) {
+    sentence.tokens.forEach(async (token) => {
       this.setHead(sentence, token.id, token.head.value)
-      this.setDeprel(sentence, token.id, token.deprel.value)
+      await this.setDeprel(sentence, token.id, token.deprel.value)
       token.head.quality = "gold"
     })
     this.setState({sentence: sentence})
+    this.refreshSentence()
   }
 
-  approveSentencePOSAll(sentence) {
-    sentence.tokens.forEach(token => {
-      this.setXpos(sentence, token.id, token.xpos.value)
+  async approveSentencePOSAll(sentence) {
+    sentence.tokens.forEach(async (token) => {
+      await this.setXpos(sentence, token.id, token.xpos.value)
       token.xpos.quality = "gold"
     })
     this.setState({sentence: sentence})
+    this.refreshSentence()
   }
 
   // End methods that need to talk to API
@@ -459,16 +483,15 @@ class Sentence extends React.Component {
 
     var updatedSentence;
     if (e.target.className === "root-bar") {
-      updatedSentence = this.setHead(this.state.sentence, id, "root")
+      this.setHead(this.state.sentence, id, "root")
     } else {
-      updatedSentence = this.setHead(this.state.sentence, id, headId)
+      this.setHead(this.state.sentence, id, headId)
     }
 
     this.setState({
       cursorOrigin: null,
       cursorCoords: null,
       cursorOriginId: null,
-      sentence: updatedSentence 
     });
   }
 
