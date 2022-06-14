@@ -3,6 +3,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { red } from '@mui/material/colors';
 import Base from './ud-tree/components';
+import { api } from '../js/common'
 
 
 const theme = createTheme({
@@ -21,9 +22,14 @@ const theme = createTheme({
 
 
 function SyntaxEditor(props) {
+  const [document, setDocument] = useState(props.data)
+  async function refresh() {
+    const newData = await api.getDocument(document.id, "json")
+    setDocument(newData)
+  }
   return (
     <ThemeProvider theme={theme}>
-      <Base data={props.data} />
+      <Base data={document} refresh={refresh} />
       <CssBaseline />
     </ThemeProvider>
   );

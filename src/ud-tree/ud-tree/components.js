@@ -1,9 +1,10 @@
 import React from 'react';
-import { Stack } from '@mui/material';
+import { Stack, IconButton } from '@mui/material';
 import getDeprelColor from './deprel_colors';
 import {getXpos, getDeprel} from './vocabs';
 import ContentEditable from 'react-contenteditable';
 import { api } from '../../js/common.js'
+import Refresh from '@mui/icons-material/Refresh';
 
 const containerPadding = 12;
 
@@ -11,7 +12,7 @@ export default class Base extends React.Component {
   render() {
     return (
       <div style={{padding: containerPadding}}>
-        <Document data={this.props.data} />
+        <Document data={this.props.data} refresh={this.props.refresh} />
         <style>
           {`
 .form {
@@ -189,13 +190,21 @@ class Document extends React.Component {
     const { id, sentences, name } = this.props.data;
     return (
       <Stack spacing={3}>
-        <h1 key="header">{name}</h1>
+        <h1 key="header">
+          {name}
+          <IconButton color="primary" size="large" component="span" onClick={this.props.refresh}>
+            <Refresh />
+          </IconButton>
+        </h1>
         {sentences.map(s => <Sentence key={s.id} sentence={s} />)}
       </Stack>
     )
   }
 }
 
+//////////////////////////////////////////////////////////////////////////////////
+// Canvas drawing
+//////////////////////////////////////////////////////////////////////////////////
 // Use a modified logistic function to compute how high an arc should go
 function getMaxHeight(src, dest) {
   const diff = Math.abs(dest - src);
@@ -248,39 +257,18 @@ function computeEdge (key, x, y, dx, dy, maxHeight, color, highlighted=false) {
   ];
 }
 
+//////////////////////////////////////////////////////////////////////////////////
+// Data/API helpers
+//////////////////////////////////////////////////////////////////////////////////
 // active learning functions for determiniting which annotations should be highlighted
-function isDeprelSuspicious(head) {
+const SUSPICIOUS_CUTOFF = 0.9
+function isHeadSuspicious(head) {
   // if quality included, and quality is "gold", return false
-  if (head.quality) {
-    if (head.quality === "gold") {
-      return false;
-    }
-  }
-  // if probas is included, if probas[head.value] < 0.9, return true 
-  if (head.probas) {
-    if(head.probas[head.value] < 0.9) {
-      return true;
-    }
-  }
-  // otherwise return false
-  return false;
+  return head.quality !== "gold" && head.probas[head.value] < SUSPICIOUS_CUTOFF;
 }
 
 function isXposSuspicious(xpos) {
-  // if quality included, and quality is "gold", return false
-  if (xpos.quality) {
-    if (xpos.quality === "gold") {
-      return false;
-    }
-  }
-  // if probas is included, if probas[head.value] < 0.9, return true 
-  if (xpos.probas) {
-    if(xpos.probas[xpos.value] < 0.9) {
-      return true;
-    }
-  }
-  // otherwise return false
-  return false;
+  return xpos.quality !== "gold" && xpos.probas[xpos.value] < SUSPICIOUS_CUTOFF;
 }
 
 async function updateHead(id, head){
@@ -300,7 +288,9 @@ async function updateLemma(id, lemma){
 }
 
 
+//////////////////////////////////////////////////////////////////////////////////
 // Component for sentence that renders tokens in a row and an SVG element with edges
+//////////////////////////////////////////////////////////////////////////////////
 class Sentence extends React.Component {
   constructor(props) {
     super(props);
@@ -378,22 +368,22 @@ class Sentence extends React.Component {
     return sentence;
   }
 
-  approveSingleXpos(token) {
+  approveSingleXpos(sentence, token) {
     this.setXpos(this.state.sentence, token.id, token.xpos.value)
     token.xpos.quality = "gold"
     this.setState({sentence: this.state.sentence});
   }
 
-  approveSingleDeprel(sentence, token) {
+  approveSingleHead(sentence, token) {
     this.setHead(sentence, token.id, token.head.value);
     this.setDeprel(sentence, token.id, token.deprel.value);
     token.head.quality = "gold";
     this.setState({sentence: sentence});
   }
 
-  approveSentenceDeprelHighlights(sentence) {
+  approveSentenceHeadHighlights(sentence) {
     sentence.tokens.forEach(token => {
-      if (isDeprelSuspicious(token.head)) {
+      if (isHeadSuspicious(token.head)) {
         this.setHead(sentence, token.id, token.head.value)
         this.setDeprel(sentence, token.id, token.deprel.value)
         token.head.quality = "gold"
@@ -412,7 +402,7 @@ class Sentence extends React.Component {
     this.setState({sentence: sentence})
   }
 
-  approveSentenceDeprelAll(sentence) {
+  approveSentenceHeadAll(sentence) {
     sentence.tokens.forEach(token => {
       this.setHead(sentence, token.id, token.head.value)
       this.setDeprel(sentence, token.id, token.deprel.value)
@@ -430,21 +420,20 @@ class Sentence extends React.Component {
   }
 
   // End methods that need to talk to API
-
   setXposEditTokenId(id) {
     this.setState({xposEditTokenId: id}, () => this.forceUpdate());
   }
 
-  approveDeprelHighlights() {
-    this.approveSentenceDeprelHighlights(this.state.sentence)
+  approveHeadHighlights() {
+    this.approveSentenceHeadHighlights(this.state.sentence)
   }
 
   approvePOSHighlights() {
     this.approveSentencePOSHighlights(this.state.sentence)
   }
 
-  approveDeprelAll() {
-    this.approveSentenceDeprelAll(this.state.sentence)
+  approveHeadAll() {
+    this.approveSentenceHeadAll(this.state.sentence)
   }
 
   approvePOSAll() {
@@ -528,6 +517,10 @@ class Sentence extends React.Component {
     document.removeEventListener("mouseup", this.handleOutsideMouseUp)
   }
 
+  componentWillReceiveProps(newProps) {
+    this.setState({sentence: newProps.sentence})
+  }
+
   render() {
     const tokens = this.state.sentence.tokens.filter(t => t["token-type"] !== "super");
 
@@ -544,8 +537,9 @@ class Sentence extends React.Component {
 
     // get edges for drawing
     const edges = tokens.map(t => {
-      const highlighted = isDeprelSuspicious(t.head);
-      const color = highlighted ? "red" : getDeprelColor(t.deprel.value);
+      const highlighted = isHeadSuspicious(t.head);
+      const isGold = t.head.quality === "gold"
+      const color = isGold ? "green" : highlighted ? "red" : getDeprelColor(t.deprel.value);
       if (!this.state.mounted || !tokenXIndex[t.id]) {
         return null;
       } else if (t.head.value === "root") {
@@ -567,7 +561,7 @@ class Sentence extends React.Component {
     }); 
 
     const labels = tokens.map(t => {
-      const highlighted = isDeprelSuspicious(t.head);
+      const highlighted = isHeadSuspicious(t.head);
       const color = highlighted ? "red" : getDeprelColor(t.deprel.value);
       const label = t.deprel.value;
       if (!this.state.mounted || !tokenXIndex[t.id]) {
@@ -596,7 +590,7 @@ class Sentence extends React.Component {
       }
     });
 
-    const deprel_approve = tokens.map(t => {
+    const headApprove = tokens.map(t => {
       if (!this.state.mounted || !tokenXIndex[t.id]) {
         return null;
       } else if (t.head.value === "root") {
@@ -604,7 +598,7 @@ class Sentence extends React.Component {
         return (
           <text id={"id-approve-deprel-label-" + t.id} key={"approve-deprel-label-" + t.id} className="check-mark"
           textAnchor="middle" x={x + 8} y={svgMaxY/2} 
-          onClick={() => {this.approveSingleDeprel(this.state.sentence, t)}}>&#10004;</text>
+          onClick={() => {this.approveSingleHead(this.state.sentence, t)}}>&#10004;</text>
         ); 
       } else {
         const headX = tokenXIndex[t.head.value];
@@ -619,7 +613,7 @@ class Sentence extends React.Component {
         return (
           <text id={"id-approve-deprel-label-" + t.id} key={"approve-deprel-label-" + t.id} className="check-mark"
           textAnchor="middle" x={x - dx / 2} y={svgMaxY - maxHeight - 20} 
-          onClick={() => {this.approveSingleDeprel(this.state.sentence, t)}}>&#10004;</text>
+          onClick={() => {this.approveSingleHead(this.state.sentence, t)}}>&#10004;</text>
         )
       }
     });
@@ -674,8 +668,8 @@ class Sentence extends React.Component {
         <div className="dropdown">
           <button className="dropbtn">Approve Deprel</button>
           <div className="dropdown-content">
-            <a onClick={() => this.approveDeprelHighlights()}>Highlighted</a>
-            <a onClick={() => this.approveDeprelAll()}>All</a>
+            <a onClick={() => this.approveHeadHighlights()}>Highlighted</a>
+            <a onClick={() => this.approveHeadAll()}>All</a>
           </div>
         </div>
         <div className="dropdown">
@@ -691,7 +685,7 @@ class Sentence extends React.Component {
           {edges}
           {labels}
           {selects}
-          {deprel_approve}
+          {headApprove}
         </svg>
         <Row key="row">
           {tokens.map(t => <TokenWithRef key={t.id} 
@@ -703,7 +697,7 @@ class Sentence extends React.Component {
                                          handleLemmaChange={this.handleLemmaChange}
                                          xposEditTokenId={this.state.xposEditTokenId} 
                                          setXposEditTokenId={this.setXposEditTokenId} 
-                                         approveSingleXpos={this.approveSingleXpos}/>)}
+                                         approveSingleXpos={token => this.approveSingleXpos(sentence, token)}/>)}
         </Row>
       </div>
     )
