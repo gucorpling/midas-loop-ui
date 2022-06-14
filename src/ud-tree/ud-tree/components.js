@@ -266,11 +266,11 @@ function computeEdge (key, x, y, dx, dy, maxHeight, color, highlighted=false) {
 // active learning functions for determiniting which annotations should be highlighted
 const SUSPICIOUS_CUTOFF = 0.9
 function isHeadSuspicious(head) {
-  return head.quality !== "gold" && head.probas[head.value] < SUSPICIOUS_CUTOFF;
+  return head.quality !== "gold" && head.probas && head.probas[head.value] < SUSPICIOUS_CUTOFF;
 }
 
 function isXposSuspicious(xpos) {
-  return xpos.quality !== "gold" && xpos.probas[xpos.value] < SUSPICIOUS_CUTOFF;
+  return xpos.quality !== "gold" && xpos.probas && xpos.probas[xpos.value] < SUSPICIOUS_CUTOFF;
 }
 
 async function updateHead(id, head){
