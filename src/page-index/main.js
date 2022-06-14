@@ -25,7 +25,6 @@ function DocumentList(props) {
     useEffect(() => {
         async function inner() {
             const result = await api.queryDocuments(queryParams.offset, queryParams.limit, queryParams.orderBy);
-            setDocs(result.docs)
             setTotal(result.total)
             setLoading(false);
         }
@@ -80,6 +79,11 @@ function DocumentList(props) {
                         <div className="spinner-border" role="status">
                             <span className="sr-only">Loading...</span>
                         </div>
+                    </div>
+                ) : docs.length === 0 ? (
+                    <div class="d-flex justify-content-center mt-4">
+                      No documents were found on your system. Please consult the documentation for notes on&nbsp;
+                      <a href="https://gucorpling.github.io/midas-loop/#_importing">how to import documents</a>.
                     </div>
                 ) : (
                     <DataTable
