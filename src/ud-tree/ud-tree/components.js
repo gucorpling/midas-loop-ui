@@ -155,6 +155,7 @@ export default class Base extends React.Component {
     top: -6px;
     padding: 6px;
 }
+.head-approve-button { margin: -18px; }
 
 .hidden {
     display: none;
@@ -542,7 +543,7 @@ class Sentence extends React.Component {
     const edges = tokens.map(t => {
       const highlighted = isHeadSuspicious(t.head);
       const isGold = t.head.quality === "gold"
-      const color = isGold ? "green" : highlighted ? "red" : getDeprelColor(t.deprel.value);
+      const color = isGold ? "green" : highlighted ? "red" : "black" /*getDeprelColor(t.deprel.value)*/;
       if (!this.state.mounted || !tokenXIndex[t.id]) {
         return null;
       } else if (t.head.value === "root") {
@@ -593,40 +594,13 @@ class Sentence extends React.Component {
       }
     });
 
-    const headApprove = tokens.map(t => {
-      if (!this.state.mounted || !tokenXIndex[t.id]) {
-        return null;
-      } else if (t.head.value === "root") {
-        const x = tokenXIndex[t.id]
-        return (
-          <text id={"id-approve-deprel-label-" + t.id} key={"approve-deprel-label-" + t.id} className="check-mark"
-          textAnchor="middle" x={x + 8} y={svgMaxY/2} 
-          onClick={() => {this.approveSingleHead(this.state.sentence, t)}}>&#10004;</text>
-        ); 
-      } else {
-        const headX = tokenXIndex[t.head.value];
-        const x = tokenXIndex[t.id]
-        if (!headX || !x) {
-          return null
-        }
-        const dx = x - headX;
-        const maxHeight = getMaxHeight(x, headX);
-        var whichClass = this.state.deprelEditTokenId === t.id ? "hidden" : "deprel";
-        //console.log(t)
-        return (
-          <text id={"id-approve-deprel-label-" + t.id} key={"approve-deprel-label-" + t.id} className="check-mark"
-          textAnchor="middle" x={x - dx / 2} y={svgMaxY - maxHeight - 20} 
-          onClick={() => {this.approveSingleHead(this.state.sentence, t)}}>&#10004;</text>
-        )
-      }
-    });
-
     const selects = tokens.map(t => {
       const color = getDeprelColor(t.deprel.value);
       const label = t.deprel.value;
       if (!this.state.mounted || !tokenXIndex[t.id]) {
         return null;
       } else if (t.head.value === "root") {
+        // TODO: should add approval for root here
         return null; 
       } else {
         const headX = tokenXIndex[t.head.value];
@@ -638,13 +612,14 @@ class Sentence extends React.Component {
         const maxHeight = getMaxHeight(x, headX);
         return (
           <foreignObject x={x - dx / 2 - 40} y={svgMaxY - maxHeight - 43} 
-                         textAnchor="middle" width="80" height="50" 
+                         textAnchor="middle" width="100" height="50" 
                          key={"object-" + t.id} className={this.state.deprelEditTokenId === t.id ? "" : "hidden"}>
             <div onMouseLeave={() => this.setState({ deprelEditTokenId: null })}>
               <select className="deprel deprel-select" value={t.deprel.value}
                   onChange={(e) => { this.setDeprel(this.state.sentence, t.id, e.target.value); }}>
                 {getDeprel("en").map(l => <option key={l} value={l}>{l}</option>)}
               </select>
+              <a className="check-mark head-approve-button" onClick={(e) => this.approveSingleHead(this.state.sentence, t)}>&#10004;</a>
             </div>
           </foreignObject>
         );
@@ -688,7 +663,6 @@ class Sentence extends React.Component {
           {edges}
           {labels}
           {selects}
-          {headApprove}
         </svg>
         <Row key="row">
           {tokens.map(t => <TokenWithRef key={t.id} 
