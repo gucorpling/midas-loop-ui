@@ -328,7 +328,6 @@ class Sentence extends React.Component {
   refreshSentence(delay = 2000) {
     const refresh = async () => {
       const newData = await api.getSentence(this.state.sentence.id)
-      console.log("!!,", newData)
       this.setState({sentence: newData});
     }
     if (delay > 0) {
