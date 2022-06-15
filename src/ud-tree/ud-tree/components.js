@@ -227,8 +227,9 @@ function windowToSvgX(x) {
   return x - containerPadding;
 }
 function getTokenX(elt) {
-  const {width, left} = elt.getBoundingClientRect();
-  return windowToSvgX(left + width/2);
+  const {width, left} = elt.getBoundingClientRect()
+  const topBcr = window.document.body.getBoundingClientRect()
+  return windowToSvgX(left + width/2 - topBcr.left);
 }
 const svgMaxY = 200;
 const tokenY = svgMaxY - 10;
