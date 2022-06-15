@@ -79,6 +79,7 @@ module.exports = {
   plugins: [
     new webpack.DefinePlugin({
       API_ENDPOINT: JSON.stringify("http://localhost:3000/api"),
+      SUSPICIOUS_PROBABILITY_THRESHOLD: 0.9,
     }),
     new HtmlWebpackPlugin({
       template: './src/page-document/tmpl.html',

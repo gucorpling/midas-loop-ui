@@ -41,7 +41,7 @@ export function Document(props) {
     const tokens = props.tokens.filter(t => t["token-type"] !== "super");
     const firstToken = tokens && tokens.length > 0 && tokens[0]
     const outProb = firstToken && firstToken.probas && firstToken.probas.O
-    const maybeMerge = outProb && outProb > 0.9
+    const maybeMerge = outProb && outProb > SUSPICIOUS_PROBABILITY_THRESHOLD
     const isGold = firstToken.quality && firstToken.quality === "gold"
     if (!isGold && maybeMerge) {
       className += " sentence-maybe-merge"
