@@ -47,6 +47,13 @@ export default class Base extends React.Component {
     cursor: pointer;
     font-weight: bold;
 }
+.approved-xpos {
+    display: flex;
+    font-size: 10px;
+    color: green;
+    cursor: pointer;
+    //font-weight: bold;
+}
 .deprel {
     font-size: 9px;
     cursor: pointer;
@@ -589,7 +596,8 @@ class Sentence extends React.Component {
 
     const labels = tokens.map(t => {
       const highlighted = isHeadSuspicious(t.head);
-      const color = highlighted ? "red" : getDeprelColor(t.deprel.value);
+      const isGold = t.head.quality === "gold"
+      const color = isGold ? "green" : highlighted ? "red" : "black";//getDeprelColor(t.deprel.value);
       const label = t.deprel.value;
       if (!this.state.mounted || !tokenXIndex[t.id]) {
         return null;
@@ -639,7 +647,9 @@ class Sentence extends React.Component {
                          key={"object-" + t.id} className={this.state.deprelEditTokenId === t.id ? "" : "hidden"}>
             <div onMouseLeave={() => this.setState({ deprelEditTokenId: null })}>
               <select className="deprel deprel-select" value={t.deprel.value}
-                  onChange={(e) => { this.setDeprel(this.state.sentence, t.id, e.target.value); }}>
+                  onChange={(e) => { 
+                    this.setHead(this.state.sentence, t.id, t.head.value);
+                    this.setDeprel(this.state.sentence, t.id, e.target.value); }}>
                 {getDeprel("en").map(l => <option key={l} value={l}>{l}</option>)}
               </select>
               <a className="check-mark head-approve-button" onClick={(e) => this.approveSingleHead(this.state.sentence, t)}>&#10004;</a>
@@ -714,7 +724,8 @@ class Token extends React.Component {
     const {handleMouseDown, handleMouseUp, handleLemmaChange, handleXposChange, setXposEditTokenId, xposEditTokenId, token, approveSingleXpos} = this.props;
     const { id, tokenType, form, lemma, upos, xpos, feats, head, deprel, deps, misc} = token;
     const xpos_highlighted = isXposSuspicious(xpos);
-    const xpos_color = xpos_highlighted ? "highlighted-xpos" : "xpos";
+    const isGold = token.xpos.quality === "gold"
+    const xpos_color = isGold ? "approved-xpos" : xpos_highlighted ? "highlighted-xpos" : "xpos";
     return (
       <div ref={this.props.innerRef}>
         <Col className="col token-col">
