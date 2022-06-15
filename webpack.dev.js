@@ -1,6 +1,14 @@
 
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const webpack = require('webpack')
+const XPOS_LABELS = ["CC", "CD", "DT", "EX", "FW", "HYPH", "IN", "IN/that", "JJ", "JJR", "JJS", "LS", "MD", "NN", 
+"NNS", "NP", "NPS", "PDT", "POS", "PP", "PP$", "RB", "RBR", "RBS", "RP", "SENT", "SYM", "TO", "UH", "VB", "VBD", "VBG", "VBN", "VBP", 
+"VBZ", "VH", "VHD", "VHG", "VHN", "VHP", "VHZ", "VV", "VVD", "VVG", "VVN", "VVP", "VVZ", "WDT", "WP", "WP$", "WRB", "``", "\'\'", "(", ")", ",", ":"]
+.map(x => JSON.stringify(x))
+const DEPREL_LABELS = [ "nsubj", "obj", "iobj", "csubj", "ccomp", "xcomp", "obl", "vocative", "expl", "dislocated", 
+"advcl", "advmod", "discourse", "aux", "cop", "mark", "nmod", "appos", "nummod", "acl", "amod", "det", "clf", "case", 
+"conj", "cc", "fixed", "flat", "compound", "list", "parataxis", "orphan", "goeswith", "reparandum", "punct", "root", "dep"]
+.map(x => JSON.stringify(x))
 
 module.exports = {
 
@@ -75,6 +83,8 @@ module.exports = {
       // The probability under which a label probability provided by an NLP service is viewed as 
       // "suspicious" by the UI. Suspicious labels are graphically indicated as such in the UI.
       SUSPICIOUS_PROBABILITY_THRESHOLD: 0.9,
+      XPOS_LABELS: XPOS_LABELS,
+      DEPREL_LABELS: DEPREL_LABELS,
     }),
     new HtmlWebpackPlugin({
       template: './src/page-document/tmpl.html',
