@@ -78,7 +78,11 @@ module.exports = {
   // https://webpack.js.org/concepts/plugins/
   plugins: [
     new webpack.DefinePlugin({
+      // The location of the midas-loop backend service, which the UI needs to communicate with.
+      // This should be something like "http://your.domain.com:3000/api".
       API_ENDPOINT: JSON.stringify("http://localhost:3000/api"),
+      // The probability under which a label probability provided by an NLP service is viewed as 
+      // "suspicious" by the UI. Suspicious labels are graphically indicated as such in the UI.
       SUSPICIOUS_PROBABILITY_THRESHOLD: 0.9,
     }),
     new HtmlWebpackPlugin({
