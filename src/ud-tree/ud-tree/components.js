@@ -359,10 +359,6 @@ class Sentence extends React.Component {
       headToken.deprel.value = "root"
       await updateDeprel(headToken.deprel.id, "root")
     }
-    if (!token.deprel.value) {
-      token.deprel.value = "<none>"
-      await updateDeprel(token.deprel.id, "<none>")
-    }
     token.head.quality = "gold"
     this.refreshSentence()
     return sentence;
@@ -597,7 +593,7 @@ class Sentence extends React.Component {
       const highlighted = isHeadSuspicious(t.head);
       const isGold = t.head.quality === "gold"
       const color = isGold ? "green" : highlighted ? "red" : "black";//getDeprelColor(t.deprel.value);
-      const label = t.deprel.value;
+      const label = t.deprel.value || "<none>";
       if (!this.state.mounted || !tokenXIndex[t.id]) {
         return null;
       } else if (t.head.value === "root") {
