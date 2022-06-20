@@ -272,12 +272,22 @@ function computeEdge (key, x, y, dx, dy, maxHeight, color, highlighted=false) {
 // Data/API helpers
 //////////////////////////////////////////////////////////////////////////////////
 // active learning functions for determiniting which annotations should be highlighted
-function isHeadSuspicious(head) {
-  return head.quality !== "gold" && head.probas && head.probas[head.value] < HEAD_SUSPICIOUS_PROBABILITY_THRESHOLD;
+function isHeadSuspicious(token) {
+  const head = token.head
+  const deprel = token.deprel
+  return (
+    !deprel.value === "punct"
+    && head.quality !== "gold"
+    && head.probas && head.probas[head.value] < HEAD_SUSPICIOUS_PROBABILITY_THRESHOLD
+  )
 }
 
-function isXposSuspicious(xpos) {
-  return xpos.quality !== "gold" && xpos.probas && xpos.probas[xpos.value] < XPOS_SUSPICIOUS_PROBABILITY_THRESHOLD;
+function isXposSuspicious(token) {
+  const xpos = token.xpos
+  return (
+    xpos.quality !== "gold"
+    && xpos.probas && xpos.probas[xpos.value] < XPOS_SUSPICIOUS_PROBABILITY_THRESHOLD
+  )
 }
 
 async function updateHead(id, head){
@@ -408,7 +418,7 @@ class Sentence extends React.Component {
 
   async approveSentenceHeadHighlights(sentence) {
     sentence.tokens.forEach(async (token) => {
-      if (isHeadSuspicious(token.head)) {
+      if (isHeadSuspicious(token)) {
         this.setHead(sentence, token.id, token.head.value)
         await this.setDeprel(sentence, token.id, token.deprel.value)
         token.head.quality = "gold"
@@ -420,7 +430,7 @@ class Sentence extends React.Component {
 
   async approveSentencePOSHighlights(sentence) {
     sentence.tokens.forEach(async (token) => {
-      if (isXposSuspicious(token.xpos)) {
+      if (isXposSuspicious(token)) {
         await this.setXpos(sentence, token.id, token.xpos.value)
         token.xpos.quality = "gold"
       }
