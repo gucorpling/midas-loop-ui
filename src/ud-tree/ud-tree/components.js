@@ -582,7 +582,7 @@ class Sentence extends React.Component {
 
     // get edges for drawing
     const edges = tokens.map(t => {
-      const highlighted = isHeadSuspicious(t.head);
+      const highlighted = isHeadSuspicious(t);
       const isGold = t.head.quality === "gold"
       const color = isGold ? "green" : highlighted ? "red" : "black" /*getDeprelColor(t.deprel.value)*/;
       if (!this.state.mounted || !tokenXIndex[t.id]) {
@@ -606,7 +606,7 @@ class Sentence extends React.Component {
     }); 
 
     const labels = tokens.map(t => {
-      const highlighted = isHeadSuspicious(t.head);
+      const highlighted = isHeadSuspicious(t);
       const isGold = t.head.quality === "gold"
       const color = isGold ? "green" : highlighted ? "red" : "black";//getDeprelColor(t.deprel.value);
       const label = t.deprel.value || "<none>";
@@ -734,7 +734,7 @@ class Token extends React.Component {
   render() {
     const {handleMouseDown, handleMouseUp, handleLemmaChange, handleXposChange, setXposEditTokenId, xposEditTokenId, token, approveSingleXpos} = this.props;
     const { id, tokenType, form, lemma, upos, xpos, feats, head, deprel, deps, misc} = token;
-    const xpos_highlighted = isXposSuspicious(xpos);
+    const xpos_highlighted = isXposSuspicious(token);
     const isGold = token.xpos.quality === "gold"
     const xpos_color = isGold ? "approved-xpos" : xpos_highlighted ? "highlighted-xpos" : "xpos";
     return (
