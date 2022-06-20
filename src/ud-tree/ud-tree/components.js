@@ -275,6 +275,9 @@ function computeEdge (key, x, y, dx, dy, maxHeight, color, highlighted=false) {
 function isHeadSuspicious(token) {
   const head = token.head
   const deprel = token.deprel
+  if (!deprel || !head) {
+    return false
+  }
   return (
     !deprel.value === "punct"
     && head.quality !== "gold"
@@ -284,6 +287,9 @@ function isHeadSuspicious(token) {
 
 function isXposSuspicious(token) {
   const xpos = token.xpos
+  if (!xpos) {
+    return false
+  }
   return (
     xpos.quality !== "gold"
     && xpos.probas && xpos.probas[xpos.value] < XPOS_SUSPICIOUS_PROBABILITY_THRESHOLD
