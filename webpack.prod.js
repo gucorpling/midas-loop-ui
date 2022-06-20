@@ -92,7 +92,9 @@ module.exports = {
       API_ENDPOINT: JSON.stringify("http://localhost:3000/api"),
       // The probability under which a label probability provided by an NLP service is viewed as 
       // "suspicious" by the UI. Suspicious labels are graphically indicated as such in the UI.
-      SUSPICIOUS_PROBABILITY_THRESHOLD: 0.9,
+      HEAD_SUSPICIOUS_PROBABILITY_THRESHOLD: 0.9,
+      XPOS_SUSPICIOUS_PROBABILITY_THRESHOLD: 0.9,
+      SSPLIT_SUSPICIOUS_PROBABILITY_THRESHOLD: 0.9,
       XPOS_LABELS: XPOS_LABELS,
       DEPREL_LABELS: DEPREL_LABELS,
     }),

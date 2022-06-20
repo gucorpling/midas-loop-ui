@@ -101,7 +101,7 @@ function parse_input(conllu) {
 				// setting spacer shape and color
 				if (split_just_seen) {
 					space = "✗";
-					if (probas_num < SUSPICIOUS_PROBABILITY_THRESHOLD) {
+					if (probas_num < SSPLIT_SUSPICIOUS_PROBABILITY_THRESHOLD) {
 						testclass = "red";
 					} else{
 						testclass = "gray";

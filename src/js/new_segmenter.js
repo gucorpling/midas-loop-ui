@@ -41,7 +41,7 @@ export function Document(props) {
     const tokens = props.tokens.filter(t => t["token-type"] !== "super");
     const firstToken = tokens && tokens.length > 0 && tokens[0]
     const outProb = firstToken && firstToken.probas && firstToken.probas.O
-    const maybeMerge = outProb && outProb > SUSPICIOUS_PROBABILITY_THRESHOLD
+    const maybeMerge = outProb && outProb > SSPLIT_SUSPICIOUS_PROBABILITY_THRESHOLD
     const isGold = firstToken.quality && firstToken.quality === "gold"
     if (!isGold && maybeMerge) {
       className += " sentence-maybe-merge"
@@ -69,7 +69,7 @@ export function Document(props) {
 		}
 		let tokenAreaClassName;
 		const isGold = props.quality && props.quality === "gold"
-		if (props.index > 0 && props.probas && props.probas.B > 0.1 && !isGold) {
+		if (props.index > 0 && props.probas && props.probas.B > SSPLIT_SUSPICIOUS_PROBABILITY_THRESHOLD && !isGold) {
 			tokenAreaClassName = "token-area token-area-maybe-split"
 		} else {
 			tokenAreaClassName = "token-area"
