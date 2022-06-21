@@ -279,7 +279,7 @@ function isHeadSuspicious(token) {
     return false
   }
   return (
-    !deprel.value === "punct"
+    deprel.value !== "punct"
     && head.quality !== "gold"
     && head.probas && head.probas[head.value] < HEAD_SUSPICIOUS_PROBABILITY_THRESHOLD
   )
