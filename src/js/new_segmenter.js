@@ -69,7 +69,7 @@ export function Document(props) {
 		}
 		let tokenAreaClassName;
 		const isGold = props.quality && props.quality === "gold"
-		if (props.index > 0 && props.probas && props.probas.B > SSPLIT_SUSPICIOUS_PROBABILITY_THRESHOLD && !isGold) {
+		if (props.index > 0 && props.probas && props.probas.O < SSPLIT_SUSPICIOUS_PROBABILITY_THRESHOLD && !isGold) {
 			tokenAreaClassName = "token-area token-area-maybe-split"
 		} else {
 			tokenAreaClassName = "token-area"
