@@ -23,11 +23,11 @@ const theme = createTheme({
 
 function SyntaxEditor(props) {
   const [document, setDocument] = useState(props.data)
-  useEffect(() => { setDocument(props.data) }, [props.data])
   async function refresh() {
     const newData = await api.getDocument(document.id, "json")
     setDocument(newData)
   }
+  useEffect(() => { refresh() }, [props.data])
   return (
     <ThemeProvider theme={theme}>
       <Base data={document} refresh={refresh} />
