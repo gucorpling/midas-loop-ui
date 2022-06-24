@@ -27,6 +27,7 @@ function SyntaxEditor(props) {
     const newData = await api.getDocument(document.id, "json")
     setDocument(newData)
   }
+  useEffect(() => { refresh() }, [props.data])
   return (
     <ThemeProvider theme={theme}>
       <Base data={document} refresh={refresh} />
