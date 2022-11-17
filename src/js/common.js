@@ -5,6 +5,13 @@ import '@fortawesome/fontawesome-free/js/regular'
 import '@fortawesome/fontawesome-free/js/brands'
 import Api from '../js/api';
 
+function setHrefEnd(end) {
+    const pieces = end.split("/")
+    const butLast = pieces.slice(0, pieces.length - 1)
+    const newPieces = butLast + [end]
+    return newPieces.join("/")
+}
+
 function getCookie(key) {
     const pieces = document.cookie.split(";");
     for (let piece of pieces) {
@@ -30,7 +37,7 @@ async function checkAuth () {
         const response = await api.checkToken(token);
         console.log("Token is " + (response.ok ? "valid" : "invalid"));
         if (!response.ok && !onLogin) {
-            window.location.href = "/login.html";
+            setHrefEnd("/login.html");
         } else {
             api.token = token;
         }
@@ -38,7 +45,7 @@ async function checkAuth () {
         console.log("Failed to contact API");
         console.log(e);
         if (!onLogin) {
-            window.location.href = "/login.html";
+            setHrefEnd("/login.html");
         }
     }
 }
