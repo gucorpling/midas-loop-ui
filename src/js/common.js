@@ -8,8 +8,9 @@ import Api from '../js/api';
 function setHrefEnd(end) {
     const pieces = end.split("/")
     const butLast = pieces.slice(0, pieces.length - 1)
-    const newPieces = butLast + [end]
-    return newPieces.join("/")
+    butLast.push(end)
+    const newHref = butLast.join("/")
+    window.location.href = newHref
 }
 
 function getCookie(key) {
@@ -37,7 +38,7 @@ async function checkAuth () {
         const response = await api.checkToken(token);
         console.log("Token is " + (response.ok ? "valid" : "invalid"));
         if (!response.ok && !onLogin) {
-            setHrefEnd("/login.html");
+            setHrefEnd("login.html");
         } else {
             api.token = token;
         }
@@ -45,7 +46,7 @@ async function checkAuth () {
         console.log("Failed to contact API");
         console.log(e);
         if (!onLogin) {
-            setHrefEnd("/login.html");
+            setHrefEnd("login.html");
         }
     }
 }
