@@ -1,6 +1,9 @@
 Midas Loop UI
 =============
 
+The UI for [Midas Loop](https://aclanthology.org/2022.law-1.13/), a human-in-the-loop annotation tool.
+It can be used in conjunction with the backend service available [here](https://github.com/gucorpling/midas-loop). 
+
 # Usage
 
 ## Prerequisites
